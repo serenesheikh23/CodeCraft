@@ -15,6 +15,10 @@ import {
   Code,
   FolderKanban,
   Quote,
+  Link2,
+  ScrollText,
+  FileText,
+  Settings,
 } from "lucide-react";
 
 const sidebarLinks = [
@@ -23,6 +27,10 @@ const sidebarLinks = [
   { href: "/admin/dashboard/addons", label: "Add-ons", icon: PlusCircle },
   { href: "/admin/dashboard/projects", label: "Projects", icon: FolderKanban },
   { href: "/admin/dashboard/testimonials", label: "Testimonials", icon: Quote },
+  { href: "/admin/dashboard/footer-links", label: "Footer Links", icon: Link2 },
+  { href: "/admin/dashboard/legal-pages", label: "Legal Pages", icon: ScrollText },
+  { href: "/admin/dashboard/pages", label: "Custom Pages", icon: FileText },
+  { href: "/admin/dashboard/settings", label: "Site Settings", icon: Settings },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {

@@ -1,50 +1,46 @@
-"use client";
-
 import Link from "next/link";
-import { Code2, Twitter, Github, Linkedin, Mail, Phone } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Code2, Mail, Phone, MessageCircle, Instagram, Linkedin, ExternalLink } from "lucide-react";
+import { prisma } from "@/lib/prisma";
 
-const footerLinks = {
-  company: [
-    { label: "About Us", href: "#" },
-    { label: "Services", href: "#services" },
-    { label: "Pricing", href: "#pricing" },
-    { label: "Contact", href: "#contact" },
-  ],
-  services: [
-    { label: "Web Development", href: "#" },
-    { label: "Mobile Apps", href: "#" },
-    { label: "E-commerce", href: "#" },
-    { label: "Custom Solutions", href: "#" },
-  ],
-  resources: [
-    { label: "Blog", href: "#" },
-    { label: "Documentation", href: "#" },
-    { label: "FAQ", href: "#" },
-    { label: "Support", href: "#" },
-  ],
-  legal: [
-    { label: "Privacy Policy", href: "#" },
-    { label: "Terms of Service", href: "#" },
-    { label: "Cookie Policy", href: "#" },
-  ],
-};
+async function getFooterData() {
+  const [settings, footerLinks] = await Promise.all([
+    prisma.siteSettings.findUnique({ where: { id: "singleton" } }),
+    prisma.footerLink.findMany({
+      where: { isActive: true },
+      orderBy: [{ section: "asc" }, { order: "asc" }],
+    }),
+  ]);
+  return { settings, footerLinks };
+}
 
-const socialLinks = [
-  { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
-  { icon: Github, href: "https://github.com", label: "GitHub" },
-  { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-  { icon: Mail, href: "mailto:hello@codecraft.dev", label: "Email" },
-];
+export default async function Footer() {
+  const { settings, footerLinks } = await getFooterData();
 
-export default function Footer() {
+  const groupedLinks = footerLinks.reduce((acc, link) => {
+    if (!acc[link.section]) acc[link.section] = [];
+    acc[link.section].push(link);
+    return acc;
+  }, {} as Record<string, typeof footerLinks>);
+
+  const defaultSettings = {
+    email: "serenesheikh23@gmail.com",
+    phone1: "+963 933 135 837",
+    phone2: "+963 997 112 295",
+    whatsapp1: "+963933135837",
+    whatsapp2: "+963997112295",
+    instagramUrl: "",
+    linkedin1Url: "",
+    linkedin2Url: "",
+    location: "Remote Worldwide",
+    tagline: "Building ideas into digital products. Websites, apps and full systems.",
+  };
+
+  const s = settings || defaultSettings;
+
   return (
     <footer className="relative bg-card border-t border-border" role="contentinfo">
-      {/* Background glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1/2 opacity-10" style={{
-        backgroundImage: `
-          radial-gradient(circle at center, rgba(37, 99, 235, 0.3) 0%, transparent 70%)
-        `
+        backgroundImage: `radial-gradient(circle at center, rgba(37, 99, 235, 0.3) 0%, transparent 70%)`
       }} aria-hidden="true" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
@@ -58,21 +54,49 @@ export default function Footer() {
               <span>Code Craft</span>
             </Link>
             <p className="text-text-muted text-sm leading-relaxed mb-6">
-              Building ideas into digital products. Websites, apps and full systems.
+              {s.tagline}
             </p>
             <div className="flex gap-4">
-              {socialLinks.map((social) => (
+              {s.instagramUrl && (
                 <a
-                  key={social.label}
-                  href={social.href}
+                  href={s.instagramUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={social.label}
+                  aria-label="Instagram"
                   className="w-10 h-10 rounded-lg bg-background border border-border flex items-center justify-center text-text-muted hover:text-primary hover:border-primary/50 transition-all"
                 >
-                  <social.icon className="w-5 h-5" />
+                  <Instagram className="w-5 h-5" />
                 </a>
-              ))}
+              )}
+              {s.linkedin1Url && (
+                <a
+                  href={s.linkedin1Url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LinkedIn"
+                  className="w-10 h-10 rounded-lg bg-background border border-border flex items-center justify-center text-text-muted hover:text-primary hover:border-primary/50 transition-all"
+                >
+                  <Linkedin className="w-5 h-5" />
+                </a>
+              )}
+              {s.linkedin2Url && (
+                <a
+                  href={s.linkedin2Url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LinkedIn 2"
+                  className="w-10 h-10 rounded-lg bg-background border border-border flex items-center justify-center text-text-muted hover:text-primary hover:border-primary/50 transition-all"
+                >
+                  <Linkedin className="w-5 h-5" />
+                </a>
+              )}
+              <a
+                href={`mailto:${s.email}`}
+                aria-label="Email"
+                className="w-10 h-10 rounded-lg bg-background border border-border flex items-center justify-center text-text-muted hover:text-primary hover:border-primary/50 transition-all"
+              >
+                <Mail className="w-5 h-5" />
+              </a>
             </div>
           </div>
 
@@ -80,8 +104,8 @@ export default function Footer() {
           <nav aria-label="Company links">
             <h3 className="font-semibold text-text mb-4">Company</h3>
             <ul className="space-y-3" role="list">
-              {footerLinks.company.map((link) => (
-                <li key={link.label}>
+              {groupedLinks.Company?.map((link) => (
+                <li key={link.id}>
                   <Link
                     href={link.href}
                     className="text-text-muted hover:text-primary transition-colors text-sm"
@@ -97,25 +121,8 @@ export default function Footer() {
           <nav aria-label="Services links">
             <h3 className="font-semibold text-text mb-4">Services</h3>
             <ul className="space-y-3" role="list">
-              {footerLinks.services.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-text-muted hover:text-primary transition-colors text-sm"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          {/* Resources */}
-          <nav aria-label="Resources links">
-            <h3 className="font-semibold text-text mb-4">Resources</h3>
-            <ul className="space-y-3" role="list">
-              {footerLinks.resources.map((link) => (
-                <li key={link.label}>
+              {groupedLinks.Services?.map((link) => (
+                <li key={link.id}>
                   <Link
                     href={link.href}
                     className="text-text-muted hover:text-primary transition-colors text-sm"
@@ -133,15 +140,29 @@ export default function Footer() {
             <ul className="space-y-3 text-sm text-text-muted" role="list">
               <li className="flex items-center gap-2">
                 <Mail className="w-4 h-4 flex-shrink-0" />
-                <a href="mailto:hello@codecraft.dev" className="hover:text-primary transition-colors">hello@codecraft.dev</a>
+                <a href={`mailto:${s.email}`} className="hover:text-primary transition-colors">{s.email}</a>
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 flex-shrink-0" />
-                <a href="tel:+963933135837" className="hover:text-primary transition-colors">+963 933 135 837</a>
+                <a href={`tel:${s.phone1.replace(/\s/g, "")}`} className="hover:text-primary transition-colors">{s.phone1}</a>
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 flex-shrink-0" />
-                <a href="tel:+963997112295" className="hover:text-primary transition-colors">+963 997 112 295</a>
+                <a href={`tel:${s.phone2.replace(/\s/g, "")}`} className="hover:text-primary transition-colors">{s.phone2}</a>
+              </li>
+              <li className="flex items-center gap-2">
+                <MessageCircle className="w-4 h-4 flex-shrink-0 text-green-400" />
+                <a href={`https://wa.me/${s.whatsapp1.replace(/\D/g, "")}`} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors flex items-center gap-1">
+                  WhatsApp 1
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </li>
+              <li className="flex items-center gap-2">
+                <MessageCircle className="w-4 h-4 flex-shrink-0 text-green-400" />
+                <a href={`https://wa.me/${s.whatsapp2.replace(/\D/g, "")}`} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors flex items-center gap-1">
+                  WhatsApp 2
+                  <ExternalLink className="w-3 h-3" />
+                </a>
               </li>
             </ul>
           </div>
@@ -155,25 +176,20 @@ export default function Footer() {
           <p className="text-sm text-text-muted">
             © {new Date().getFullYear()} Code Craft. All rights reserved.
           </p>
-          <div className="flex items-center gap-6">
-            <Link href="/admin/login" className="text-sm text-text-muted hover:text-primary transition-colors">
-              Admin Login
-            </Link>
-            <nav aria-label="Legal links">
-              <ul className="flex gap-6" role="list">
-                {footerLinks.legal.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-text-muted hover:text-primary transition-colors"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </div>
+          <nav aria-label="Legal links">
+            <ul className="flex gap-6" role="list">
+              {groupedLinks.Legal?.map((link) => (
+                <li key={link.id}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-text-muted hover:text-primary transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
       </div>
     </footer>

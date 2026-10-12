@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Loader2, ArrowLeft, FolderKanban } from "lucide-react";
 import Link from "next/link";
+import ImageUpload from "@/components/admin/ImageUpload";
 
 interface FormData {
   title: string;
@@ -222,17 +223,11 @@ export default function NewProjectPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="imageUrl" className="block text-sm font-medium text-text-muted mb-2">
-              Hero Image URL *
-            </label>
-            <input
-              id="imageUrl"
-              type="url"
+            <ImageUpload
               value={formData.imageUrl}
-              onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-              required
-              className="w-full px-4 py-3 bg-background border border-border rounded-lg text-text placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all"
-              placeholder="https://images.unsplash.com/..."
+              onChange={(url) => setFormData({ ...formData, imageUrl: url })}
+              label="Hero Image"
+              aspectRatio="video"
             />
           </div>
 

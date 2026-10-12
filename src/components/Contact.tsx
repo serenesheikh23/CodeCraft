@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Send, Loader2, CheckCircle, AlertCircle } from "lucide-react";
+import { Mail, Phone, MapPin, Send, Loader2, CheckCircle, AlertCircle, MessageCircle, ExternalLink, Instagram, Linkedin } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function ContactSection() {
@@ -45,14 +45,20 @@ export default function ContactSection() {
     {
       icon: Mail,
       label: "Email",
-      value: "hello@codecraft.dev",
-      href: "mailto:hello@codecraft.dev",
+      value: "serenesheikh23@gmail.com",
+      href: "mailto:serenesheikh23@gmail.com",
     },
     {
       icon: Phone,
       label: "Phone",
-      value: "+963 933 135 837 | +963 997 112 295",
+      value: "+963 933 135 837",
       href: "tel:+963933135837",
+    },
+    {
+      icon: Phone,
+      label: "Phone",
+      value: "+963 997 112 295",
+      href: "tel:+963997112295",
     },
     {
       icon: MapPin,
@@ -61,6 +67,17 @@ export default function ContactSection() {
       href: "#",
     },
   ];
+
+  const whatsappLinks = [
+    { number: "963933135837", label: "WhatsApp 1" },
+    { number: "963997112295", label: "WhatsApp 2" },
+  ];
+
+  // Social placeholders for future use
+  // const socialLinks = [
+  //   { icon: Instagram, url: "https://instagram.com/yourhandle", label: "Instagram" },
+  //   { icon: Linkedin, url: "https://linkedin.com/in/yourprofile", label: "LinkedIn" },
+  // ];
 
   return (
     <section
@@ -104,7 +121,7 @@ export default function ContactSection() {
             <div className="space-y-6">
               {contactInfo.map((item, index) => (
                 <motion.div
-                  key={item.label}
+                  key={item.label + index}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -125,6 +142,58 @@ export default function ContactSection() {
                   </div>
                 </motion.div>
               ))}
+
+              {/* WhatsApp Buttons */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.5 }}
+                className="pt-4 border-t border-border"
+              >
+                <p className="text-sm font-medium text-text-muted mb-4">Chat on WhatsApp</p>
+                <div className="flex flex-wrap gap-3">
+                  {whatsappLinks.map((wa) => (
+                    <a
+                      key={wa.number}
+                      href={`https://wa.me/${wa.number}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 bg-green-500/10 border border-green-500/20 text-green-400 rounded-lg hover:bg-green-500/20 hover:border-green-500/30 transition-all"
+                    >
+                      <MessageCircle className="w-4 h-4" />
+                      {wa.label}
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  ))}
+                </div>
+              </motion.div>
+
+              {/* Social placeholders for future use */}
+              {/* 
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.6 }}
+                className="pt-4 border-t border-border"
+              >
+                <p className="text-sm font-medium text-text-muted mb-4">Follow us</p>
+                <div className="flex gap-3">
+                  {socialLinks.map((social) => (
+                    <a
+                      key={social.label}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 rounded-lg bg-card-hover border border-border flex items-center justify-center text-text-muted hover:text-primary hover:border-primary/50 transition-all"
+                    >
+                      <social.icon className="w-5 h-5" />
+                    </a>
+                  ))}
+                </div>
+              </motion.div>
+              */}
             </div>
           </motion.div>
 

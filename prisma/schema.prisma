@@ -75,3 +75,46 @@ model Testimonial {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
+
+model SiteSettings {
+  id                String   @id @default("singleton")
+  email             String   @default("serenesheikh23@gmail.com")
+  phone1            String   @default("+963 933 135 837")
+  phone2            String   @default("+963 997 112 295")
+  whatsapp1         String   @default("+963933135837")
+  whatsapp2         String   @default("+963997112295")
+  instagramUrl      String   @default("")
+  linkedin1Url      String   @default("")
+  linkedin2Url      String   @default("")
+  location          String   @default("Remote Worldwide")
+  tagline           String   @default("Building ideas into digital products. Websites, apps and full systems.")
+  updatedAt         DateTime @updatedAt
+}
+
+model FooterLink {
+  id        String   @id @default(cuid())
+  section   String
+  label     String
+  href      String
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model LegalPage {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  content   String
+  updatedAt DateTime @updatedAt
+}
+
+model CustomPage {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  content   String
+  isActive  Boolean  @default(true)
+  updatedAt DateTime @updatedAt
+}

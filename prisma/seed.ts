@@ -374,6 +374,208 @@ async function main() {
   console.log("✅ Testimonials seeded:", testimonials.length);
 
   console.log("🎉 Database seed completed successfully!");
+
+  // Site Settings
+  await prisma.siteSettings.upsert({
+    where: { id: "singleton" },
+    update: {},
+    create: {
+      id: "singleton",
+      email: "serenesheikh23@gmail.com",
+      phone1: "+963 933 135 837",
+      phone2: "+963 997 112 295",
+      whatsapp1: "+963933135837",
+      whatsapp2: "+963997112295",
+      instagramUrl: "",
+      linkedin1Url: "",
+      linkedin2Url: "",
+      location: "Remote Worldwide",
+      tagline: "Building ideas into digital products. Websites, apps and full systems.",
+    },
+  });
+  console.log("✅ Site Settings created");
+
+  // Footer Links
+  const footerLinks = [
+    // Company
+    { section: "Company", label: "About Us", href: "/about", order: 1, isActive: true },
+    { section: "Company", label: "Services", href: "/#services", order: 2, isActive: true },
+    { section: "Company", label: "Pricing", href: "/#services", order: 3, isActive: true },
+    { section: "Company", label: "Contact", href: "/#contact", order: 4, isActive: true },
+    // Services
+    { section: "Services", label: "Web Development", href: "/#services", order: 1, isActive: true },
+    { section: "Services", label: "Mobile Apps", href: "/#services", order: 2, isActive: true },
+    { section: "Services", label: "E-commerce", href: "/#services", order: 3, isActive: true },
+    { section: "Services", label: "Custom Solutions", href: "/#services", order: 4, isActive: true },
+    // Legal
+    { section: "Legal", label: "Privacy Policy", href: "/legal/privacy", order: 1, isActive: true },
+    { section: "Legal", label: "Terms of Service", href: "/legal/terms", order: 2, isActive: true },
+    { section: "Legal", label: "Cookie Policy", href: "/legal/cookies", order: 3, isActive: true },
+  ];
+
+  for (const link of footerLinks) {
+    await prisma.footerLink.upsert({
+      where: { id: `footer-${link.section.toLowerCase()}-${link.order}` },
+      update: link,
+      create: {
+        id: `footer-${link.section.toLowerCase()}-${link.order}`,
+        ...link,
+      },
+    });
+  }
+  console.log("✅ Footer Links seeded:", footerLinks.length);
+
+  // Legal Pages
+  const legalPages = [
+    {
+      slug: "privacy",
+      title: "Privacy Policy",
+      content: `Last updated: ${new Date().toLocaleDateString()}
+
+Code Craft ("we", "our", "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you visit our website or use our services.
+
+## Information We Collect
+
+We may collect the following types of information:
+
+### Personal Information
+- Name and contact information (email, phone number) when you submit a contact form
+- Company name and role when provided voluntarily
+- Communication preferences
+
+### Technical Information
+- IP address, browser type, operating system
+- Pages visited, time spent on pages
+- Referring website addresses
+
+## How We Use Your Information
+
+We use the information we collect to:
+- Respond to your inquiries and provide customer support
+- Send you updates about our services (with your consent)
+- Improve our website and services
+- Analyze website traffic and usage patterns
+- Comply with legal obligations
+
+## Data Sharing
+
+We do not sell, trade, or rent your personal information to third parties. We may share your information with:
+- Service providers who assist us in operating our website (hosting, analytics, email services)
+- Legal authorities when required by law
+
+## Data Security
+
+We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.
+
+## Your Rights
+
+Depending on your location, you may have the right to:
+- Access your personal data
+- Request correction or deletion of your data
+- Object to or restrict processing
+- Data portability
+- Withdraw consent at any time
+
+## Contact Us
+
+If you have questions about this Privacy Policy, please contact us at:
+Email: serenesheikh23@gmail.com
+Phone: +963 933 135 837`,
+    },
+    {
+      slug: "terms",
+      title: "Terms of Service",
+      content: `Last updated: ${new Date().toLocaleDateString()}
+
+By accessing and using Code Craft's website and services, you agree to be bound by these Terms of Service.
+
+## Services
+
+Code Craft provides web development, mobile app development, and custom software solutions. The scope, timeline, and deliverables for each project are defined in a separate project agreement or proposal.
+
+## Client Responsibilities
+
+Clients agree to:
+- Provide accurate and complete project requirements
+- Respond to communications in a timely manner
+- Provide necessary access and credentials for project execution
+- Make payments according to the agreed schedule
+
+## Intellectual Property
+
+Upon full payment, all custom code, designs, and deliverables created specifically for the client become the client's property. Code Craft retains the right to showcase completed projects in our portfolio unless otherwise agreed.
+
+## Confidentiality
+
+Both parties agree to keep confidential any proprietary information shared during the project engagement.
+
+## Limitation of Liability
+
+Code Craft's total liability for any project shall not exceed the total fees paid for that project. We are not liable for indirect, incidental, or consequential damages.
+
+## Termination
+
+Either party may terminate the engagement with written notice. Completed work and incurred expenses up to the termination date are payable.
+
+## Governing Law
+
+These terms are governed by the laws applicable in the jurisdiction where Code Craft operates.
+
+## Contact
+
+For questions about these terms, contact us at serenesheikh23@gmail.com`,
+    },
+    {
+      slug: "cookies",
+      title: "Cookie Policy",
+      content: `Last updated: ${new Date().toLocaleDateString()}
+
+This Cookie Policy explains how Code Craft uses cookies and similar technologies on our website.
+
+## What Are Cookies
+
+Cookies are small text files stored on your device when you visit a website. They help the website function properly, remember your preferences, and provide analytics.
+
+## Types of Cookies We Use
+
+### Essential Cookies
+Required for the website to function. These cannot be disabled.
+
+### Analytics Cookies
+Help us understand how visitors interact with our website (e.g., Google Analytics). We use this data to improve user experience.
+
+### Preference Cookies
+Remember your settings like language or region preferences.
+
+## Managing Cookies
+
+You can control cookies through your browser settings:
+- Block all cookies
+- Delete existing cookies
+- Set preferences for specific websites
+
+Note: Disabling essential cookies may break website functionality.
+
+## Third-Party Cookies
+
+We may use third-party services (analytics, embedded content) that set their own cookies. We do not control these cookies.
+
+## Contact
+
+For questions about our cookie usage, contact serenesheikh23@gmail.com`,
+    },
+  ];
+
+  for (const page of legalPages) {
+    await prisma.legalPage.upsert({
+      where: { slug: page.slug },
+      update: page,
+      create: page,
+    });
+  }
+  console.log("✅ Legal Pages seeded:", legalPages.length);
+
+  console.log("🎉 All seed data completed successfully!");
 }
 
 main()

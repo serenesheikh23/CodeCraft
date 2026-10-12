@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Loader2, ArrowLeft, MessageSquare, Star } from "lucide-react";
 import Link from "next/link";
+import ImageUpload from "@/components/admin/ImageUpload";
 
 interface Testimonial {
   id: string;
@@ -259,18 +260,12 @@ export default function EditTestimonialPage() {
             </select>
           </div>
 
-          <div>
-            <label htmlFor="avatarUrl" className="block text-sm font-medium text-text-muted mb-2">
-              Avatar Image URL *
-            </label>
-            <input
-              id="avatarUrl"
-              type="url"
+          <div className="sm:col-span-2">
+            <ImageUpload
               value={formData.avatarUrl}
-              onChange={(e) => setFormData({ ...formData, avatarUrl: e.target.value })}
-              required
-              className="w-full px-4 py-3 bg-background border border-border rounded-lg text-text placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all"
-              placeholder="https://images.unsplash.com/photo-...w=150&h=150"
+              onChange={(url) => setFormData({ ...formData, avatarUrl: url })}
+              label="Avatar Image"
+              aspectRatio="square"
             />
           </div>
 
