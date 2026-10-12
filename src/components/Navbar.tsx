@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { Menu, X, Code2 } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -13,27 +13,28 @@ const navLinks = [
 ];
 
 export default function Navbar() {
+  const [mounted, setMounted] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { scrollY } = useScroll();
-  const navOpacity = useTransform(scrollY, [0, 100], [0, 1]);
 
   useEffect(() => {
+    setMounted(true);
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
     <>
-      <motion.header
-        style={{ opacity: navOpacity }}
+      <header
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+          mounted ? "opacity-100" : "opacity-0",
           isScrolled
-            ? "bg-background/90 backdrop-blur-md border-b border-border shadow-glass"
+            ? "bg-background/90 backdrop-blur-md border-b border-border"
             : "bg-transparent"
         )}
       >
@@ -61,25 +62,18 @@ export default function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-text-muted hover:text-text transition-colors text-sm font-medium relative"
+                  className="group text-text-muted hover:text-text transition-colors text-sm font-medium relative py-2"
                 >
                   {link.label}
-                  <motion.span
-                    layoutId="underline"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-primary origin-left scale-x-0"
-                    initial={false}
-                  />
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-primary origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
                 </Link>
               ))}
             </div>
 
             {/* CTA Button */}
             <div className="hidden lg:flex lg:items-center lg:gap-4">
-              <Link
-                href="#contact"
-                className="btn-primary text-sm px-6 py-2.5"
-              >
-                Swipe for prices >
+              <Link href="#contact" className="btn-primary text-sm px-6 py-2.5">
+                Swipe for prices {'>'}
               </Link>
             </div>
 
@@ -96,9 +90,12 @@ export default function Navbar() {
 
           {/* Mobile Navigation */}
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: isMobileMenuOpen ? 1 : 0, height: isMobileMenuOpen ? "auto" : 0 }}
-            exit={{ opacity: 0, height: 0 }}
+            initial={false}
+            animate={{
+              opacity: isMobileMenuOpen ? 1 : 0,
+              height: isMobileMenuOpen ? "auto" : 0,
+            }}
+            transition={{ duration: 0.2 }}
             className="lg:hidden overflow-hidden border-t border-border bg-background/95 backdrop-blur-md"
           >
             <div className="px-4 py-4 space-y-3">
@@ -117,12 +114,12 @@ export default function Navbar() {
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="btn-primary text-center block mt-2"
               >
-                Swipe for prices >
+                Swipe for prices {'>'}
               </Link>
             </div>
           </motion.div>
         </nav>
-      </motion.header>
+      </header>
 
       {/* Spacer for fixed header */}
       <div className="h-16 lg:h-20" aria-hidden="true" />

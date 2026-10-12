@@ -1,0 +1,232 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { Plus, Edit, Trash2, Search, Loader2, FolderKanban, Star, Globe, Github } from "lucide-react";
+
+interface Project {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  problem: string;
+  solution: string;
+  outcome: string;
+  imageUrl: string;
+  liveUrl: string;
+  githubUrl: string;
+  techStack: string;
+  featured: boolean;
+  order: number;
+  isActive: boolean;
+}
+
+export default function ProjectsPage() {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const fetchProjects = async () => {
+    try {
+      const res = await fetch("/api/projects");
+      if (res.ok) {
+        const data = await res.json();
+        setProjects(data);
+      }
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this project?")) return;
+
+    setIsDeleting(true);
+    setDeleteId(id);
+    try {
+      const res = await fetch(`/api/projects/${id}`, { method: "DELETE" });
+      if (res.ok) {
+        setProjects(projects.filter((p) => p.id !== id));
+      } else {
+        alert("Failed to delete project");
+      }
+    } catch (error) {
+      console.error("Error deleting project:", error);
+      alert("An error occurred");
+    } finally {
+      setIsDeleting(false);
+      setDeleteId(null);
+    }
+  };
+
+  const filteredProjects = projects.filter(
+    (p) =>
+      p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.slug.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  return (
+    <div className="space-y-6">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+      >
+        <div>
+          <h1 className="text-3xl font-bold text-text flex items-center gap-3">
+            <FolderKanban className="w-8 h-8 text-primary" />
+            Projects
+          </h1>
+          <p className="text-text-muted mt-1">Manage your project portfolio</p>
+        </div>
+        <Link href="/admin/dashboard/projects/new" className="btn-primary">
+          <Plus className="w-4 h-4 mr-2" />
+          Add Project
+        </Link>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="relative max-w-md"
+      >
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" size={18} />
+        <input
+          type="text"
+          placeholder="Search projects..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full pl-10 pr-4 py-3 bg-card border border-border rounded-lg text-text placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all"
+        />
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="bg-card border border-border rounded-xl overflow-hidden"
+      >
+        {isLoading ? (
+          <div className="p-8 text-center">
+            <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto" />
+            <p className="text-text-muted mt-4">Loading projects...</p>
+          </div>
+        ) : filteredProjects.length === 0 ? (
+          <div className="p-8 text-center">
+            <FolderKanban className="w-12 h-12 text-text-muted mx-auto mb-4 opacity-50" />
+            <h3 className="text-lg font-medium text-text">No projects found</h3>
+            <p className="text-text-muted mt-1">
+              {searchQuery ? "Try adjusting your search" : "Get started by adding your first project"}
+            </p>
+            {!searchQuery && (
+              <Link href="/admin/dashboard/projects/new" className="btn-primary inline-flex mt-4">
+                <Plus className="w-4 h-4 mr-2" />
+                Add Project
+              </Link>
+            )}
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-border bg-card-hover">
+                  <th className="px-6 py-4 text-left text-sm font-medium text-text-muted">Project</th>
+                  <th className="px-6 py-4 text-left text-sm font-medium text-text-muted">Tech Stack</th>
+                  <th className="px-6 py-4 text-left text-sm font-medium text-text-muted">Featured</th>
+                  <th className="px-6 py-4 text-left text-sm font-medium text-text-muted">Status</th>
+                  <th className="px-6 py-4 text-left text-sm font-medium text-text-muted">Order</th>
+                  <th className="px-6 py-4 text-right text-sm font-medium text-text-muted">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {filteredProjects.map((project, index) => (
+                  <motion.tr
+                    key={project.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    className="hover:bg-card-hover transition-colors"
+                  >
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                          <FolderKanban className="w-5 h-5 text-primary" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-text">{project.title}</p>
+                          <p className="text-sm text-text-muted truncate max-w-xs">{project.slug}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="text-sm text-text-muted">
+                        {JSON.parse(project.techStack || "[]").length} technologies
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          project.featured
+                            ? "bg-yellow-500/10 text-yellow-400"
+                            : "bg-gray-500/10 text-gray-400"
+                        }`}
+                      >
+                        {project.featured ? "Featured" : "Standard"}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          project.isActive
+                            ? "bg-green-500/10 text-green-400"
+                            : "bg-red-500/10 text-red-400"
+                        }`}
+                      >
+                        {project.isActive ? "Active" : "Inactive"}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-text-muted">{project.order}</td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center justify-end gap-2">
+                        <Link
+                          href={`/admin/dashboard/projects/${project.id}/edit`}
+                          className="p-2 rounded-lg text-text-muted hover:text-text hover:bg-card-hover transition-colors"
+                          title="Edit"
+                        >
+                          <Edit size={16} />
+                        </Link>
+                        <button
+                          onClick={() => handleDelete(project.id)}
+                          disabled={isDeleting}
+                          className="p-2 rounded-lg text-text-muted hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                          title="Delete"
+                        >
+                          {deleteId === project.id && isDeleting ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            <Trash2 size={16} />
+                          )}
+                        </button>
+                      </div>
+                    </td>
+                  </motion.tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </motion.div>
+    </div>
+  );
+}

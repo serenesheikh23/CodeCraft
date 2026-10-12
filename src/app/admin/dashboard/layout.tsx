@@ -13,12 +13,16 @@ import {
   Menu,
   X,
   Code,
+  FolderKanban,
+  Quote,
 } from "lucide-react";
 
 const sidebarLinks = [
   { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/dashboard/services", label: "Services", icon: Package },
   { href: "/admin/dashboard/addons", label: "Add-ons", icon: PlusCircle },
+  { href: "/admin/dashboard/projects", label: "Projects", icon: FolderKanban },
+  { href: "/admin/dashboard/testimonials", label: "Testimonials", icon: Quote },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
