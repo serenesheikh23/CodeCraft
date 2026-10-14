@@ -7,29 +7,31 @@ import { motion, AnimatePresence } from "framer-motion";
 import { signOut } from "next-auth/react";
 import {
   LayoutDashboard,
+  Layers3,
   Package,
   PlusCircle,
+  FolderKanban,
+  Quote,
+  FileText,
+  Link2,
+  ScrollText,
+  Settings,
   LogOut,
   Menu,
   X,
   Code,
-  FolderKanban,
-  Quote,
-  Link2,
-  ScrollText,
-  FileText,
-  Settings,
 } from "lucide-react";
 
 const sidebarLinks = [
   { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/admin/dashboard/sections", label: "Sections", icon: Layers3 },
   { href: "/admin/dashboard/services", label: "Services", icon: Package },
   { href: "/admin/dashboard/addons", label: "Add-ons", icon: PlusCircle },
   { href: "/admin/dashboard/projects", label: "Projects", icon: FolderKanban },
   { href: "/admin/dashboard/testimonials", label: "Testimonials", icon: Quote },
+  { href: "/admin/dashboard/pages", label: "Custom Pages", icon: FileText },
   { href: "/admin/dashboard/footer-links", label: "Footer Links", icon: Link2 },
   { href: "/admin/dashboard/legal-pages", label: "Legal Pages", icon: ScrollText },
-  { href: "/admin/dashboard/pages", label: "Custom Pages", icon: FileText },
   { href: "/admin/dashboard/settings", label: "Site Settings", icon: Settings },
 ];
 
@@ -39,7 +41,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Mobile sidebar backdrop */}
       <AnimatePresence>
         {sidebarOpen && (
           <motion.div
@@ -52,7 +53,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         )}
       </AnimatePresence>
 
-      {/* Sidebar */}
       <aside
         className={`fixed top-0 left-0 z-50 h-full w-64 bg-card border-r border-border transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -71,10 +71,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </button>
         </div>
 
-        <nav className="p-4 space-y-2">
+        <nav className="p-4 space-y-1 overflow-y-auto" style={{ maxHeight: "calc(100vh - 180px)" }}>
           {sidebarLinks.map((link) => {
             const Icon = link.icon;
-            const isActive = pathname === link.href;
+            const isActive = pathname === link.href || (link.href !== "/admin/dashboard" && pathname.startsWith(link.href));
             return (
               <Link
                 key={link.href}
@@ -85,14 +85,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     : "text-text-muted hover:bg-card-hover hover:text-text"
                 }`}
               >
-                <Icon className="w-5 h-5" />
-                <span>{link.label}</span>
+                <Icon className="w-5 h-5 flex-shrink-0" />
+                <span className="text-sm">{link.label}</span>
               </Link>
             );
           })}
         </nav>
 
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-border">
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-border bg-card">
           <button
             onClick={() => signOut({ callbackUrl: "/admin/login" })}
             className="flex items-center gap-3 w-full px-4 py-3 text-red-400 hover:bg-red-500/10 rounded-xl transition-colors"
@@ -103,7 +103,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </div>
       </aside>
 
-      {/* Main content */}
       <div className="lg:pl-64">
         <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-md border-b border-border">
           <div className="flex items-center justify-between px-6 py-4">
@@ -114,7 +113,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Menu className="w-6 h-6" />
             </button>
             <h1 className="text-xl font-bold text-text">Admin Dashboard</h1>
-            <div className="w-8" /> {/* Spacer for alignment */}
+            <div className="w-8" />
           </div>
         </header>
 

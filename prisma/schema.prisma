@@ -118,3 +118,16 @@ model CustomPage {
   isActive  Boolean  @default(true)
   updatedAt DateTime @updatedAt
 }
+
+model HomepageSection {
+  id          String   @id @default(cuid())
+  type        String
+  name        String   @default("")
+  title       String   @default("")
+  subtitle    String   @default("")
+  content     String   @default("{}")
+  order       Int      @default(0)
+  isVisible   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

@@ -1,58 +1,65 @@
-import { Metadata } from "next";
+import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, FileText } from "lucide-react";
-import { prisma } from "@/lib/prisma";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
-interface Props {
+export default async function CustomPage({
+  params,
+}: {
   params: Promise<{ slug: string }>;
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+}) {
   const { slug } = await params;
-  const page = await prisma.customPage.findUnique({ where: { slug, isActive: true } });
-  return {
-    title: page ? `${page.title} | Code Craft` : "Page | Code Craft",
-    description: page ? page.content.slice(0, 160) : "Custom page",
-  };
-}
 
-export default async function CustomPage({ params }: Props) {
-  const { slug } = await params;
-  const page = await prisma.customPage.findUnique({ where: { slug, isActive: true } });
+  const page = await prisma.customPage.findUnique({
+    where: { slug },
+  });
 
-  if (!page) {
+  if (!page || !page.isActive) {
     notFound();
   }
 
+  const paragraphs = page.content.split("\n\n");
+
   return (
-    <>
-      <Navbar />
-      <main id="main-content" className="min-h-screen">
-        <div className="py-20 lg:py-32">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-text-muted hover:text-primary transition-colors mb-8"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Back to home
-            </Link>
-            <article className="bg-card border border-border rounded-2xl p-8 lg:p-12">
-              <header className="mb-8 pb-8 border-b border-border">
-                <FileText className="w-10 h-10 text-primary mb-4" aria-hidden="true" />
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-text">{page.title}</h1>
-              </header>
-              <div className="prose prose-invert max-w-none whitespace-pre-wrap text-text-muted leading-relaxed">
-                {page.content}
-              </div>
-            </article>
-          </div>
+    <div className="min-h-screen bg-background">
+      {/* Navbar space */}
+      <div className="h-16 lg:h-20" />
+
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-text-muted hover:text-text transition-colors text-sm mb-12"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to home
+        </Link>
+
+        <div className="flex items-center gap-3 mb-6">
+          <FileText className="w-6 h-6 text-primary" />
+          <span className="text-sm uppercase tracking-widest text-text-muted">Page</span>
         </div>
-      </main>
-      <Footer />
-    </>
+
+        <h1 className="font-serif text-5xl lg:text-6xl text-text leading-tight mb-8">
+          {page.title}
+        </h1>
+
+        <div className="h-px bg-border mb-12" />
+
+        <article className="space-y-6">
+          {paragraphs.map((para, i) => (
+            <p key={i} className="text-lg text-text-muted leading-relaxed">
+              {para}
+            </p>
+          ))}
+        </article>
+
+        <div className="mt-16 pt-8 border-t border-border">
+          <p className="text-text-muted text-sm mb-4">Want to work together?</p>
+          <Link href="/#contact" className="btn-primary inline-flex items-center gap-2">
+            Get in touch
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 }
