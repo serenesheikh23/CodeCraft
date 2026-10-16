@@ -129,7 +129,8 @@ export default function ServiceFormPage() {
           <ArrowLeft size={20} />
         </Link>
         <div>
-          <h1 className="text-3xl font-bold text-text flex items-center gap-3">
+          <div className="section-label text-lime mb-4">SERVICES</div>
+        <h1 className="font-serif text-3xl lg:text-4xl text-text">
             <Box className="w-8 h-8 text-primary" />
             {isEditing ? "Edit Service" : "Add Service"}
           </h1>
@@ -159,7 +160,7 @@ export default function ServiceFormPage() {
       >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="name" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Service Name *
             </label>
             <input
@@ -174,7 +175,7 @@ export default function ServiceFormPage() {
           </div>
 
           <div>
-            <label htmlFor="icon" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="icon" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Icon
             </label>
             <select
@@ -193,7 +194,7 @@ export default function ServiceFormPage() {
         </div>
 
         <div>
-          <label htmlFor="description" className="block text-sm font-medium text-text-muted mb-2">
+          <label htmlFor="description" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
             Description *
           </label>
           <textarea
@@ -209,7 +210,7 @@ export default function ServiceFormPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <div>
-            <label htmlFor="minPrice" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="minPrice" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Min Price ($) *
             </label>
             <input
@@ -224,7 +225,7 @@ export default function ServiceFormPage() {
           </div>
 
           <div>
-            <label htmlFor="maxPrice" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="maxPrice" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Max Price ($) *
             </label>
             <input
@@ -239,7 +240,7 @@ export default function ServiceFormPage() {
           </div>
 
           <div>
-            <label htmlFor="order" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="order" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Display Order
             </label>
             <input
@@ -254,7 +255,7 @@ export default function ServiceFormPage() {
         </div>
 
         <div>
-          <label htmlFor="features" className="block text-sm font-medium text-text-muted mb-2">
+          <label htmlFor="features" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
             Features (comma separated) *
           </label>
           <textarea
@@ -275,7 +276,7 @@ export default function ServiceFormPage() {
             type="checkbox"
             checked={formData.isActive}
             onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-            className="w-5 h-5 rounded border-border text-primary focus:ring-primary/50"
+            className="w-5 h-5 rounded border-border text-coral focus:ring-coral/50"
           />
           <label htmlFor="isActive" className="text-text">
             Active (visible on website)

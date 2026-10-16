@@ -76,7 +76,7 @@ export default function ImageUpload({ value, onChange, label, aspectRatio }: Ima
 
   return (
     <div className="space-y-3">
-      <label htmlFor={`upload-${label.toLowerCase().replace(/\s+/g, "-")}`} className="block text-sm font-medium text-text-muted mb-2">
+      <label htmlFor={`upload-${label.toLowerCase().replace(/\s+/g, "-")}`} className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
         {label}
       </label>
 
@@ -131,7 +131,7 @@ export default function ImageUpload({ value, onChange, label, aspectRatio }: Ima
 
         {isUploading && (
           <div className="absolute inset-0 bg-background/80 flex items-center justify-center rounded-xl">
-            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            <Loader2 className="w-8 h-8 animate-spin text-coral" />
           </div>
         )}
       </div>

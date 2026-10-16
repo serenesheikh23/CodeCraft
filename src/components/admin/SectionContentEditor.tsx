@@ -25,7 +25,7 @@ interface SectionContentEditorProps {
   updateContent: (patch: Record<string, unknown>) => void;
 }
 
-const inputCls = "w-full bg-background border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-primary";
+const inputCls = "w-full bg-background border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-coral";
 const labelCls = "block text-xs font-medium text-text-muted mb-1.5";
 
 export default function SectionContentEditor({

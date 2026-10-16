@@ -72,7 +72,8 @@ export default function NewNavLinkPage() {
           <ArrowLeft size={20} />
         </Link>
         <div>
-          <h1 className="text-3xl font-bold text-text flex items-center gap-3">
+          <div className="section-label text-lime mb-4">NAV LINKS</div>
+        <h1 className="font-serif text-3xl lg:text-4xl text-text">
             <Menu className="w-8 h-8 text-primary" />
             Add Nav Link
           </h1>
@@ -98,7 +99,7 @@ export default function NewNavLinkPage() {
         className="bg-card border border-border rounded-xl p-6 space-y-6"
       >
         <div>
-          <label htmlFor="label" className="block text-sm font-medium text-text-muted mb-2">
+          <label htmlFor="label" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
             Label *
           </label>
           <input
@@ -113,7 +114,7 @@ export default function NewNavLinkPage() {
         </div>
 
         <div>
-          <label htmlFor="href" className="block text-sm font-medium text-text-muted mb-2">
+          <label htmlFor="href" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
             URL / Href *
           </label>
           <input
@@ -129,7 +130,7 @@ export default function NewNavLinkPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="order" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="order" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Display Order
             </label>
             <input
@@ -150,7 +151,7 @@ export default function NewNavLinkPage() {
               type="checkbox"
               checked={formData.isActive}
               onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-              className="w-5 h-5 rounded border-border text-primary focus:ring-primary/50"
+              className="w-5 h-5 rounded border-border text-coral focus:ring-coral/50"
             />
             <label htmlFor="isActive" className="text-text">
               Active (visible in navbar)
@@ -163,7 +164,7 @@ export default function NewNavLinkPage() {
               type="checkbox"
               checked={formData.isExternal}
               onChange={(e) => setFormData({ ...formData, isExternal: e.target.checked })}
-              className="w-5 h-5 rounded border-border text-primary focus:ring-primary/50"
+              className="w-5 h-5 rounded border-border text-coral focus:ring-coral/50"
             />
             <label htmlFor="isExternal" className="text-text">
               External link (opens in new tab)

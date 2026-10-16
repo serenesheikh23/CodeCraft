@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { signOut } from "next-auth/react";
@@ -19,7 +20,6 @@ import {
   Settings,
   LogOut,
   X,
-  Code,
 } from "lucide-react";
 
 const sidebarLinks = [
@@ -48,7 +48,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+            className="fixed inset-0 bg-black/60 z-40 lg:hidden"
             onClick={() => setSidebarOpen(false)}
           />
         )}
@@ -59,30 +59,46 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
+        {/* Logo header */}
         <div className="flex items-center justify-between p-6 border-b border-border">
-          <Link href="/" className="flex items-center gap-2">
-            <Code className="w-8 h-8 text-primary" />
-            <span className="text-xl font-bold text-text">Code Craft</span>
+          <Link href="/" className="flex items-center gap-3 group">
+            <div
+              className="relative w-8 h-8 transition-transform duration-300 group-hover:scale-105"
+              style={{ filter: "drop-shadow(0 0 8px rgba(34, 211, 238, 0.5))" }}
+            >
+              <Image
+                src="/logo.svg"
+                alt="Code Craft"
+                fill
+                sizes="32px"
+                className="object-contain"
+                priority
+              />
+            </div>
+            <span className="font-serif text-xl text-text">Code Craft</span>
           </Link>
           <button
             onClick={() => setSidebarOpen(false)}
-            className="lg:hidden text-text-muted hover:text-text"
+            className="lg:hidden text-text-muted hover:text-text transition-colors"
           >
             <X className="w-6 h-6" />
           </button>
         </div>
 
+        {/* Navigation */}
         <nav className="p-4 space-y-1 overflow-y-auto" style={{ maxHeight: "calc(100vh - 180px)" }}>
           {sidebarLinks.map((link) => {
             const Icon = link.icon;
-            const isActive = pathname === link.href || (link.href !== "/admin/dashboard" && pathname.startsWith(link.href));
+            const isActive =
+              pathname === link.href ||
+              (link.href !== "/admin/dashboard" && pathname.startsWith(link.href));
             return (
               <Link
                 key={link.href}
                 href={link.href}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
                   isActive
-                    ? "bg-primary/10 text-primary font-medium"
+                    ? "bg-coral/10 text-coral font-medium"
                     : "text-text-muted hover:bg-card-hover hover:text-text"
                 }`}
               >
@@ -93,6 +109,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           })}
         </nav>
 
+        {/* Sign out */}
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-border bg-card">
           <button
             onClick={() => signOut({ callbackUrl: "/admin/login" })}
@@ -109,11 +126,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <div className="flex items-center justify-between px-6 py-4">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden text-text-muted hover:text-text"
+              className="lg:hidden text-text-muted hover:text-text transition-colors"
             >
               <Menu className="w-6 h-6" />
             </button>
-            <h1 className="text-xl font-bold text-text">Admin Dashboard</h1>
+            <div className="flex items-center gap-3">
+              <span className="hidden lg:inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-lime font-semibold">
+                <span className="w-6 h-px bg-lime" />
+                Admin
+              </span>
+              <h1 className="font-serif text-xl text-text">Dashboard</h1>
+            </div>
             <div className="w-8" />
           </div>
         </header>

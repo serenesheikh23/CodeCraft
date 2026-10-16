@@ -37,9 +37,9 @@ export default function ContactSection() {
   return (
     <section id="contact" className="relative py-32 lg:py-48 overflow-hidden">
       <div className="absolute top-1/2 -right-32 w-[600px] h-[600px] glow-blue opacity-50 blur-3xl pointer-events-none" />
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
-          {/* Left: Heading + contact info */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -58,13 +58,13 @@ export default function ContactSection() {
             </p>
 
             {/* Email card */}
-            <div className="border border-border p-6 mb-6 flex items-start gap-4 hover:border-lime/40 transition-colors">
-              <Mail className="w-5 h-5 text-lime flex-shrink-0 mt-1" />
+            <div className="border border-border p-6 mb-6 flex items-start gap-4 hover:border-coral/40 transition-colors">
+              <Mail className="w-5 h-5 text-coral flex-shrink-0 mt-1" />
               <div>
                 <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-2">Email</div>
                 <a
                   href="mailto:serenesheikh23@gmail.com"
-                  className="text-text hover:text-lime transition-colors"
+                  className="text-text hover:text-coral transition-colors"
                 >
                   serenesheikh23@gmail.com
                 </a>
@@ -72,52 +72,42 @@ export default function ContactSection() {
             </div>
 
             {/* Location card */}
-            <div className="border border-border p-6 mb-16 flex items-start gap-4 hover:border-lime/40 transition-colors">
-              <MapPin className="w-5 h-5 text-lime flex-shrink-0 mt-1" />
+            <div className="border border-border p-6 mb-16 flex items-start gap-4 hover:border-coral/40 transition-colors">
+              <MapPin className="w-5 h-5 text-coral flex-shrink-0 mt-1" />
               <div>
                 <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-2">Location</div>
                 <div className="text-text">Remote Worldwide</div>
               </div>
             </div>
 
-            {/* Call us directly */}
+            {/* Call us directly + WhatsApp */}
             <div className="border-t border-border pt-10">
               <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-6">
                 Call us directly
               </div>
 
-              <div className="flex flex-row gap-6 sm:gap-10 items-center flex-wrap">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
                 <a
                   href="tel:+963933135837"
-                  className="flex items-center gap-2.5 text-text hover:text-lime transition-colors text-sm sm:text-base whitespace-nowrap"
+                  className="text-text hover:text-coral transition-colors text-lg font-serif whitespace-nowrap"
                 >
-                  <MessageCircle className="w-4 h-4 text-lime flex-shrink-0" />
-                  <span>+963 933 135 837</span>
+                  +963 933 135 837
                 </a>
-                <a
-                  href="tel:+963997112295"
-                  className="flex items-center gap-2.5 text-text hover:text-lime transition-colors text-sm sm:text-base whitespace-nowrap"
-                >
-                  <MessageCircle className="w-4 h-4 text-lime flex-shrink-0" />
-                  <span>+963 997 112 295</span>
-                </a>
-              </div>
 
-              <div className="mt-10">
                 <a
                   href="https://wa.me/963933135837"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-secondary"
+                  className="inline-flex items-center justify-center gap-2 border border-border text-text-muted hover:bg-coral hover:text-background hover:border-coral transition-colors px-5 py-3 rounded-md font-medium uppercase tracking-wider text-xs w-full sm:w-auto"
                 >
-                  <MessageCircle className="w-3 h-3" />
+                  <MessageCircle className="w-3.5 h-3.5" />
                   Chat on WhatsApp
                 </a>
               </div>
             </div>
           </motion.div>
 
-          {/* Right: Form */}
+          {/* Form */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -128,7 +118,7 @@ export default function ContactSection() {
             <form onSubmit={handleSubmit} className="border border-border p-8 lg:p-10">
               <div className="space-y-6">
                 <div>
-                  <label htmlFor="name" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-3">
+                  <label htmlFor="name" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-3 font-semibold">
                     Full Name
                   </label>
                   <input
@@ -137,12 +127,12 @@ export default function ContactSection() {
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full bg-transparent border-b border-border focus:border-lime outline-none py-3 text-text transition-colors"
+                    className="w-full bg-transparent border-b border-border focus:border-coral outline-none py-3 text-text transition-colors"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-3">
+                  <label htmlFor="email" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-3 font-semibold">
                     Email Address
                   </label>
                   <input
@@ -151,12 +141,12 @@ export default function ContactSection() {
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full bg-transparent border-b border-border focus:border-lime outline-none py-3 text-text transition-colors"
+                    className="w-full bg-transparent border-b border-border focus:border-coral outline-none py-3 text-text transition-colors"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-3">
+                  <label htmlFor="message" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-3 font-semibold">
                     Message
                   </label>
                   <textarea
@@ -165,7 +155,7 @@ export default function ContactSection() {
                     rows={6}
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="w-full bg-transparent border-b border-border focus:border-lime outline-none py-3 text-text transition-colors resize-none"
+                    className="w-full bg-transparent border-b border-border focus:border-coral outline-none py-3 text-text transition-colors resize-none"
                   />
                 </div>
               </div>
@@ -184,7 +174,7 @@ export default function ContactSection() {
               <button
                 type="submit"
                 disabled={status === "loading"}
-                className="btn-primary w-full py-4"
+                className="mt-8 w-full bg-text text-background hover:bg-coral hover:text-background transition-colors py-4 rounded-md font-semibold uppercase tracking-wider text-xs inline-flex items-center justify-center gap-2 disabled:opacity-50"
               >
                 {status === "loading" ? (
                   <>

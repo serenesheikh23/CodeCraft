@@ -45,7 +45,6 @@ export async function PUT(
         outcome: String(body.outcome ?? ""),
         imageUrl: String(body.imageUrl ?? ""),
         liveUrl: String(body.liveUrl ?? ""),
-        githubUrl: String(body.githubUrl ?? ""),
         techStack: String(body.techStack ?? "[]"),
         images: String(body.images ?? "[]"),
         featured: body.featured === true,

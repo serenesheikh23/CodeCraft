@@ -12,7 +12,6 @@ interface Project {
   imageUrl: string;
   techStack: string;
   liveUrl: string;
-  githubUrl: string;
   featured: boolean;
 }
 
@@ -79,7 +78,6 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
               transition={{ duration: 0.6, delay: index * 0.1 }}
               className="group border border-border overflow-hidden transition-colors duration-300 hover:border-coral/40"
             >
-              {/* Image */}
               <Link href={`/projects/${project.slug}`} className="block relative aspect-video overflow-hidden bg-card">
                 {project.imageUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -96,7 +94,6 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
                 <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               </Link>
 
-              {/* Content */}
               <div className="p-8">
                 <div className="flex items-start justify-between gap-4 mb-4">
                   <Link href={`/projects/${project.slug}`} className="flex-1">
@@ -113,7 +110,6 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
                   {project.description}
                 </p>
 
-                {/* Links */}
                 <div className="flex items-center gap-5 pt-4 border-t border-border">
                   {project.liveUrl && (
                     <a

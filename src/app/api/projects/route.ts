@@ -41,7 +41,6 @@ export async function POST(request: NextRequest) {
         outcome,
         imageUrl,
         liveUrl: liveUrl || "",
-        githubUrl: githubUrl || "",
         techStack: JSON.stringify(techStackArray),
         featured: featured ?? false,
         order: Number(order) || 0,

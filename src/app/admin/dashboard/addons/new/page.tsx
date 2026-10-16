@@ -96,7 +96,8 @@ export default function NewAddOnPage() {
           <ArrowLeft size={20} />
         </Link>
         <div>
-          <h1 className="text-3xl font-bold text-text flex items-center gap-3">
+          <div className="section-label text-lime mb-4">ADD-ONS</div>
+        <h1 className="font-serif text-3xl lg:text-4xl text-text">
             <Package className="w-8 h-8 text-accent" />
             Add Add-on
           </h1>
@@ -123,7 +124,7 @@ export default function NewAddOnPage() {
       >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="name" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Add-on Name *
             </label>
             <input
@@ -138,7 +139,7 @@ export default function NewAddOnPage() {
           </div>
 
           <div>
-            <label htmlFor="icon" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="icon" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Icon
             </label>
             <select
@@ -157,7 +158,7 @@ export default function NewAddOnPage() {
         </div>
 
         <div>
-          <label htmlFor="description" className="block text-sm font-medium text-text-muted mb-2">
+          <label htmlFor="description" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
             Description *
           </label>
           <textarea
@@ -173,7 +174,7 @@ export default function NewAddOnPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="price" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="price" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Price ($) *
             </label>
             <input
@@ -188,7 +189,7 @@ export default function NewAddOnPage() {
           </div>
 
           <div>
-            <label htmlFor="order" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="order" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Display Order
             </label>
             <input

@@ -62,7 +62,8 @@ export default function NewLegalPagePage() {
           <ArrowLeft size={20} />
         </Link>
         <div>
-          <h1 className="text-3xl font-bold text-text flex items-center gap-3">
+          <div className="section-label text-lime mb-4">LEGAL PAGES</div>
+        <h1 className="font-serif text-3xl lg:text-4xl text-text">
             <ScrollText className="w-8 h-8 text-primary" />
             Add Legal Page
           </h1>
@@ -88,7 +89,7 @@ export default function NewLegalPagePage() {
         className="bg-card border border-border rounded-xl p-6 space-y-6"
       >
         <div>
-          <label htmlFor="slug" className="block text-sm font-medium text-text-muted mb-2">
+          <label htmlFor="slug" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
             Slug *
           </label>
           <input
@@ -104,7 +105,7 @@ export default function NewLegalPagePage() {
         </div>
 
         <div>
-          <label htmlFor="title" className="block text-sm font-medium text-text-muted mb-2">
+          <label htmlFor="title" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
             Title *
           </label>
           <input
@@ -119,7 +120,7 @@ export default function NewLegalPagePage() {
         </div>
 
         <div>
-          <label htmlFor="content" className="block text-sm font-medium text-text-muted mb-2">
+          <label htmlFor="content" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
             Content *
           </label>
           <textarea

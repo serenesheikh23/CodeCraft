@@ -88,7 +88,8 @@ export default function TestimonialsPage() {
         className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
       >
         <div>
-          <h1 className="text-3xl font-bold text-text flex items-center gap-3">
+          <div className="section-label text-lime mb-4">TESTIMONIALS</div>
+        <h1 className="font-serif text-3xl lg:text-4xl text-text">
             <MessageSquare className="w-8 h-8 text-accent" />
             Testimonials
           </h1>

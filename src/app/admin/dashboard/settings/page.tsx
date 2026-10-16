@@ -82,12 +82,13 @@ export default function SiteSettingsPage() {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold text-text flex items-center gap-3">
+        <div className="section-label text-lime mb-4">SETTINGS</div>
+        <h1 className="font-serif text-3xl lg:text-4xl text-text">
           <Settings className="w-8 h-8 text-primary" />
           Site Settings
         </h1>
         <div className="bg-card border border-border rounded-xl p-8 text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto" />
+          <Loader2 className="w-8 h-8 animate-spin text-coral mx-auto" />
           <p className="text-text-muted mt-4">Loading settings...</p>
         </div>
       </div>
@@ -100,7 +101,7 @@ export default function SiteSettingsPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <h1 className="text-3xl font-bold text-text flex items-center gap-3">
+        <h1 className="font-serif text-3xl lg:text-4xl text-text">
           <Settings className="w-8 h-8 text-primary" />
           Site Settings
         </h1>
@@ -145,7 +146,7 @@ export default function SiteSettingsPage() {
       >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="email" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Email *
             </label>
             <input
@@ -160,7 +161,7 @@ export default function SiteSettingsPage() {
           </div>
 
           <div>
-            <label htmlFor="location" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="location" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Location
             </label>
             <input
@@ -176,7 +177,7 @@ export default function SiteSettingsPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="phone1" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="phone1" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Phone 1
             </label>
             <input
@@ -190,7 +191,7 @@ export default function SiteSettingsPage() {
           </div>
 
           <div>
-            <label htmlFor="phone2" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="phone2" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Phone 2
             </label>
             <input
@@ -206,7 +207,7 @@ export default function SiteSettingsPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="whatsapp1" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="whatsapp1" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               WhatsApp 1 (number only)
             </label>
             <input
@@ -221,7 +222,7 @@ export default function SiteSettingsPage() {
           </div>
 
           <div>
-            <label htmlFor="whatsapp2" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="whatsapp2" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               WhatsApp 2 (number only)
             </label>
             <input
@@ -238,7 +239,7 @@ export default function SiteSettingsPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="instagramUrl" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="instagramUrl" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Instagram URL
             </label>
             <input
@@ -252,7 +253,7 @@ export default function SiteSettingsPage() {
           </div>
 
           <div>
-            <label htmlFor="linkedin1Url" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="linkedin1Url" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               LinkedIn 1 URL
             </label>
             <input
@@ -267,7 +268,7 @@ export default function SiteSettingsPage() {
         </div>
 
         <div>
-          <label htmlFor="linkedin2Url" className="block text-sm font-medium text-text-muted mb-2">
+          <label htmlFor="linkedin2Url" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
             LinkedIn 2 URL
           </label>
           <input
@@ -281,7 +282,7 @@ export default function SiteSettingsPage() {
         </div>
 
         <div>
-          <label htmlFor="tagline" className="block text-sm font-medium text-text-muted mb-2">
+          <label htmlFor="tagline" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
             Tagline
           </label>
           <textarea

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
@@ -39,54 +40,76 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4 relative overflow-hidden">
+      {/* Glows */}
+      <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] glow-cyan opacity-40 blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] glow-blue opacity-40 blur-3xl pointer-events-none" />
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md bg-card border border-border rounded-2xl p-8 shadow-glow"
+        className="relative w-full max-w-md bg-card border border-border rounded-xl p-8"
       >
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-text mb-2">Admin Login</h1>
-          <p className="text-text-muted">Sign in to manage Code Craft</p>
+        {/* Logo */}
+        <div className="flex justify-center mb-8">
+          <div
+            className="relative w-12 h-12"
+            style={{ filter: "drop-shadow(0 0 10px rgba(34, 211, 238, 0.5))" }}
+          >
+            <Image
+              src="/logo.svg"
+              alt="Code Craft"
+              fill
+              sizes="48px"
+              className="object-contain"
+              priority
+            />
+          </div>
+        </div>
+
+        <div className="text-center mb-10">
+          <div className="section-label text-lime mb-4 justify-center">ADMIN</div>
+          <h1 className="font-serif text-3xl text-text">Sign in to Code Craft</h1>
+          <p className="text-text-muted mt-3 text-sm">Manage your content and settings</p>
         </div>
 
         {error && (
-          <div className="bg-red-500/10 border border-red-500/50 text-red-500 p-3 rounded-lg mb-6 text-sm text-center">
+          <div className="bg-red-500/10 border border-red-500/30 text-red-400 p-3 rounded-lg mb-6 text-sm text-center">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-text-muted mb-2">
+            <label className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Email Address
             </label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted pointer-events-none" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full bg-background border border-border rounded-lg pl-10 pr-4 py-3 text-text focus:outline-none focus:border-primary transition-colors"
+                className="w-full bg-background border border-border rounded-lg pl-10 pr-4 py-3 text-text focus:outline-none focus:border-coral transition-colors"
                 placeholder="admin@codecraft.com"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-text-muted mb-2">
+            <label className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Password
             </label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted pointer-events-none" />
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full bg-background border border-border rounded-lg pl-10 pr-4 py-3 text-text focus:outline-none focus:border-primary transition-colors"
+                className="w-full bg-background border border-border rounded-lg pl-10 pr-4 py-3 text-text focus:outline-none focus:border-coral transition-colors"
                 placeholder="••••••••"
               />
             </div>

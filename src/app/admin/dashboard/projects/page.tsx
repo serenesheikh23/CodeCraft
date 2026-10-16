@@ -15,8 +15,6 @@ interface Project {
   outcome: string;
   imageUrl: string;
   liveUrl: string;
-  githubUrl: string;
-  techStack: string;
   featured: boolean;
   order: number;
   isActive: boolean;
@@ -83,7 +81,8 @@ export default function ProjectsPage() {
         className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
       >
         <div>
-          <h1 className="text-3xl font-bold text-text flex items-center gap-3">
+          <div className="section-label text-lime mb-4">PROJECTS</div>
+        <h1 className="font-serif text-3xl lg:text-4xl text-text">
             <FolderKanban className="w-8 h-8 text-primary" />
             Projects
           </h1>
@@ -119,7 +118,7 @@ export default function ProjectsPage() {
       >
         {isLoading ? (
           <div className="p-8 text-center">
-            <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto" />
+            <Loader2 className="w-8 h-8 animate-spin text-coral mx-auto" />
             <p className="text-text-muted mt-4">Loading projects...</p>
           </div>
         ) : filteredProjects.length === 0 ? (
@@ -142,7 +141,6 @@ export default function ProjectsPage() {
               <thead>
                 <tr className="border-b border-border bg-card-hover">
                   <th className="px-6 py-4 text-left text-sm font-medium text-text-muted">Project</th>
-                  <th className="px-6 py-4 text-left text-sm font-medium text-text-muted">Tech Stack</th>
                   <th className="px-6 py-4 text-left text-sm font-medium text-text-muted">Featured</th>
                   <th className="px-6 py-4 text-left text-sm font-medium text-text-muted">Status</th>
                   <th className="px-6 py-4 text-left text-sm font-medium text-text-muted">Order</th>
@@ -160,19 +158,21 @@ export default function ProjectsPage() {
                   >
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                          <FolderKanban className="w-5 h-5 text-primary" />
-                        </div>
-                        <div>
-                          <p className="font-medium text-text">{project.title}</p>
-                          <p className="text-sm text-text-muted truncate max-w-xs">{project.slug}</p>
+                        {project.imageUrl ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={project.imageUrl}
+                            alt={project.title}
+                            className="w-10 h-10 rounded object-cover border border-border flex-shrink-0"
+                          />
+                        ) : (
+                          <div className="w-10 h-10 rounded bg-card-hover border border-border flex-shrink-0" />
+                        )}
+                        <div className="min-w-0">
+                          <div className="text-text font-medium truncate">{project.title}</div>
+                          <div className="text-xs text-text-muted truncate">/{project.slug}</div>
                         </div>
                       </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="text-sm text-text-muted">
-                        {JSON.parse(project.techStack || "[]").length} technologies
-                      </span>
                     </td>
                     <td className="px-6 py-4">
                       <span

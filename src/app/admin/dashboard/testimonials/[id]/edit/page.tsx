@@ -125,7 +125,8 @@ export default function EditTestimonialPage() {
             <ArrowLeft size={20} />
           </Link>
           <div>
-            <h1 className="text-3xl font-bold text-text flex items-center gap-3">
+            <div className="section-label text-lime mb-4">TESTIMONIALS</div>
+        <h1 className="font-serif text-3xl lg:text-4xl text-text">
               <MessageSquare className="w-8 h-8 text-accent" />
               Edit Testimonial
             </h1>
@@ -153,7 +154,7 @@ export default function EditTestimonialPage() {
           <ArrowLeft size={20} />
         </Link>
         <div>
-          <h1 className="text-3xl font-bold text-text flex items-center gap-3">
+          <h1 className="font-serif text-3xl lg:text-4xl text-text">
             <MessageSquare className="w-8 h-8 text-accent" />
             Edit Testimonial
           </h1>
@@ -180,7 +181,7 @@ export default function EditTestimonialPage() {
       >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="clientName" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="clientName" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Client Name *
             </label>
             <input
@@ -195,7 +196,7 @@ export default function EditTestimonialPage() {
           </div>
 
           <div>
-            <label htmlFor="clientRole" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="clientRole" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Client Role *
             </label>
             <input
@@ -211,7 +212,7 @@ export default function EditTestimonialPage() {
         </div>
 
         <div>
-          <label htmlFor="clientCompany" className="block text-sm font-medium text-text-muted mb-2">
+          <label htmlFor="clientCompany" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
             Client Company *
           </label>
           <input
@@ -226,7 +227,7 @@ export default function EditTestimonialPage() {
         </div>
 
         <div>
-          <label htmlFor="content" className="block text-sm font-medium text-text-muted mb-2">
+          <label htmlFor="content" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
             Testimonial Content *
           </label>
           <textarea
@@ -242,7 +243,7 @@ export default function EditTestimonialPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <div>
-            <label htmlFor="rating" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="rating" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Rating (1-5) *
             </label>
             <select
@@ -270,7 +271,7 @@ export default function EditTestimonialPage() {
           </div>
 
           <div>
-            <label htmlFor="order" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="order" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Display Order
             </label>
             <input

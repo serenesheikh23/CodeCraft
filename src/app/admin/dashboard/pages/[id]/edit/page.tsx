@@ -153,7 +153,7 @@ export default function EditCustomPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <Loader2 className="w-8 h-8 animate-spin text-coral" />
       </div>
     );
   }
@@ -166,29 +166,30 @@ export default function EditCustomPage() {
       </button>
 
       <div>
-        <h1 className="text-3xl font-bold text-text">Edit Page</h1>
+        <div className="section-label text-lime mb-4">CUSTOM PAGES</div>
+        <h1 className="font-serif text-3xl lg:text-4xl text-text">Edit Page</h1>
         <p className="text-text-muted mt-1">Update page content and add sections</p>
       </div>
 
       <form onSubmit={handleSubmit} className="bg-card border border-border rounded-xl p-6 space-y-5">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-text-muted mb-2">Title</label>
-            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full bg-background border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-primary" />
+            <label className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">Title</label>
+            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full bg-background border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-coral transition-colors" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-text-muted mb-2">Slug</label>
-            <input type="text" value={slug} onChange={(e) => setSlug(e.target.value)} className="w-full bg-background border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-primary" />
+            <label className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">Slug</label>
+            <input type="text" value={slug} onChange={(e) => setSlug(e.target.value)} className="w-full bg-background border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-coral transition-colors" />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-text-muted mb-2">Fallback Content (used if no sections are added)</label>
-          <textarea rows={6} value={content} onChange={(e) => setContent(e.target.value)} className="w-full bg-background border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-primary resize-none" />
+          <label className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">Fallback Content (used if no sections are added)</label>
+          <textarea rows={6} value={content} onChange={(e) => setContent(e.target.value)} className="w-full bg-background border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-coral resize-none" />
         </div>
 
         <div className="flex items-center gap-3">
-          <input type="checkbox" id="isActive" checked={isActive} onChange={(e) => setIsActive(e.target.checked)} className="w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+          <input type="checkbox" id="isActive" checked={isActive} onChange={(e) => setIsActive(e.target.checked)} className="w-5 h-5 rounded border-border text-coral focus:ring-coral/50" />
           <label htmlFor="isActive" className="text-sm font-medium text-text">Active (published)</label>
         </div>
 
@@ -216,8 +217,8 @@ export default function EditCustomPage() {
         {showAddSection && (
           <div className="bg-background border border-border rounded-lg p-5 space-y-4">
             <div>
-              <label className="block text-sm font-medium text-text-muted mb-2">Type</label>
-              <select value={newSectionType} onChange={(e) => { setNewSectionType(e.target.value as SectionType); setNewSectionContent({}); }} className="w-full bg-card border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-primary">
+              <label className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">Type</label>
+              <select value={newSectionType} onChange={(e) => { setNewSectionType(e.target.value as SectionType); setNewSectionContent({}); }} className="w-full bg-card border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-coral">
                 <optgroup label="Layout Sections">
                   {TYPE_OPTIONS.filter(o => o.group === "Layout").map((opt) => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -234,12 +235,12 @@ export default function EditCustomPage() {
             {!DB_BACKED.includes(newSectionType) && (
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-text-muted mb-2">Title</label>
-                  <input type="text" value={newSectionTitle} onChange={(e) => setNewSectionTitle(e.target.value)} className="w-full bg-card border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-primary" />
+                  <label className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">Title</label>
+                  <input type="text" value={newSectionTitle} onChange={(e) => setNewSectionTitle(e.target.value)} className="w-full bg-card border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-coral" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-text-muted mb-2">Subtitle</label>
-                  <input type="text" value={newSectionSubtitle} onChange={(e) => setNewSectionSubtitle(e.target.value)} className="w-full bg-card border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-primary" />
+                  <label className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">Subtitle</label>
+                  <input type="text" value={newSectionSubtitle} onChange={(e) => setNewSectionSubtitle(e.target.value)} className="w-full bg-card border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-coral" />
                 </div>
               </div>
             )}

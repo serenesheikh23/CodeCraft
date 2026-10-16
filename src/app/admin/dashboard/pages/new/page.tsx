@@ -64,7 +64,8 @@ export default function NewCustomPagePage() {
           <ArrowLeft size={20} />
         </Link>
         <div>
-          <h1 className="text-3xl font-bold text-text flex items-center gap-3">
+          <div className="section-label text-lime mb-4">CUSTOM PAGES</div>
+        <h1 className="font-serif text-3xl lg:text-4xl text-text">
             <FileText className="w-8 h-8 text-primary" />
             Add Custom Page
           </h1>
@@ -90,7 +91,7 @@ export default function NewCustomPagePage() {
         className="bg-card border border-border rounded-xl p-6 space-y-6"
       >
         <div>
-          <label htmlFor="slug" className="block text-sm font-medium text-text-muted mb-2">
+          <label htmlFor="slug" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
             Slug *
           </label>
           <input
@@ -106,7 +107,7 @@ export default function NewCustomPagePage() {
         </div>
 
         <div>
-          <label htmlFor="title" className="block text-sm font-medium text-text-muted mb-2">
+          <label htmlFor="title" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
             Title *
           </label>
           <input
@@ -121,7 +122,7 @@ export default function NewCustomPagePage() {
         </div>
 
         <div>
-          <label htmlFor="content" className="block text-sm font-medium text-text-muted mb-2">
+          <label htmlFor="content" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
             Content *
           </label>
           <textarea
@@ -141,7 +142,7 @@ export default function NewCustomPagePage() {
             type="checkbox"
             checked={formData.isActive}
             onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-            className="w-5 h-5 rounded border-border text-primary focus:ring-primary/50"
+            className="w-5 h-5 rounded border-border text-coral focus:ring-coral/50"
           />
           <label htmlFor="isActive" className="text-text">
             Active (visible on website)

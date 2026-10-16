@@ -16,8 +16,6 @@ interface FormData {
   outcome: string;
   imageUrl: string;
   liveUrl: string;
-  githubUrl: string;
-  techStack: string;
   featured: boolean;
   order: string;
   isActive: boolean;
@@ -34,8 +32,6 @@ export default function NewProjectPage() {
     outcome: "",
     imageUrl: "",
     liveUrl: "",
-    githubUrl: "",
-    techStack: "",
     featured: false,
     order: "0",
     isActive: true,
@@ -49,7 +45,6 @@ export default function NewProjectPage() {
     setError("");
 
     try {
-      const techStackArray = formData.techStack.split(",").map((f) => f.trim()).filter(Boolean);
 
       const data = {
         title: formData.title,
@@ -60,8 +55,6 @@ export default function NewProjectPage() {
         outcome: formData.outcome,
         imageUrl: formData.imageUrl,
         liveUrl: formData.liveUrl,
-        githubUrl: formData.githubUrl,
-        techStack: JSON.stringify(techStackArray),
         featured: formData.featured,
         order: Number(formData.order),
         isActive: formData.isActive,
@@ -101,7 +94,8 @@ export default function NewProjectPage() {
           <ArrowLeft size={20} />
         </Link>
         <div>
-          <h1 className="text-3xl font-bold text-text flex items-center gap-3">
+          <div className="section-label text-lime mb-4">PROJECTS</div>
+        <h1 className="font-serif text-3xl lg:text-4xl text-text">
             <FolderKanban className="w-8 h-8 text-primary" />
             Add Project
           </h1>
@@ -128,7 +122,7 @@ export default function NewProjectPage() {
       >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="title" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Project Title *
             </label>
             <input
@@ -143,7 +137,7 @@ export default function NewProjectPage() {
           </div>
 
           <div>
-            <label htmlFor="slug" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="slug" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Slug *
             </label>
             <input
@@ -160,7 +154,7 @@ export default function NewProjectPage() {
         </div>
 
         <div>
-          <label htmlFor="description" className="block text-sm font-medium text-text-muted mb-2">
+          <label htmlFor="description" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
             Short Description *
           </label>
           <textarea
@@ -176,7 +170,7 @@ export default function NewProjectPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="problem" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="problem" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Problem Statement *
             </label>
             <textarea
@@ -191,7 +185,7 @@ export default function NewProjectPage() {
           </div>
 
           <div>
-            <label htmlFor="solution" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="solution" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Solution *
             </label>
             <textarea
@@ -207,7 +201,7 @@ export default function NewProjectPage() {
         </div>
 
         <div>
-          <label htmlFor="outcome" className="block text-sm font-medium text-text-muted mb-2">
+          <label htmlFor="outcome" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
             Outcome / Results *
           </label>
           <textarea
@@ -232,7 +226,7 @@ export default function NewProjectPage() {
           </div>
 
           <div>
-            <label htmlFor="liveUrl" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="liveUrl" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Live Demo URL
             </label>
             <input
@@ -247,22 +241,9 @@ export default function NewProjectPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div>
-            <label htmlFor="githubUrl" className="block text-sm font-medium text-text-muted mb-2">
-              GitHub Repository URL
-            </label>
-            <input
-              id="githubUrl"
-              type="url"
-              value={formData.githubUrl}
-              onChange={(e) => setFormData({ ...formData, githubUrl: e.target.value })}
-              className="w-full px-4 py-3 bg-background border border-border rounded-lg text-text placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all"
-              placeholder="https://github.com/username/repo"
-            />
-          </div>
 
           <div>
-            <label htmlFor="order" className="block text-sm font-medium text-text-muted mb-2">
+            <label htmlFor="order" className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">
               Display Order
             </label>
             <input
@@ -276,21 +257,7 @@ export default function NewProjectPage() {
           </div>
         </div>
 
-        <div>
-          <label htmlFor="techStack" className="block text-sm font-medium text-text-muted mb-2">
-            Tech Stack (comma separated) *
-          </label>
-          <textarea
-            id="techStack"
-            value={formData.techStack}
-            onChange={(e) => setFormData({ ...formData, techStack: e.target.value })}
-            required
-            rows={2}
-            className="w-full px-4 py-3 bg-background border border-border rounded-lg text-text placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all resize-none"
-            placeholder="e.g., Next.js, TypeScript, Prisma, PostgreSQL, Tailwind CSS"
-          />
-          <p className="text-sm text-text-muted mt-1">Separate technologies with commas</p>
-        </div>
+        
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="flex items-center gap-3">
@@ -299,7 +266,7 @@ export default function NewProjectPage() {
               type="checkbox"
               checked={formData.featured}
               onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
-              className="w-5 h-5 rounded border-border text-primary focus:ring-primary/50"
+              className="w-5 h-5 rounded border-border text-coral focus:ring-coral/50"
             />
             <label htmlFor="featured" className="text-text">
               Featured (show on homepage)
@@ -312,7 +279,7 @@ export default function NewProjectPage() {
               type="checkbox"
               checked={formData.isActive}
               onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-              className="w-5 h-5 rounded border-border text-primary focus:ring-primary/50"
+              className="w-5 h-5 rounded border-border text-coral focus:ring-coral/50"
             />
             <label htmlFor="isActive" className="text-text">
               Active (visible on website)

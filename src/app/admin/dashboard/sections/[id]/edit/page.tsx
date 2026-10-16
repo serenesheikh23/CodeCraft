@@ -97,7 +97,7 @@ export default function EditSectionPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <Loader2 className="w-8 h-8 animate-spin text-coral" />
       </div>
     );
   }
@@ -111,12 +111,12 @@ export default function EditSectionPage() {
         Back
       </button>
       <div>
-        <h1 className="text-3xl font-bold text-text">Edit Section</h1>
+        <h1 className="font-serif text-3xl lg:text-4xl text-text">Edit Section</h1>
       </div>
       <form onSubmit={handleSubmit} className="bg-card border border-border rounded-xl p-6 space-y-5">
         <div>
-          <label className="block text-sm font-medium text-text-muted mb-2">Section Type</label>
-          <select value={type} onChange={(e) => setType(e.target.value as SectionType)} className="w-full bg-background border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-primary">
+          <label className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">Section Type</label>
+          <select value={type} onChange={(e) => setType(e.target.value as SectionType)} className="w-full bg-background border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-coral transition-colors">
             <optgroup label="Layout Sections">
               {TYPE_OPTIONS.filter(o => o.group === "Layout").map((opt) => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -131,30 +131,30 @@ export default function EditSectionPage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-text-muted mb-2">Name (admin label)</label>
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full bg-background border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-primary" />
+          <label className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">Name (admin label)</label>
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full bg-background border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-coral transition-colors" />
         </div>
 
         {!isDbBacked && (
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-text-muted mb-2">Title</label>
-              <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full bg-background border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-primary" />
+              <label className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">Title</label>
+              <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full bg-background border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-coral transition-colors" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-text-muted mb-2">Subtitle</label>
-              <input type="text" value={subtitle} onChange={(e) => setSubtitle(e.target.value)} className="w-full bg-background border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-primary" />
+              <label className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">Subtitle</label>
+              <input type="text" value={subtitle} onChange={(e) => setSubtitle(e.target.value)} className="w-full bg-background border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-coral transition-colors" />
             </div>
           </div>
         )}
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-text-muted mb-2">Order</label>
-            <input type="number" value={order} onChange={(e) => setOrder(Number(e.target.value))} className="w-full bg-background border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-primary" />
+            <label className="block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold">Order</label>
+            <input type="number" value={order} onChange={(e) => setOrder(Number(e.target.value))} className="w-full bg-background border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-coral transition-colors" />
           </div>
           <div className="flex items-center gap-3 pt-8">
-            <input type="checkbox" id="isVisible" checked={isVisible} onChange={(e) => setIsVisible(e.target.checked)} className="w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+            <input type="checkbox" id="isVisible" checked={isVisible} onChange={(e) => setIsVisible(e.target.checked)} className="w-5 h-5 rounded border-border text-coral focus:ring-coral/50" />
             <label htmlFor="isVisible" className="text-sm font-medium text-text">Visible</label>
           </div>
         </div>

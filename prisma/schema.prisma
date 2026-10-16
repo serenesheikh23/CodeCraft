@@ -52,14 +52,14 @@ model Project {
   outcome      String
   imageUrl     String
   liveUrl      String
-  githubUrl    String
-  techStack    String   // JSON stringified array
+  githubUrl String?
+  techStack String?   // JSON stringified array
   featured     Boolean  @default(false)
   order        Int      @default(0)
   isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  images      String   @default("[]")
+  images String @default("[]")
 }
 
 model Testimonial {

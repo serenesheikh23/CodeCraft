@@ -23,8 +23,6 @@ export default function EditProjectPage() {
   const [imageUrl, setImageUrl] = useState("");
   const [images, setImages] = useState<string[]>([]);
   const [liveUrl, setLiveUrl] = useState("");
-  const [githubUrl, setGithubUrl] = useState("");
-  const [techStack, setTechStack] = useState("");
   const [featured, setFeatured] = useState(false);
   const [order, setOrder] = useState(0);
   const [isActive, setIsActive] = useState(true);
@@ -43,25 +41,9 @@ export default function EditProjectPage() {
           setOutcome(p.outcome || "");
           setImageUrl(p.imageUrl || "");
           setLiveUrl(p.liveUrl || "");
-          setGithubUrl(p.githubUrl || "");
           setFeatured(p.featured === true);
           setOrder(p.order || 0);
           setIsActive(p.isActive !== false);
-
-          let techArr: string[] = [];
-          try {
-            const raw = p.techStack;
-            if (Array.isArray(raw)) techArr = raw;
-            else if (typeof raw === "string" && raw.startsWith("[")) {
-              const parsed = JSON.parse(raw);
-              if (Array.isArray(parsed)) techArr = parsed;
-            } else if (typeof raw === "string") {
-              techArr = raw.split(",").map((s: string) => s.trim()).filter(Boolean);
-            }
-          } catch {
-            techArr = [];
-          }
-          setTechStack(techArr.join(", "));
 
           let imgArr: string[] = [];
           try {
@@ -89,11 +71,6 @@ export default function EditProjectPage() {
     e.preventDefault();
     setIsSaving(true);
 
-    const techArray = techStack
-      .split(",")
-      .map((t) => t.trim())
-      .filter((t) => t !== "");
-
     const payload = {
       title,
       slug,
@@ -104,8 +81,6 @@ export default function EditProjectPage() {
       imageUrl,
       images: JSON.stringify(images),
       liveUrl,
-      githubUrl,
-      techStack: JSON.stringify(techArray),
       featured,
       order: Number(order),
       isActive,
@@ -135,13 +110,13 @@ export default function EditProjectPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <Loader2 className="w-8 h-8 animate-spin text-coral" />
       </div>
     );
   }
 
-  const inputCls = "w-full bg-background border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-primary";
-  const labelCls = "block text-sm font-medium text-text-muted mb-2";
+  const inputCls = "w-full bg-background border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-coral transition-colors";
+  const labelCls = "block text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-semibold";
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
@@ -151,11 +126,12 @@ export default function EditProjectPage() {
       </button>
 
       <div>
-        <h1 className="text-3xl font-bold text-text">Edit Project</h1>
-        <p className="text-text-muted mt-1">Update project details</p>
+        <div className="section-label text-lime mb-4">PROJECTS</div>
+        <h1 className="font-serif text-3xl lg:text-4xl text-text">Edit Project</h1>
+        <p className="text-text-muted mt-3 text-sm">Update project details</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-card border border-border rounded-xl p-6 space-y-5">
+      <form onSubmit={handleSubmit} className="bg-card border border-border rounded-xl p-6 lg:p-8 space-y-5">
         <div>
           <label className={labelCls}>Title</label>
           <input type="text" required value={title} onChange={(e) => setTitle(e.target.value)} className={inputCls} />
@@ -196,40 +172,29 @@ export default function EditProjectPage() {
           <MultiImageUpload value={images} onChange={setImages} />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className={labelCls}>Live URL</label>
-            <input type="text" value={liveUrl} onChange={(e) => setLiveUrl(e.target.value)} className={inputCls} />
-          </div>
-          <div>
-            <label className={labelCls}>GitHub URL</label>
-            <input type="text" value={githubUrl} onChange={(e) => setGithubUrl(e.target.value)} className={inputCls} />
-          </div>
-        </div>
-
         <div>
-          <label className={labelCls}>Tech Stack (comma separated)</label>
-          <input type="text" value={techStack} onChange={(e) => setTechStack(e.target.value)} className={inputCls} />
+          <label className={labelCls}>Live URL</label>
+          <input type="text" value={liveUrl} onChange={(e) => setLiveUrl(e.target.value)} className={inputCls} />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className={labelCls}>Order</label>
             <input type="number" value={order} onChange={(e) => setOrder(Number(e.target.value))} className={inputCls} />
           </div>
           <div className="space-y-3 pt-8">
             <div className="flex items-center gap-3">
-              <input type="checkbox" id="featured" checked={featured} onChange={(e) => setFeatured(e.target.checked)} className="w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+              <input type="checkbox" id="featured" checked={featured} onChange={(e) => setFeatured(e.target.checked)} className="w-5 h-5 rounded border-border text-coral focus:ring-coral/50" />
               <label htmlFor="featured" className="text-sm font-medium text-text">Featured</label>
             </div>
             <div className="flex items-center gap-3">
-              <input type="checkbox" id="isActive" checked={isActive} onChange={(e) => setIsActive(e.target.checked)} className="w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+              <input type="checkbox" id="isActive" checked={isActive} onChange={(e) => setIsActive(e.target.checked)} className="w-5 h-5 rounded border-border text-coral focus:ring-coral/50" />
               <label htmlFor="isActive" className="text-sm font-medium text-text">Active</label>
             </div>
           </div>
         </div>
 
-        <div className="flex gap-3 pt-4 border-t border-border">
+        <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-border">
           <button type="submit" disabled={isSaving} className="btn-primary flex-1 flex items-center justify-center py-3 disabled:opacity-50">
             {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : "Save Changes"}
           </button>

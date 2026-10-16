@@ -107,13 +107,14 @@ export default function NavLinksPage() {
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold text-text flex items-center gap-3">
+          <div className="section-label text-lime mb-4">NAV LINKS</div>
+        <h1 className="font-serif text-3xl lg:text-4xl text-text">
             <Menu className="w-8 h-8 text-primary" />
             Nav Links
           </h1>
         </div>
         <div className="bg-card border border-border rounded-xl p-8 text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto" />
+          <Loader2 className="w-8 h-8 animate-spin text-coral mx-auto" />
           <p className="text-text-muted mt-4">Loading nav links...</p>
         </div>
       </div>
@@ -137,7 +138,7 @@ export default function NavLinksPage() {
             className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
           >
             <div>
-              <h1 className="text-3xl font-bold text-text flex items-center gap-3">
+              <h1 className="font-serif text-3xl lg:text-4xl text-text">
                 <Menu className="w-8 h-8 text-primary" />
                 Nav Links
               </h1>
