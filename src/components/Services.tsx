@@ -2,10 +2,9 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Check, ChevronRight, Layout, Building, Code, ShoppingCart, Smartphone, Layers, GitBranch, Package } from "lucide-react";
+import { ChevronRight, Layout, Building, Code, ShoppingCart, Smartphone, Layers, GitBranch, Package } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
 
-// Notice: features is now a string because SQLite stores it as JSON text
 interface Service {
   id: string;
   name: string;
@@ -38,156 +37,244 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 export default function ServicesSection({ services }: { services: Service[] }) {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
+  const activeServices = services.filter(s => s.isActive);
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut",
-      },
-    },
-  };
+  if (activeServices.length === 0) return null;
+
+  // Split into rows: first 2, next 3, then remaining
+  const row1 = activeServices.slice(0, 2);
+  const row2 = activeServices.slice(2, 5);
+  const row3 = activeServices.slice(5);
 
   return (
     <section
       id="services"
-      className="relative py-20 lg:py-32 overflow-hidden"
+      className="relative py-32 lg:py-48 overflow-hidden"
       aria-labelledby="services-heading"
     >
-      <div className="absolute inset-0" aria-hidden="true">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-5xl opacity-5" style={{
-          backgroundImage: `radial-gradient(circle at center, rgba(37, 99, 235, 0.2) 0%, transparent 70%)`
-        }} />
-      </div>
-
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="mb-16 lg:mb-24"
         >
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
-            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            Our Services
-          </span>
-          <h2 id="services-heading" className="text-3xl sm:text-4xl lg:text-5xl font-bold text-text mb-4">
-            Digital solutions
+          <div className="text-text-muted text-xs uppercase tracking-[0.2em] font-medium mb-4">
+            WHAT WE DO
+          </div>
+          <h2 id="services-heading" className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight text-text">
+            We build things
             <br />
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              tailored for you
-            </span>
+            that actually ship.
           </h2>
-          <p className="text-lg text-text-muted max-w-2xl mx-auto">
-            From simple landing pages to complex full-stack applications, we build digital products that scale.
+          <p className="mt-6 text-lg text-text-muted max-w-2xl leading-relaxed">
+            From landing pages to full-stack applications — production-ready code, delivered on time.
           </p>
         </motion.div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          role="list"
-          aria-label="Services"
-        >
-          {services.map((service, index) => {
-            const Icon = iconMap[service.icon] || Layout;
+        {/* Row 1: 2 services - larger cards */}
+        {row1.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16"
+            role="list"
+            aria-label="Services"
+          >
+            {row1.map((service, index) => {
+              const Icon = iconMap[service.icon] || Layout;
+              const features = JSON.parse(service.features || "[]") as string[];
 
-            return (
-              <motion.article
-                key={service.id}
-                variants={itemVariants}
-                className="group relative"
-                role="listitem"
-              >
-                <div className="bg-card border border-border rounded-2xl p-6 h-full transition-all duration-300 hover:border-primary/50 hover:shadow-glow hover:-translate-y-1">
-                  <motion.div
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                    transition={{ duration: 0.3 }}
-                    className="w-14 h-14 rounded-xl bg-gradient-primary flex items-center justify-center mb-5 group-hover:shadow-[0_0_30px_rgba(37,99,235,0.4)] transition-shadow"
+              return (
+                <article
+                  key={service.id}
+                  className="group relative border border-border p-8 lg:p-10 transition-colors duration-300 hover:border-lime/40"
+                  role="listitem"
+                >
+                  <div className="flex items-start gap-3 mb-6">
+                    <Icon className="w-5 h-5 text-text-muted flex-shrink-0 mt-0.5" aria-hidden="true" />
+                    <h3 className="font-serif text-2xl lg:text-3xl font-bold text-text leading-snug">{service.name}</h3>
+                  </div>
+
+                  <p className="text-text-muted mb-6 leading-relaxed text-base lg:text-lg">{service.description}</p>
+
+                  <div className="flex items-baseline gap-2 mb-6">
+                    <span className="font-serif text-3xl lg:text-4xl font-bold text-text">
+                      {formatPrice(service.minPrice, service.maxPrice)}
+                    </span>
+                    <span className="text-text-muted">USD</span>
+                  </div>
+
+                  <ul className="space-y-3 mb-8" role="list">
+                    {features.slice(0, 6).map((feature, featureIndex) => (
+                      <li key={feature + featureIndex} className="flex items-start gap-3 text-text-muted">
+                        <span className="w-1 h-1 rounded-full bg-lime flex-shrink-0 mt-2" />
+                        <span className="text-base leading-relaxed">{feature}</span>
+                      </li>
+                    ))}
+                    {features.length > 6 && (
+                      <li className="flex items-center gap-2 text-sm text-lime font-medium">
+                        <ChevronRight className="w-4 h-4 flex-shrink-0" />
+                        <span>+{features.length - 6} more features</span>
+                      </li>
+                    )}
+                  </ul>
+
+                  <Link
+                    href="#contact"
+                    className="w-full border border-border text-text-muted hover:border-lime/50 hover:text-text hover:bg-card-hover transition-all inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md font-medium uppercase tracking-wider text-xs"
                   >
-                    <Icon className="w-7 h-7 text-white" />
-                  </motion.div>
+                    Discuss a project
+                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </article>
+              );
+            })}
+          </motion.div>
+        )}
 
-                  <h3 className="text-xl font-bold text-text mb-2">{service.name}</h3>
-                  <p className="text-text-muted mb-5 line-clamp-2">{service.description}</p>
+        {/* Row 2: 3 services */}
+        {row2.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16"
+            role="list"
+            aria-label="Services"
+          >
+            {row2.map((service, index) => {
+              const Icon = iconMap[service.icon] || Layout;
+              const features = JSON.parse(service.features || "[]") as string[];
 
-                  <div className="flex items-baseline gap-2 mb-5">
-                    <span className="text-2xl font-bold text-text">
+              return (
+                <article
+                  key={service.id}
+                  className="group relative border border-border p-6 transition-colors duration-300 hover:border-lime/40"
+                  role="listitem"
+                >
+                  <div className="flex items-start gap-3 mb-4">
+                    <Icon className="w-5 h-5 text-text-muted flex-shrink-0 mt-0.5" aria-hidden="true" />
+                    <h3 className="font-serif text-xl font-bold text-text leading-snug">{service.name}</h3>
+                  </div>
+
+                  <p className="text-text-muted mb-4 leading-relaxed text-sm">{service.description}</p>
+
+                  <div className="flex items-baseline gap-2 mb-4">
+                    <span className="font-serif text-2xl font-bold text-text">
                       {formatPrice(service.minPrice, service.maxPrice)}
                     </span>
                     <span className="text-text-muted">USD</span>
                   </div>
 
                   <ul className="space-y-2 mb-6" role="list">
-                    {(JSON.parse(service.features || "[]") as string[]).slice(0, 4).map((feature, featureIndex) => (
-                      <motion.li
-                        key={feature}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.1 + featureIndex * 0.05 }}
-                        className="flex items-center gap-2 text-sm text-text-muted"
-                      >
-                        <Check className="w-4 h-4 text-primary flex-shrink-0" />
+                    {features.slice(0, 4).map((feature, featureIndex) => (
+                      <li key={feature + featureIndex} className="flex items-start gap-2 text-sm text-text-muted">
+                        <span className="w-1 h-1 rounded-full bg-lime flex-shrink-0 mt-1.5" />
                         <span>{feature}</span>
-                      </motion.li>
+                      </li>
                     ))}
-                    {(JSON.parse(service.features || "[]") as string[]).length > 4 && (
-                      <motion.li
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.1 + 4 * 0.05 }}
-                        className="flex items-center gap-2 text-sm text-primary font-medium"
-                      >
-                        <ChevronRight className="w-4 h-4 flex-shrink-0" />
-                        <span>+{(JSON.parse(service.features || "[]") as string[]).length - 4} more features</span>
-                      </motion.li>
+                    {features.length > 4 && (
+                      <li className="flex items-center gap-2 text-xs text-lime font-medium">
+                        <ChevronRight className="w-3 h-3 flex-shrink-0" />
+                        <span>+{features.length - 4} more</span>
+                      </li>
                     )}
                   </ul>
 
                   <Link
                     href="#contact"
-                    className="w-full btn-secondary text-center group relative overflow-hidden"
+                    className="w-full border border-border text-text-muted hover:border-lime/50 hover:text-text hover:bg-card-hover transition-all inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-md font-medium uppercase tracking-wider text-xs"
                   >
-                    <span className="relative z-10 flex items-center justify-center gap-2">
-                      Get a quote
-                      <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                    </span>
+                    Discuss a project
+                    <ChevronRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
                   </Link>
-                </div>
-              </motion.article>
-            );
-          })}
-        </motion.div>
+                </article>
+              );
+            })}
+          </motion.div>
+        )}
+
+        {/* Row 3: remaining services */}
+        {row3.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16"
+            role="list"
+            aria-label="Services"
+          >
+            {row3.map((service, index) => {
+              const Icon = iconMap[service.icon] || Layout;
+              const features = JSON.parse(service.features || "[]") as string[];
+
+              return (
+                <article
+                  key={service.id}
+                  className="group relative border border-border p-6 transition-colors duration-300 hover:border-lime/40"
+                  role="listitem"
+                >
+                  <div className="flex items-start gap-3 mb-4">
+                    <Icon className="w-5 h-5 text-text-muted flex-shrink-0 mt-0.5" aria-hidden="true" />
+                    <h3 className="font-serif text-xl font-bold text-text leading-snug">{service.name}</h3>
+                  </div>
+
+                  <p className="text-text-muted mb-4 leading-relaxed text-sm">{service.description}</p>
+
+                  <div className="flex items-baseline gap-2 mb-4">
+                    <span className="font-serif text-2xl font-bold text-text">
+                      {formatPrice(service.minPrice, service.maxPrice)}
+                    </span>
+                    <span className="text-text-muted">USD</span>
+                  </div>
+
+                  <ul className="space-y-2 mb-6" role="list">
+                    {features.slice(0, 4).map((feature, featureIndex) => (
+                      <li key={feature + featureIndex} className="flex items-start gap-2 text-sm text-text-muted">
+                        <span className="w-1 h-1 rounded-full bg-lime flex-shrink-0 mt-1.5" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                    {features.length > 4 && (
+                      <li className="flex items-center gap-2 text-xs text-lime font-medium">
+                        <ChevronRight className="w-3 h-3 flex-shrink-0" />
+                        <span>+{features.length - 4} more</span>
+                      </li>
+                    )}
+                  </ul>
+
+                  <Link
+                    href="#contact"
+                    className="w-full border border-border text-text-muted hover:border-lime/50 hover:text-text hover:bg-card-hover transition-all inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-md font-medium uppercase tracking-wider text-xs"
+                  >
+                    Discuss a project
+                    <ChevronRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </article>
+              );
+            })}
+          </motion.div>
+        )}
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ delay: 0.3 }}
-          className="text-center mt-12"
+          className="text-center"
         >
           <Link
             href="#contact"
-            className="btn-primary inline-flex items-center gap-2 px-8 py-3"
+            className="bg-transparent border border-border text-text inline-flex items-center gap-2 px-6 py-3 rounded-md font-medium uppercase tracking-wider text-xs hover:bg-lime hover:text-background hover:border-lime transition-colors"
           >
-            View all services
-            <ChevronRight className="w-5 h-5" />
+            All services
+            <ChevronRight className="w-4 h-4" />
           </Link>
         </motion.div>
       </div>

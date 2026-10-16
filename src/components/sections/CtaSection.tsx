@@ -1,75 +1,64 @@
 "use client";
-import { motion } from "framer-motion";
 
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { cn } from "@/lib/utils";
 
-interface CtaSectionProps {
-  title: string;
-  subtitle: string;
-  content: Record<string, unknown>;
+interface CtaContent {
+  headline?: string;
+  subheadline?: string;
+  buttonLabel?: string;
+  buttonHref?: string;
 }
 
-export default function CtaSection({ title, subtitle, content }: CtaSectionProps) {
-  const headline = (content.headline as string) || "Have a project in mind?";
-  const subheadline = (content.subheadline as string) || "Let's talk about what you're building.";
-  const buttonLabel = (content.buttonLabel as string) || "Start a project";
-  const buttonHref = (content.buttonHref as string) || "/#contact";
-
-  if (!headline && !subheadline) return null;
-
+export default function CtaSection({
+  content,
+}: {
+  title: string;
+  subtitle: string;
+  content: CtaContent;
+}) {
   return (
-    <section
-      id="cta"
-      className="relative py-24 lg:py-40 overflow-hidden"
-      aria-labelledby="cta-heading"
-    >
-      <div className="absolute inset-0" aria-hidden="true">
-        <div className="absolute inset-0 opacity-5" style={{
-          backgroundImage: `
-            linear-gradient(rgba(37, 99, 235, 0.1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(37, 99, 235, 0.1) 1px, transparent 1px)
-          `,
-          backgroundSize: '60px 60px'
-        }} />
-      </div>
-
-      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <section className="relative py-32 lg:py-48 bg-background overflow-hidden">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          {subtitle && (
-            <span className="inline-block text-text-muted text-sm uppercase tracking-widest font-medium mb-4">
-              {subtitle}
-            </span>
-          )}
-          <h2
-            id="cta-heading"
-            className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-text leading-tight mb-6"
+          <motion.h2
+            initial={{ opacity: 0, clipPath: "inset(100% 0 0 0)" }}
+            animate={{ opacity: 1, clipPath: "inset(0 0 0 0)" }}
+            transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
+            className="font-serif text-6xl lg:text-7xl leading-[0.9] tracking-tight text-text"
           >
-            {headline}
-          </h2>
-          {subheadline && (
-            <p className="text-lg sm:text-xl text-text-muted max-w-2xl mx-auto mb-10 leading-relaxed">
-              {subheadline}
-            </p>
-          )}
-          <Link
-            href={buttonHref}
-            className={cn(
-              "btn-primary inline-flex items-center gap-2 px-8 py-4 text-lg font-medium uppercase tracking-wide rounded-md",
-              "group relative overflow-hidden"
-            )}
+            {content.headline || "Have a project in mind?"}
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="mt-6 text-lg text-text-muted max-w-xl leading-relaxed"
           >
-            <span className="relative z-10 flex items-center gap-2">
-              {buttonLabel}
-              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-            </span>
-          </Link>
+            {content.subheadline || "Let's talk about what you're building."}
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="mt-10"
+          >
+            <Link
+              href={content.buttonHref || "/#contact"}
+              className="inline-flex items-center gap-2 px-7 py-3.5 bg-text text-background rounded-md text-xs font-semibold uppercase tracking-wider hover:bg-lime hover:text-background transition-colors"
+            >
+              {content.buttonLabel || "Start a project"}
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </motion.div>
         </motion.div>
       </div>
     </section>

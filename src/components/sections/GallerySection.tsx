@@ -34,14 +34,14 @@ export default function GallerySection({ title, subtitle, content }: GallerySect
             className="grid grid-cols-[30%,70%] gap-8 items-start mb-16 lg:mb-20"
           >
             {subtitle && (
-              <div className="text-text-muted text-sm uppercase tracking-widest font-medium pt-2">
+              <div className="text-text-muted text-sm uppercase tracking-[0.2em] font-medium pt-2">
                 {subtitle}
               </div>
             )}
             {title && (
               <h2
                 id="gallery-heading"
-                className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-text leading-tight"
+                className="font-serif text-3xl sm:text-5xl leading-tight text-text"
               >
                 {title}
               </h2>
@@ -49,21 +49,10 @@ export default function GallerySection({ title, subtitle, content }: GallerySect
           </motion.div>
         )}
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, staggerChildren: 0.1 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-          role="list"
-          aria-label="Gallery"
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" role="list" aria-label="Gallery">
           {images.map((image, index) => (
-            <motion.figure
+            <figure
               key={image.url + index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               className="group relative aspect-[4/3] overflow-hidden rounded-lg bg-card-hover"
               role="listitem"
             >
@@ -77,9 +66,9 @@ export default function GallerySection({ title, subtitle, content }: GallerySect
                   <p className="text-sm text-text-muted">{image.caption}</p>
                 </figcaption>
               )}
-            </motion.figure>
+            </figure>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

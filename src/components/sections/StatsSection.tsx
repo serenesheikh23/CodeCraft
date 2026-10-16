@@ -21,27 +21,27 @@ export default function StatsSection({ title, subtitle, content }: StatsSectionP
   return (
     <section
       id="stats"
-      className="relative py-24 lg:py-40 overflow-hidden"
+      className="relative py-32 lg:py-48 overflow-hidden bg-card border-y border-border"
       aria-labelledby="stats-heading"
     >
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
         {(title || subtitle) && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6 }}
-            className="grid grid-cols-[30%,70%] gap-8 items-start mb-16 lg:mb-20"
+            className="mb-16 lg:mb-24"
           >
             {subtitle && (
-              <div className="text-text-muted text-sm uppercase tracking-widest font-medium pt-2">
+              <div className="text-text-muted text-xs uppercase tracking-[0.2em] font-medium mb-4">
                 {subtitle}
               </div>
             )}
             {title && (
               <h2
                 id="stats-heading"
-                className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-text leading-tight"
+                className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight text-text"
               >
                 {title}
               </h2>
@@ -49,33 +49,26 @@ export default function StatsSection({ title, subtitle, content }: StatsSectionP
           </motion.div>
         )}
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, staggerChildren: 0.1 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12 text-center"
-          role="list"
-          aria-label="Statistics"
-        >
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12" role="list" aria-label="Statistics">
           {items.map((item, index) => (
             <motion.div
               key={item.label + index}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.08 }}
               className="group"
               role="listitem"
             >
-              <div className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-text mb-3 group-hover:text-primary transition-colors">
+              <div className="font-serif text-6xl lg:text-7xl font-bold text-text mb-3 group-hover:text-lime transition-colors">
                 {item.value}
               </div>
-              <div className="text-text-muted text-sm uppercase tracking-wider font-medium">
+              <div className="text-text-muted text-xs uppercase tracking-[0.2em] font-medium">
                 {item.label}
               </div>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Check, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface PricingSectionProps {
@@ -29,27 +29,27 @@ export default function PricingSection({ title, subtitle, content }: PricingSect
   return (
     <section
       id="pricing"
-      className="relative py-24 lg:py-40 overflow-hidden"
+      className="relative py-32 lg:py-48 overflow-hidden bg-card border-y border-border"
       aria-labelledby="pricing-heading"
     >
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
         {(title || subtitle) && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6 }}
-            className="grid grid-cols-[30%,70%] gap-8 items-start mb-16 lg:mb-20"
+            className="mb-16 lg:mb-24"
           >
             {subtitle && (
-              <div className="text-text-muted text-sm uppercase tracking-widest font-medium pt-2">
+              <div className="text-text-muted text-xs uppercase tracking-[0.2em] font-medium mb-4">
                 {subtitle}
               </div>
             )}
             {title && (
               <h2
                 id="pricing-heading"
-                className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-text leading-tight"
+                className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight text-text"
               >
                 {title}
               </h2>
@@ -57,49 +57,32 @@ export default function PricingSection({ title, subtitle, content }: PricingSect
           </motion.div>
         )}
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, staggerChildren: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto"
-          role="list"
-          aria-label="Pricing plans"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto" role="list" aria-label="Pricing plans">
           {plans.map((plan, index) => (
-            <motion.article
+            <article
               key={plan.name + index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               className={cn(
-                "relative bg-card border rounded-lg p-8 transition-all duration-300",
+                "relative bg-background border p-8 transition-colors duration-300",
                 plan.featured
-                  ? "border-primary/50 shadow-[0_0_30px_rgba(37,99,235,0.1)]"
-                  : "border-border hover:border-primary/50"
+                  ? "border-lime/40"
+                  : "border-border hover:border-lime/40"
               )}
               role="listitem"
             >
-              {plan.featured && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
-                  Popular
-                </span>
-              )}
+              <h3 className="text-base font-semibold text-text mb-2">{plan.name}</h3>
 
-              <h3 className="text-lg font-bold text-text mb-2">{plan.name}</h3>
-
-              <div className="flex items-baseline gap-2 mb-6">
+              <div className="flex items-baseline gap-2 mb-8">
                 <span className="font-serif text-4xl sm:text-5xl font-bold text-text">
                   ${plan.price}
                 </span>
                 <span className="text-text-muted">/{plan.period}</span>
               </div>
 
-              <ul className="space-y-3 mb-8" role="list">
+              <ul className="space-y-4 mb-10" role="list">
                 {plan.features.map((feature, featureIndex) => (
                   <li key={feature + featureIndex} className="flex items-start gap-3 text-text-muted">
-                    <Check className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                    <span>{feature}</span>
+                    <span className="w-1 h-1 rounded-full bg-lime flex-shrink-0 mt-2" />
+                    <span className="text-base leading-relaxed">{feature}</span>
                   </li>
                 ))}
               </ul>
@@ -107,18 +90,18 @@ export default function PricingSection({ title, subtitle, content }: PricingSect
               <Link
                 href={plan.ctaHref}
                 className={cn(
-                  "w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md font-medium uppercase tracking-wide transition-all",
+                  "w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md font-medium uppercase tracking-wider transition-all text-xs",
                   plan.featured
-                    ? "bg-text text-background hover:bg-text/90"
-                    : "bg-transparent border border-border text-text-muted hover:border-primary/50 hover:text-text"
+                    ? "bg-text text-background hover:bg-lime hover:text-background"
+                    : "bg-transparent border border-border text-text-muted hover:border-lime/50 hover:text-text hover:bg-card-hover"
                 )}
               >
                 {plan.ctaLabel}
                 <ChevronRight className="w-4 h-4" />
               </Link>
-            </motion.article>
+            </article>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

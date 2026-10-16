@@ -82,7 +82,7 @@ export default function ContactSection() {
   return (
     <section
       id="contact"
-      className="relative py-20 lg:py-32 overflow-hidden"
+      className="relative py-32 lg:py-48 overflow-hidden"
       aria-labelledby="contact-heading"
     >
       {/* Background */}
@@ -94,7 +94,7 @@ export default function ContactSection() {
         }} />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           {/* Info Section */}
           <motion.div
@@ -103,18 +103,16 @@ export default function ContactSection() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6 }}
           >
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 text-accent text-sm font-medium mb-6">
-              Get in touch
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-lime/10 text-lime text-xs font-medium uppercase tracking-[0.2em] mb-6">
+              GET IN TOUCH
             </span>
-            <h2 id="contact-heading" className="text-3xl sm:text-4xl lg:text-5xl font-bold text-text mb-6">
-              Let&apos;s build
+            <h2 id="contact-heading" className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight text-text mb-6">
+              Tell us what
               <br />
-              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                something great
-              </span>
+              you're building.
             </h2>
             <p className="text-lg text-text-muted mb-10 leading-relaxed">
-              Have a project in mind? We&apos;d love to hear about it. Send us a message and we&apos;ll get back to you within 24 hours.
+              We reply within 24 hours — usually faster.
             </p>
 
             {/* Contact Info */}
@@ -126,22 +124,49 @@ export default function ContactSection() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.2 + index * 0.1 }}
-                  className="flex items-start gap-4 p-5 bg-card border border-border rounded-xl hover:border-primary/50 transition-colors"
+                  className="flex items-start gap-4 p-5 bg-card border border-border rounded-lg hover:border-lime/40 transition-colors"
                 >
-                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <item.icon className="w-5 h-5 text-primary" />
+                  <div className="w-12 h-12 rounded-lg bg-lime/10 flex items-center justify-center flex-shrink-0">
+                    <item.icon className="w-5 h-5 text-lime" />
                   </div>
                   <div>
                     <p className="text-sm font-medium text-text-muted">{item.label}</p>
                     <a
                       href={item.href}
-                      className="text-text hover:text-primary transition-colors mt-1 block"
+                      className="text-text hover:text-lime transition-colors mt-1 block"
                     >
                       {item.value}
                     </a>
                   </div>
                 </motion.div>
               ))}
+
+              {/* Phone numbers horizontal layout */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4 }}
+                className="pt-4 border-t border-border"
+              >
+                <p className="text-sm font-medium text-text-muted mb-4">Call us directly</p>
+                <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                  <a
+                    href={`tel:+963933135837`}
+                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-card border border-border rounded-lg text-text-muted hover:text-lime hover:border-lime/50 transition-all"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    <span>+963 933 135 837</span>
+                  </a>
+                  <a
+                    href={`tel:+963997112295`}
+                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-card border border-border rounded-lg text-text-muted hover:text-lime hover:border-lime/50 transition-all"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    <span>+963 997 112 295</span>
+                  </a>
+                </div>
+              </motion.div>
 
               {/* WhatsApp Buttons */}
               <motion.div
@@ -186,7 +211,7 @@ export default function ContactSection() {
                       href={social.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-10 h-10 rounded-lg bg-card-hover border border-border flex items-center justify-center text-text-muted hover:text-primary hover:border-primary/50 transition-all"
+                      className="w-10 h-10 rounded-lg bg-card-hover border border-border flex items-center justify-center text-text-muted hover:text-lime hover:border-lime/50 transition-all"
                     >
                       <social.icon className="w-5 h-5" />
                     </a>
@@ -204,7 +229,7 @@ export default function ContactSection() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <div className="bg-card border border-border rounded-2xl p-6 sm:p-8">
+            <div className="bg-card border border-border rounded-lg p-6 sm:p-8">
               <h3 className="text-xl font-bold text-text mb-6">Send us a message</h3>
 
               {status === "success" && (
@@ -217,7 +242,7 @@ export default function ContactSection() {
                   <CheckCircle className="w-5 h-5 flex-shrink-0" />
                   <div>
                     <p className="font-medium">Message sent successfully!</p>
-                    <p className="text-sm text-green-400/80">We&apos;ll get back to you within 24 hours.</p>
+                    <p className="text-sm text-green-400/80">We'll get back to you within 24 hours.</p>
                   </div>
                 </motion.div>
               )}
@@ -250,7 +275,7 @@ export default function ContactSection() {
                     required
                     disabled={status === "loading"}
                     className={cn(
-                      "w-full px-4 py-3 bg-background border border-border rounded-lg text-text placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all",
+                      "w-full px-4 py-3 bg-background border border-border rounded-lg text-text placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-lime/50 focus:border-transparent transition-all",
                       "disabled:opacity-50 disabled:cursor-not-allowed"
                     )}
                     placeholder="John Doe"
@@ -270,7 +295,7 @@ export default function ContactSection() {
                     required
                     disabled={status === "loading"}
                     className={cn(
-                      "w-full px-4 py-3 bg-background border border-border rounded-lg text-text placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all",
+                      "w-full px-4 py-3 bg-background border border-border rounded-lg text-text placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-lime/50 focus:border-transparent transition-all",
                       "disabled:opacity-50 disabled:cursor-not-allowed"
                     )}
                     placeholder="john@example.com"
@@ -290,7 +315,7 @@ export default function ContactSection() {
                     rows={5}
                     disabled={status === "loading"}
                     className={cn(
-                      "w-full px-4 py-3 bg-background border border-border rounded-lg text-text placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all resize-none",
+                      "w-full px-4 py-3 bg-background border border-border rounded-lg text-text placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-lime/50 focus:border-transparent transition-all resize-none",
                       "disabled:opacity-50 disabled:cursor-not-allowed"
                     )}
                     placeholder="Tell us about your project..."
@@ -304,7 +329,7 @@ export default function ContactSection() {
                   type="submit"
                   disabled={status === "loading"}
                   className={cn(
-                    "w-full btn-primary py-4 text-lg font-medium",
+                    "w-full bg-text text-background py-4 text-lg font-medium uppercase tracking-wider rounded-lg hover:bg-lime transition-colors",
                     "disabled:opacity-50 disabled:cursor-not-allowed"
                   )}
                 >

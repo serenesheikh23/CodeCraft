@@ -224,6 +224,24 @@ async function main() {
   }
   console.log("✅ Custom Pages seeded:", customPages.length);
 
+  // Nav Links
+  const navLinks = [
+    { label: "Work", href: "/#projects", order: 1 },
+    { label: "Services", href: "/#services", order: 2 },
+    { label: "About", href: "/p/about", order: 3 },
+    { label: "Contact", href: "/#contact", order: 4 },
+  ];
+
+  for (const link of navLinks) {
+    const id = `navlink-${link.order}`;
+    await prisma.navLink.upsert({
+      where: { id },
+      update: { ...link, isActive: true, isExternal: false },
+      create: { id, ...link, isActive: true, isExternal: false },
+    });
+  }
+  console.log("✅ Nav Links seeded:", navLinks.length);
+
   // Homepage Sections
   const homepageSections = [
     {

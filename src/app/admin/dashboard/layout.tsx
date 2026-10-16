@@ -8,6 +8,7 @@ import { signOut } from "next-auth/react";
 import {
   LayoutDashboard,
   Layers3,
+  Menu,
   Package,
   PlusCircle,
   FolderKanban,
@@ -17,7 +18,6 @@ import {
   ScrollText,
   Settings,
   LogOut,
-  Menu,
   X,
   Code,
 } from "lucide-react";
@@ -25,6 +25,7 @@ import {
 const sidebarLinks = [
   { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/dashboard/sections", label: "Sections", icon: Layers3 },
+  { href: "/admin/dashboard/nav-links", label: "Nav Links", icon: Menu },
   { href: "/admin/dashboard/services", label: "Services", icon: Package },
   { href: "/admin/dashboard/addons", label: "Add-ons", icon: PlusCircle },
   { href: "/admin/dashboard/projects", label: "Projects", icon: FolderKanban },

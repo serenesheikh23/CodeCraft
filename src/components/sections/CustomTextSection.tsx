@@ -16,27 +16,27 @@ export default function CustomTextSection({ title, subtitle, content }: CustomTe
   return (
     <section
       id="custom-text"
-      className="relative py-24 lg:py-40 overflow-hidden"
+      className="relative py-32 lg:py-48 overflow-hidden"
       aria-labelledby="custom-text-heading"
     >
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
         {(title || subtitle) && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6 }}
-            className="grid grid-cols-[30%,70%] gap-8 items-start mb-16 lg:mb-20"
+            className="mb-16 lg:mb-24"
           >
             {subtitle && (
-              <div className="text-text-muted text-sm uppercase tracking-widest font-medium pt-2">
+              <div className="text-text-muted text-xs uppercase tracking-[0.2em] font-medium mb-4">
                 {subtitle}
               </div>
             )}
             {title && (
               <h2
                 id="custom-text-heading"
-                className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-text leading-tight"
+                className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight text-text"
               >
                 {title}
               </h2>
@@ -44,15 +44,9 @@ export default function CustomTextSection({ title, subtitle, content }: CustomTe
           </motion.div>
         )}
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
-          className="max-w-3xl mx-auto prose prose-invert whitespace-pre-wrap text-text-muted leading-relaxed"
-        >
+        <div className="max-w-3xl mx-auto whitespace-pre-wrap text-text-muted leading-relaxed text-base lg:text-lg">
           {body}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

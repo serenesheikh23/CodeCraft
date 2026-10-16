@@ -3,7 +3,6 @@ import HeroSection from "./HeroSection";
 import FeaturesSection from "./FeaturesSection";
 import PricingSection from "./PricingSection";
 import FaqSection from "./FaqSection";
-import CtaSection from "./CtaSection";
 import GallerySection from "./GallerySection";
 import StatsSection from "./StatsSection";
 import LogosSection from "./LogosSection";
@@ -47,8 +46,6 @@ export default async function SectionRenderer({ section }: { section: Section })
       return <PricingSection {...sharedProps} />;
     case "faq":
       return <FaqSection {...sharedProps} />;
-    case "cta":
-      return <CtaSection {...sharedProps} />;
     case "gallery":
       return <GallerySection {...sharedProps} />;
     case "stats":

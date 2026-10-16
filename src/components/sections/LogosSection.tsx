@@ -34,14 +34,14 @@ export default function LogosSection({ title, subtitle, content }: LogosSectionP
             className="grid grid-cols-[30%,70%] gap-8 items-start mb-16 lg:mb-20"
           >
             {subtitle && (
-              <div className="text-text-muted text-sm uppercase tracking-widest font-medium pt-2">
+              <div className="text-text-muted text-sm uppercase tracking-[0.2em] font-medium pt-2">
                 {subtitle}
               </div>
             )}
             {title && (
               <h2
                 id="logos-heading"
-                className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-text leading-tight"
+                className="font-serif text-3xl sm:text-5xl leading-tight text-text"
               >
                 {title}
               </h2>
@@ -49,22 +49,10 @@ export default function LogosSection({ title, subtitle, content }: LogosSectionP
           </motion.div>
         )}
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-12 items-center"
-          role="list"
-          aria-label="Client logos"
-        >
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-12 items-center" role="list" aria-label="Client logos">
           {logos.map((logo, index) => (
-            <motion.div
+            <div
               key={logo.alt + index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.05 }}
               className="filter grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
               role="listitem"
             >
@@ -73,9 +61,9 @@ export default function LogosSection({ title, subtitle, content }: LogosSectionP
                 alt={logo.alt}
                 className="mx-auto max-h-12 w-auto object-contain"
               />
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

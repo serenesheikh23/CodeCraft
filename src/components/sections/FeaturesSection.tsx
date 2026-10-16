@@ -41,27 +41,27 @@ export default function FeaturesSection({ title, subtitle, content }: FeaturesSe
   return (
     <section
       id="features"
-      className="relative py-24 lg:py-40 overflow-hidden"
+      className="relative py-32 lg:py-48 overflow-hidden"
       aria-labelledby="features-heading"
     >
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
         {(title || subtitle) && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6 }}
-            className="grid grid-cols-[30%,70%] gap-8 items-start mb-16 lg:mb-20"
+            className="mb-16 lg:mb-24"
           >
             {subtitle && (
-              <div className="text-text-muted text-sm uppercase tracking-widest font-medium pt-2">
+              <div className="text-text-muted text-xs uppercase tracking-[0.2em] font-medium mb-4">
                 {subtitle}
               </div>
             )}
             {title && (
               <h2
                 id="features-heading"
-                className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-text leading-tight"
+                className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight text-text"
               >
                 {title}
               </h2>
@@ -69,37 +69,25 @@ export default function FeaturesSection({ title, subtitle, content }: FeaturesSe
           </motion.div>
         )}
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, staggerChildren: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          role="list"
-          aria-label="Features"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" role="list" aria-label="Features">
           {items.map((item, index) => {
             const Icon = iconMap[item.icon] || Layout;
 
             return (
-              <motion.article
+              <article
                 key={item.title + index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="bg-card border border-border rounded-lg p-8 transition-all duration-300 hover:border-primary/50"
+                className="group border border-border p-6 transition-colors duration-300 hover:border-lime/40"
                 role="listitem"
               >
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6">
-                  <Icon className="w-6 h-6 text-primary" />
+                <div className="flex items-start gap-3 mb-4">
+                  <Icon className="w-5 h-5 text-text-muted flex-shrink-0 mt-0.5" aria-hidden="true" />
+                  <h3 className="text-base font-semibold text-text leading-snug">{item.title}</h3>
                 </div>
-
-                <h3 className="text-xl font-bold text-text mb-3">{item.title}</h3>
-                <p className="text-text-muted leading-relaxed">{item.description}</p>
-              </motion.article>
+                <p className="text-text-muted leading-relaxed text-base">{item.description}</p>
+              </article>
             );
           })}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

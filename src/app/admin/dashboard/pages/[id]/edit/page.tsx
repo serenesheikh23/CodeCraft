@@ -2,237 +2,278 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { motion } from "framer-motion";
-import { Loader2, ArrowLeft, FileText } from "lucide-react";
+import { Loader2, ArrowLeft, Plus, Trash2, Edit, GripVertical } from "lucide-react";
+import SectionContentEditor from "@/components/admin/SectionContentEditor";
 import Link from "next/link";
 
-interface CustomPage {
+type SectionType = "hero" | "features" | "pricing" | "faq" | "cta" | "gallery" | "stats" | "logos" | "custom-text" | "services" | "projects" | "testimonials" | "contact";
+
+const TYPE_OPTIONS: { value: SectionType; label: string; group: string }[] = [
+  { value: "hero", label: "Hero", group: "Layout" },
+  { value: "cta", label: "CTA Banner", group: "Layout" },
+  { value: "custom-text", label: "Custom Text", group: "Layout" },
+  { value: "features", label: "Features Grid", group: "Layout" },
+  { value: "pricing", label: "Pricing Table", group: "Layout" },
+  { value: "faq", label: "FAQ", group: "Layout" },
+  { value: "gallery", label: "Gallery", group: "Layout" },
+  { value: "stats", label: "Stats", group: "Layout" },
+  { value: "logos", label: "Logos", group: "Layout" },
+  { value: "services", label: "Services List (from DB)", group: "Data-driven" },
+  { value: "projects", label: "Featured Projects (from DB)", group: "Data-driven" },
+  { value: "testimonials", label: "Testimonials (from DB)", group: "Data-driven" },
+  { value: "contact", label: "Contact Form", group: "Data-driven" },
+];
+
+const DB_BACKED: SectionType[] = ["services", "projects", "testimonials", "contact"];
+
+interface PageSection {
   id: string;
-  slug: string;
+  pageId: string;
+  type: string;
   title: string;
+  subtitle: string;
   content: string;
-  isActive: boolean;
+  order: number;
 }
 
-interface FormData {
-  slug: string;
-  title: string;
-  content: string;
-  isActive: boolean;
-}
-
-export default function EditCustomPagePage() {
+export default function EditCustomPage() {
   const router = useRouter();
   const params = useParams();
   const id = params.id as string;
 
-  const [formData, setFormData] = useState<FormData>({
-    slug: "",
-    title: "",
-    content: "",
-    isActive: true,
-  });
   const [isLoading, setIsLoading] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+
+  // Page fields
+  const [slug, setSlug] = useState("");
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [isActive, setIsActive] = useState(true);
+
+  // Sections
+  const [sections, setSections] = useState<PageSection[]>([]);
+  const [showAddSection, setShowAddSection] = useState(false);
+  const [newSectionType, setNewSectionType] = useState<SectionType>("hero");
+  const [newSectionContent, setNewSectionContent] = useState<Record<string, unknown>>({});
+  const [newSectionTitle, setNewSectionTitle] = useState("");
+  const [newSectionSubtitle, setNewSectionSubtitle] = useState("");
+  const [isSavingSection, setIsSavingSection] = useState(false);
 
   useEffect(() => {
-    const fetchPage = async () => {
+    async function fetchAll() {
       try {
-        const res = await fetch(`/api/pages/${id}`);
-        if (res.ok) {
-          const data: CustomPage = await res.json();
-          setFormData({
-            slug: data.slug,
-            title: data.title,
-            content: data.content,
-            isActive: data.isActive,
-          });
+        const pageRes = await fetch(`/api/pages/${id}`);
+        if (pageRes.ok) {
+          const page = await pageRes.json();
+          setSlug(page.slug || "");
+          setTitle(page.title || "");
+          setContent(page.content || "");
+          setIsActive(page.isActive ?? true);
+        }
+        const secRes = await fetch(`/api/pages/${id}/sections`);
+        if (secRes.ok) {
+          const data = await secRes.json();
+          setSections(Array.isArray(data) ? data : []);
         }
       } catch (error) {
-        console.error("Error fetching page:", error);
+        console.error(error);
       } finally {
         setIsLoading(false);
       }
-    };
-
-    fetchPage();
+    }
+    fetchAll();
   }, [id]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setError("");
-
+    setIsSaving(true);
     try {
       const res = await fetch(`/api/pages/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ slug, title, content, isActive }),
       });
-
       if (res.ok) {
         router.push("/admin/dashboard/pages");
         router.refresh();
       } else {
-        const err = await res.json();
-        setError(err.error || "Failed to update page");
+        alert("Failed to update page");
       }
-    } catch (err) {
-      setError("An error occurred. Please try again.");
+    } catch {
+      alert("An error occurred");
     } finally {
-      setIsSubmitting(false);
+      setIsSaving(false);
+    }
+  };
+
+  const handleAddSection = async () => {
+    setIsSavingSection(true);
+    try {
+      const res = await fetch(`/api/pages/${id}/sections`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: newSectionType,
+          title: newSectionTitle,
+          subtitle: newSectionSubtitle,
+          content: JSON.stringify(newSectionContent),
+          order: sections.length,
+        }),
+      });
+      if (res.ok) {
+        const created = await res.json();
+        setSections([...sections, created]);
+        setShowAddSection(false);
+        setNewSectionType("hero");
+        setNewSectionContent({});
+        setNewSectionTitle("");
+        setNewSectionSubtitle("");
+      } else {
+        alert("Failed to add section");
+      }
+    } catch {
+      alert("An error occurred");
+    } finally {
+      setIsSavingSection(false);
+    }
+  };
+
+  const handleDeleteSection = async (sectionId: string) => {
+    if (!confirm("Delete this section?")) return;
+    try {
+      const res = await fetch(`/api/page-sections/${sectionId}`, { method: "DELETE" });
+      if (res.ok) {
+        setSections(sections.filter((s) => s.id !== sectionId));
+      }
+    } catch {
+      alert("An error occurred");
     }
   };
 
   if (isLoading) {
     return (
-      <div className="max-w-3xl mx-auto space-y-6">
-        <div className="flex items-center gap-4">
-          <Link
-            href="/admin/dashboard/pages"
-            className="p-2 rounded-lg text-text-muted hover:text-text hover:bg-card-hover transition-colors"
-          >
-            <ArrowLeft size={20} />
-          </Link>
-          <div>
-            <h1 className="text-3xl font-bold text-text flex items-center gap-3">
-              <FileText className="w-8 h-8 text-primary" />
-              Edit Custom Page
-            </h1>
-          </div>
-        </div>
-        <div className="bg-card border border-border rounded-xl p-8 text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto" />
-          <p className="text-text-muted mt-4">Loading page...</p>
-        </div>
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
   }
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex items-center gap-4"
-      >
-        <Link
-          href="/admin/dashboard/pages"
-          className="p-2 rounded-lg text-text-muted hover:text-text hover:bg-card-hover transition-colors"
-        >
-          <ArrowLeft size={20} />
-        </Link>
-        <div>
-          <h1 className="text-3xl font-bold text-text flex items-center gap-3">
-            <FileText className="w-8 h-8 text-primary" />
-            Edit Custom Page
-          </h1>
-          <p className="text-text-muted mt-1">Update page details</p>
-        </div>
-      </motion.div>
+      <button onClick={() => router.back()} className="flex items-center gap-2 text-text-muted hover:text-text transition-colors text-sm">
+        <ArrowLeft className="w-4 h-4" />
+        Back
+      </button>
 
-      {error && (
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400"
-        >
-          {error}
-        </motion.div>
-      )}
+      <div>
+        <h1 className="text-3xl font-bold text-text">Edit Page</h1>
+        <p className="text-text-muted mt-1">Update page content and add sections</p>
+      </div>
 
-      <motion.form
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        onSubmit={handleSubmit}
-        className="bg-card border border-border rounded-xl p-6 space-y-6"
-      >
-        <div>
-          <label htmlFor="slug" className="block text-sm font-medium text-text-muted mb-2">
-            Slug *
-          </label>
-          <input
-            id="slug"
-            type="text"
-            value={formData.slug}
-            onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-            required
-            className="w-full px-4 py-3 bg-background border border-border rounded-lg text-text placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all"
-            placeholder="e.g., about, services, portfolio"
-          />
-          <p className="text-sm text-text-muted mt-1">URL-friendly identifier (lowercase, hyphens only). This will be accessible at /p/[slug]</p>
+      <form onSubmit={handleSubmit} className="bg-card border border-border rounded-xl p-6 space-y-5">
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-text-muted mb-2">Title</label>
+            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full bg-background border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-primary" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-text-muted mb-2">Slug</label>
+            <input type="text" value={slug} onChange={(e) => setSlug(e.target.value)} className="w-full bg-background border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-primary" />
+          </div>
         </div>
 
         <div>
-          <label htmlFor="title" className="block text-sm font-medium text-text-muted mb-2">
-            Title *
-          </label>
-          <input
-            id="title"
-            type="text"
-            value={formData.title}
-            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-            required
-            className="w-full px-4 py-3 bg-background border border-border rounded-lg text-text placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all"
-            placeholder="e.g., About Us"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="content" className="block text-sm font-medium text-text-muted mb-2">
-            Content *
-          </label>
-          <textarea
-            id="content"
-            value={formData.content}
-            onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-            required
-            rows={15}
-            className="w-full px-4 py-3 bg-background border border-border rounded-lg text-text placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all resize-none"
-            placeholder="Enter the page content..."
-          />
+          <label className="block text-sm font-medium text-text-muted mb-2">Fallback Content (used if no sections are added)</label>
+          <textarea rows={6} value={content} onChange={(e) => setContent(e.target.value)} className="w-full bg-background border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-primary resize-none" />
         </div>
 
         <div className="flex items-center gap-3">
-          <input
-            id="isActive"
-            type="checkbox"
-            checked={formData.isActive}
-            onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-            className="w-5 h-5 rounded border-border text-primary focus:ring-primary/50"
-          />
-          <label htmlFor="isActive" className="text-text">
-            Active (visible on website)
-          </label>
+          <input type="checkbox" id="isActive" checked={isActive} onChange={(e) => setIsActive(e.target.checked)} className="w-5 h-5 rounded border-border text-primary focus:ring-primary" />
+          <label htmlFor="isActive" className="text-sm font-medium text-text">Active (published)</label>
         </div>
 
-        <div className="flex items-center gap-4 pt-4 border-t border-border">
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            type="submit"
-            disabled={isSubmitting}
-            className="btn-primary flex-1 sm:flex-none"
-          >
-            {isSubmitting ? (
-              <span className="flex items-center justify-center gap-2">
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Saving...
-              </span>
-            ) : (
-              "Update Page"
-            )}
-          </motion.button>
-          <Link
-            href="/admin/dashboard/pages"
-            className="btn-secondary flex-1 sm:flex-none text-center"
-          >
-            Cancel
-          </Link>
+        <div className="flex gap-3 pt-4 border-t border-border">
+          <button type="submit" disabled={isSaving} className="btn-primary flex-1 flex items-center justify-center gap-2 py-3 disabled:opacity-50">
+            {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : "Save Page Settings"}
+          </button>
+          <button type="button" onClick={() => router.back()} className="btn-secondary flex-1 py-3">Cancel</button>
         </div>
-      </motion.form>
+      </form>
+
+      {/* Page Sections Panel */}
+      <div className="bg-card border border-border rounded-xl p-6 space-y-5">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-xl font-bold text-text">Page Sections</h2>
+            <p className="text-text-muted text-sm mt-1">If you add sections, they replace the fallback content above</p>
+          </div>
+          <button type="button" onClick={() => setShowAddSection(!showAddSection)} className="btn-secondary flex items-center gap-2 text-sm">
+            <Plus className="w-4 h-4" />
+            {showAddSection ? "Cancel" : "Add Section"}
+          </button>
+        </div>
+
+        {showAddSection && (
+          <div className="bg-background border border-border rounded-lg p-5 space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-text-muted mb-2">Type</label>
+              <select value={newSectionType} onChange={(e) => { setNewSectionType(e.target.value as SectionType); setNewSectionContent({}); }} className="w-full bg-card border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-primary">
+                <optgroup label="Layout Sections">
+                  {TYPE_OPTIONS.filter(o => o.group === "Layout").map((opt) => (
+                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  ))}
+                </optgroup>
+                <optgroup label="Data-driven Sections">
+                  {TYPE_OPTIONS.filter(o => o.group === "Data-driven").map((opt) => (
+                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  ))}
+                </optgroup>
+              </select>
+            </div>
+
+            {!DB_BACKED.includes(newSectionType) && (
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-text-muted mb-2">Title</label>
+                  <input type="text" value={newSectionTitle} onChange={(e) => setNewSectionTitle(e.target.value)} className="w-full bg-card border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-primary" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-text-muted mb-2">Subtitle</label>
+                  <input type="text" value={newSectionSubtitle} onChange={(e) => setNewSectionSubtitle(e.target.value)} className="w-full bg-card border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-primary" />
+                </div>
+              </div>
+            )}
+
+            <SectionContentEditor type={newSectionType} content={newSectionContent} updateContent={(patch) => setNewSectionContent((prev) => ({ ...prev, ...patch }))} />
+
+            <button type="button" onClick={handleAddSection} disabled={isSavingSection} className="btn-primary w-full py-3 flex items-center justify-center gap-2 disabled:opacity-50">
+              {isSavingSection ? <Loader2 className="w-5 h-5 animate-spin" /> : "Add Section"}
+            </button>
+          </div>
+        )}
+
+        {sections.length === 0 && !showAddSection && (
+          <div className="text-center py-8 text-text-muted text-sm">
+            No sections yet. The fallback content above will be shown.
+          </div>
+        )}
+
+        <div className="space-y-2">
+          {sections.map((section, index) => (
+            <div key={section.id} className="flex items-center gap-3 bg-background border border-border rounded-lg p-4">
+              <GripVertical className="w-4 h-4 text-text-muted flex-shrink-0" />
+              <span className="text-xs uppercase tracking-wider text-text-muted px-2 py-1 bg-card rounded">{section.type}</span>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm text-text truncate">{section.title || "(untitled)"}</p>
+                <p className="text-xs text-text-muted">Order: {index + 1}</p>
+              </div>
+              <button type="button" onClick={() => handleDeleteSection(section.id)} className="p-2 rounded-lg text-red-400 hover:bg-red-500/10 transition-colors">
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
