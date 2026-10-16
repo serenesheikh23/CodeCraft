@@ -93,7 +93,7 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="w-full bg-background border border-border rounded-lg pl-10 pr-4 py-3 text-text focus:outline-none focus:border-coral transition-colors"
-                placeholder="admin@codecraft.com"
+                placeholder="Enter your email"
               />
             </div>
           </div>
