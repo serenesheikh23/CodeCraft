@@ -1,258 +1,162 @@
-import { Metadata } from "next";
+import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
-import { ExternalLink, Github, ArrowLeft, Code2, CheckCircle } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, ExternalLink } from "lucide-react";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import ProjectSlideshow from "@/components/ProjectSlideshow";
 
-interface PageProps {
+const BRAND_BLUE = "#3B82F6";
+
+export default async function ProjectDetailPage({
+  params,
+}: {
   params: Promise<{ slug: string }>;
-}
-
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const project = await prisma.project.findUnique({
-    where: { slug },
-    select: { title: true, description: true, imageUrl: true },
-  });
-
-  if (!project) {
-    return { title: "Project Not Found" };
-  }
-
-  return {
-    title: `${project.title} | Code Craft`,
-    description: project.description,
-    openGraph: {
-      title: project.title,
-      description: project.description,
-      images: [project.imageUrl],
-    },
-  };
-}
-
-export default async function ProjectDetailPage({ params }: PageProps) {
+}) {
   const { slug } = await params;
 
   const project = await prisma.project.findUnique({
     where: { slug },
   });
 
-  if (!project) {
+  if (!project || !project.isActive) {
     notFound();
   }
 
-  const techStack = JSON.parse(project.techStack || "[]") as string[];
+  // Parse images array
+  let images: string[] = [];
+  try {
+    images = JSON.parse((project as { images?: string }).images || "[]");
+  } catch {
+    images = [];
+  }
+
+  // Fallback: use single imageUrl if images array is empty
+  if (images.length === 0 && project.imageUrl) {
+    images = [project.imageUrl];
+  }
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "SoftwareApplication",
-            name: project.title,
-            description: project.description,
-            image: project.imageUrl,
-            url: project.liveUrl || `https://codecraft.dev/projects/${project.slug}`,
-            applicationCategory: "BusinessApplication",
-            operatingSystem: "Web",
-            offers: {
-              "@type": "Offer",
-              price: "0",
-              priceCurrency: "USD",
-            },
-          }),
-        }}
-      />
-      <main className="min-h-screen">
-        {/* Hero Section */}
-        <section className="relative min-h-[60vh] lg:min-h-[70vh] flex items-end overflow-hidden">
-          <div className="absolute inset-0 z-0">
-            <img
-              src={project.imageUrl}
-              alt={project.title}
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/50 to-transparent" />
-          </div>
+      <Navbar />
 
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 lg:pb-20">
-            <div className="max-w-3xl">
-              <Link
-                href="/"
-                className="inline-flex items-center gap-2 text-text-muted hover:text-primary transition-colors mb-6"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Back to Home
-              </Link>
+      <main className="relative bg-background">
+        <div className="absolute top-0 left-0 w-[600px] h-[600px] glow-cyan opacity-30 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] glow-blue opacity-30 blur-3xl pointer-events-none" />
 
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
-                <Code2 className="w-4 h-4" />
-                Case Study
-              </span>
+        <div className="relative max-w-5xl mx-auto px-6 lg:px-12 py-16 lg:py-24">
+          {/* Back link — larger bottom margin */}
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-text-muted hover:text-coral transition-colors text-sm mb-16 lg:mb-20"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to home
+          </Link>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-                {project.title}
-              </h1>
+          {/* Category label */}
+          <div className="section-label text-lime mb-6">CASE STUDY</div>
 
-              <p className="text-lg sm:text-xl text-white/80 mb-8 max-w-2xl leading-relaxed">
-                {project.description}
+          <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight text-text mb-6">
+            {project.title}
+          </h1>
+
+          <p className="text-xl text-text-muted leading-relaxed max-w-3xl mb-16">
+            {project.description}
+          </p>
+
+          {/* Slideshow */}
+          {images.length > 0 && (
+            <div className="mb-20">
+              <ProjectSlideshow images={images} title={project.title} />
+            </div>
+          )}
+
+          {project.problem && (
+            <section className="mb-16">
+              <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-4 font-semibold">
+                The problem
+              </div>
+              <p className="text-lg text-text leading-relaxed max-w-3xl">
+                {project.problem}
               </p>
+            </section>
+          )}
 
-              <div className="flex flex-wrap gap-3">
-                {techStack.map((tech) => (
-                  <span
-                    key={tech}
-                    className="px-3 py-1.5 text-sm font-medium text-white/90 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg"
-                  >
-                    {tech}
-                  </span>
-                ))}
+          {project.solution && (
+            <section className="mb-16">
+              <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-4 font-semibold">
+                The solution
+              </div>
+              <p className="text-lg text-text leading-relaxed max-w-3xl">
+                {project.solution}
+              </p>
+            </section>
+          )}
+
+          {project.outcome && (
+            <section className="mb-20 pb-20 border-b border-border">
+              <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-4 font-semibold">
+                The outcome
+              </div>
+              <p className="text-lg text-text leading-relaxed max-w-3xl">
+                {project.outcome}
+              </p>
+            </section>
+          )}
+
+          {project.liveUrl && (
+            <div className="mb-20">
+              <a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-base text-coral hover:text-lime transition-colors"
+              >
+                <ExternalLink className="w-5 h-5" />
+                View live site
+              </a>
+            </div>
+          )}
+
+          <section
+            id="contact"
+            className="relative border border-border p-10 lg:p-16 overflow-hidden"
+          >
+            <div
+              className="absolute -top-40 -right-40 w-[400px] h-[400px] rounded-full pointer-events-none opacity-40 blur-3xl"
+              style={{ background: "radial-gradient(circle, rgba(59,130,246,0.4) 0%, transparent 70%)" }}
+            />
+
+            <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+              <div className="lg:col-span-8">
+                <div className="section-label text-lime mb-4">HAVE A PROJECT LIKE THIS?</div>
+                <h2 className="font-serif text-4xl lg:text-5xl leading-tight text-text">
+                  Let&apos;s build
+                  <br />
+                  yours next.
+                </h2>
+              </div>
+              <div className="lg:col-span-4 lg:text-right">
+                <Link
+                  href="/#contact"
+                  className="inline-flex items-center gap-2 px-8 py-4 rounded-md font-semibold uppercase tracking-wider text-xs transition-all duration-200"
+                  style={{
+                    backgroundColor: BRAND_BLUE,
+                    color: "#F8FAFC",
+                    border: `1px solid ${BRAND_BLUE}`,
+                  }}
+                >
+                  Get a quote
+                  <ArrowUpRight className="w-4 h-4" />
+                </Link>
               </div>
             </div>
-          </div>
-        </section>
-
-        {/* Content Sections */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
-          <div className="grid lg:grid-cols-3 gap-12">
-            {/* Main Content */}
-            <div className="lg:col-span-2 space-y-16">
-              {/* Problem Section */}
-              <section className="space-y-6">
-                <h2 className="text-2xl sm:text-3xl font-bold text-text">The Challenge</h2>
-                <div className="prose prose-invert max-w-none">
-                  <p className="text-text-muted leading-relaxed text-lg">{project.problem}</p>
-                </div>
-              </section>
-
-              {/* Solution Section */}
-              <section className="space-y-6">
-                <h2 className="text-2xl sm:text-3xl font-bold text-text">Our Solution</h2>
-                <div className="prose prose-invert max-w-none">
-                  <p className="text-text-muted leading-relaxed text-lg">{project.solution}</p>
-                </div>
-
-                {/* Tech Stack Details */}
-                <div className="mt-8">
-                  <h3 className="text-lg font-semibold text-text mb-4">Technology Stack</h3>
-                  <div className="flex flex-wrap gap-3">
-                    {techStack.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-4 py-2 text-sm font-medium text-text bg-card border border-border rounded-xl"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </section>
-
-              {/* Outcome Section */}
-              <section className="space-y-6">
-                <h2 className="text-2xl sm:text-3xl font-bold text-text">Results & Impact</h2>
-                <div className="prose prose-invert max-w-none">
-                  <p className="text-text-muted leading-relaxed text-lg">{project.outcome}</p>
-                </div>
-
-                <div className="grid sm:grid-cols-2 gap-4 mt-8">
-                  <div className="bg-card border border-border rounded-xl p-6">
-                    <div className="flex items-center gap-3 mb-3">
-                      <CheckCircle className="w-6 h-6 text-green-400" />
-                      <h4 className="font-semibold text-text">Measurable Outcomes</h4>
-                    </div>
-                    <p className="text-text-muted">Quantifiable improvements in key metrics</p>
-                  </div>
-                  <div className="bg-card border border-border rounded-xl p-6">
-                    <div className="flex items-center gap-3 mb-3">
-                      <CheckCircle className="w-6 h-6 text-green-400" />
-                      <h4 className="font-semibold text-text">Client Satisfaction</h4>
-                    </div>
-                    <p className="text-text-muted">Positive feedback and ongoing partnership</p>
-                  </div>
-                </div>
-              </section>
-            </div>
-
-            {/* Sidebar */}
-            <div className="space-y-6">
-              {/* Project Links */}
-              <div className="bg-card border border-border rounded-2xl p-6 sticky top-24 space-y-4">
-                <h3 className="text-lg font-semibold text-text">Project Links</h3>
-
-                {project.liveUrl && (
-                  <a
-                    href={project.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-primary w-full justify-center gap-2"
-                  >
-                    <ExternalLink className="w-5 h-5" />
-                    View Live Demo
-                  </a>
-                )}
-
-                {project.githubUrl && (
-                  <a
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-secondary w-full justify-center gap-2"
-                  >
-                    <Github className="w-5 h-5" />
-                    View Source Code
-                  </a>
-                )}
-
-                {!project.liveUrl && !project.githubUrl && (
-                  <p className="text-text-muted text-center py-4">No external links available</p>
-                )}
-              </div>
-
-              {/* Quick Stats */}
-              <div className="bg-card border border-border rounded-2xl p-6 space-y-4">
-                <h3 className="text-lg font-semibold text-text">Project Info</h3>
-                <dl className="space-y-3 text-sm">
-                  <div className="flex justify-between">
-                    <dt className="text-text-muted">Status</dt>
-                    <dd className="font-medium text-text">
-                      {project.isActive ? "Active" : "Archived"}
-                    </dd>
-                  </div>
-                  <div className="flex justify-between">
-                    <dt className="text-text-muted">Featured</dt>
-                    <dd className="font-medium text-text">
-                      {project.featured ? "Yes" : "No"}
-                    </dd>
-                  </div>
-                  <div className="flex justify-between">
-                    <dt className="text-text-muted">Technologies</dt>
-                    <dd className="font-medium text-text">{techStack.length}</dd>
-                  </div>
-                </dl>
-              </div>
-            </div>
-          </div>
+          </section>
         </div>
-
-        {/* CTA Section */}
-        <section className="py-16 lg:py-24 bg-card border-t border-border">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl sm:text-4xl font-bold text-text mb-4">
-              Ready to build your project?
-            </h2>
-            <p className="text-lg text-text-muted mb-8 max-w-2xl mx-auto">
-              Let's discuss how we can bring your vision to life with the same dedication and expertise.
-            </p>
-            <Link href="#contact" className="btn-primary inline-flex items-center gap-2 px-8 py-3">
-              Get a Quote
-              <ArrowLeft className="w-5 h-5" />
-            </Link>
-          </div>
-        </section>
       </main>
+
+      <Footer />
     </>
   );
 }

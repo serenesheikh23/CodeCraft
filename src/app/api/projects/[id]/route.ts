@@ -1,93 +1,77 @@
-import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { NextResponse } from "next/server";
 
 export async function GET(
-  request: NextRequest,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
-    const project = await prisma.project.findUnique({
-      where: { id },
-    });
-
-    if (!project) {
-      return NextResponse.json({ error: "Project not found" }, { status: 404 });
-    }
-
+    const project = await prisma.project.findUnique({ where: { id } });
+    if (!project) return NextResponse.json({ error: "Not found" }, { status: 404 });
     return NextResponse.json(project);
   } catch (error) {
-    console.error("Error fetching project:", error);
-    return NextResponse.json({ error: "Failed to fetch project" }, { status: 500 });
+    console.error("GET error:", error);
+    return NextResponse.json({ error: "Failed" }, { status: 500 });
   }
 }
 
 export async function PUT(
-  request: NextRequest,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
+
+  let body: Record<string, unknown>;
   try {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    body = await request.json();
+  } catch (e) {
+    console.error("Invalid JSON body");
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
 
-    const { id } = await params;
-    const body = await request.json();
-    const { title, slug, description, problem, solution, outcome, imageUrl, liveUrl, githubUrl, techStack, featured, order, isActive } = body;
+  console.log("=== PUT /api/projects/" + id + " ===");
+  console.log("Received images:", JSON.stringify(body.images));
 
-    if (!title || !slug || !description || !problem || !solution || !outcome || !imageUrl) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
-    }
-
-    const techStackArray = techStack.split(",").map((f: string) => f.trim()).filter(Boolean);
-
+  try {
     const project = await prisma.project.update({
       where: { id },
       data: {
-        title,
-        slug,
-        description,
-        problem,
-        solution,
-        outcome,
-        imageUrl,
-        liveUrl: liveUrl || "",
-        githubUrl: githubUrl || "",
-        techStack: JSON.stringify(techStackArray),
-        featured: featured ?? false,
-        order: Number(order) || 0,
-        isActive: isActive ?? true,
+        title: String(body.title ?? ""),
+        slug: String(body.slug ?? ""),
+        description: String(body.description ?? ""),
+        problem: String(body.problem ?? ""),
+        solution: String(body.solution ?? ""),
+        outcome: String(body.outcome ?? ""),
+        imageUrl: String(body.imageUrl ?? ""),
+        liveUrl: String(body.liveUrl ?? ""),
+        githubUrl: String(body.githubUrl ?? ""),
+        techStack: String(body.techStack ?? "[]"),
+        images: String(body.images ?? "[]"),
+        featured: body.featured === true,
+        order: Number(body.order) || 0,
+        isActive: body.isActive !== false,
       },
     });
-
+    console.log("Saved successfully. Images in DB:", project.images);
     return NextResponse.json(project);
   } catch (error) {
-    console.error("Error updating project:", error);
-    return NextResponse.json({ error: "Failed to update project" }, { status: 500 });
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error("PUT FAILED:", msg);
+    return NextResponse.json({ error: "Failed", detail: msg }, { status: 500 });
   }
 }
 
 export async function DELETE(
-  request: NextRequest,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     const { id } = await params;
-    await prisma.project.delete({
-      where: { id },
-    });
-
+    await prisma.project.delete({ where: { id } });
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error deleting project:", error);
-    return NextResponse.json({ error: "Failed to delete project" }, { status: 500 });
+    console.error("DELETE error:", error);
+    return NextResponse.json({ error: "Failed" }, { status: 500 });
   }
 }

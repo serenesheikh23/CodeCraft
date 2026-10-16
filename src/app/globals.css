@@ -44,24 +44,6 @@
 }
 
 @layer components {
-  .btn-primary {
-    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-white rounded-lg
-           bg-gradient-primary
-           hover:shadow-glow
-           focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background
-           transition-all duration-200
-           disabled:opacity-50 disabled:cursor-not-allowed;
-  }
-
-  .btn-secondary {
-    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-text rounded-lg
-           bg-card border border-border
-           hover:bg-card-hover hover:border-primary/50 hover:text-text
-           focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background
-           transition-all duration-200
-           disabled:opacity-50 disabled:cursor-not-allowed;
-  }
-
   .glass-card {
     @apply bg-card/80 backdrop-blur-md border border-border/50 rounded-xl;
   }
@@ -74,10 +56,6 @@
     @apply w-full px-4 py-3 bg-background border border-border rounded-lg text-text placeholder-text-muted
            focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent
            transition-all duration-200;
-  }
-
-  .card-hover {
-    @apply transition-all duration-300 hover:border-primary/50 hover:shadow-glow hover:-translate-y-1;
   }
 }
 
@@ -117,4 +95,162 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+}
+
+/* ============================================
+   UNIFIED BUTTON SYSTEM
+   All buttons share the same hover behavior.
+   ============================================ */
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background-color: #F8FAFC;
+  color: #0B1220;
+  border: 1px solid #F8FAFC;
+  cursor: pointer;
+  transition: all 200ms ease-out;
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  background-color: #22D3EE;
+  border-color: #22D3EE;
+  color: #0B1220;
+  transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background-color: transparent;
+  color: #F8FAFC;
+  border: 1px solid #1a2332;
+  cursor: pointer;
+  transition: all 200ms ease-out;
+  text-decoration: none;
+}
+
+.btn-secondary:hover {
+  background-color: #22D3EE;
+  border-color: #22D3EE;
+  color: #0B1220;
+  transform: translateY(-1px);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  background-color: transparent;
+  color: #94A3B8;
+  border: 1px solid #1a2332;
+  cursor: pointer;
+  transition: all 200ms ease-out;
+  text-decoration: none;
+}
+
+.btn-icon:hover {
+  background-color: #22D3EE;
+  border-color: #22D3EE;
+  color: #0B1220;
+  transform: scale(1.08);
+}
+
+.btn-icon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* ============================================
+   COLOR SYSTEM — pulled from brand logo
+   ============================================ */
+
+.brand-gradient-text {
+  background: linear-gradient(135deg, #22D3EE 0%, #3B82F6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-gradient-bg {
+  background: linear-gradient(135deg, #22D3EE 0%, #3B82F6 100%);
+}
+
+.brand-gradient-border {
+  position: relative;
+}
+
+.brand-gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, #22D3EE 0%, #3B82F6 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.glow-cyan {
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.18) 0%, rgba(34, 211, 238, 0) 70%);
+}
+
+.glow-blue {
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0) 70%);
+}
+
+.tint-blue {
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.03) 0%, transparent 50%, rgba(34, 211, 238, 0.03) 100%);
+}
+
+.section-label {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.section-label::before {
+  content: "";
+  width: 1.5rem;
+  height: 1px;
+  background: linear-gradient(90deg, #22D3EE, #3B82F6);
 }

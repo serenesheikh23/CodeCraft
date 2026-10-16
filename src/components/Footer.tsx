@@ -1,191 +1,190 @@
 import Link from "next/link";
-import { Code2, Mail, Phone, MessageCircle, Instagram, Linkedin, ExternalLink } from "lucide-react";
+import Image from "next/image";
 import { prisma } from "@/lib/prisma";
-
-async function getFooterData() {
-  const [settings, footerLinks] = await Promise.all([
-    prisma.siteSettings.findUnique({ where: { id: "singleton" } }),
-    prisma.footerLink.findMany({
-      where: { isActive: true },
-      orderBy: [{ section: "asc" }, { order: "asc" }],
-    }),
-  ]);
-  return { settings, footerLinks };
-}
+import {
+  Code2,
+  Mail,
+  Phone,
+  MessageCircle,
+  Instagram,
+  Linkedin,
+} from "lucide-react";
 
 export default async function Footer() {
-  const { settings, footerLinks } = await getFooterData();
+  const settings = await prisma.siteSettings.findUnique({ where: { id: "singleton" } });
+  const links = await prisma.footerLink.findMany({
+    where: { isActive: true },
+    orderBy: [{ section: "asc" }, { order: "asc" }],
+  });
 
-  const groupedLinks = footerLinks.reduce((acc, link) => {
-    if (!acc[link.section]) acc[link.section] = [];
-    acc[link.section].push(link);
-    return acc;
-  }, {} as Record<string, typeof footerLinks>);
+  const grouped: Record<string, typeof links> = {};
+  for (const link of links) {
+    if (!grouped[link.section]) grouped[link.section] = [];
+    grouped[link.section].push(link);
+  }
 
-  const defaultSettings = {
-    email: "serenesheikh23@gmail.com",
-    phone1: "+963 933 135 837",
-    phone2: "+963 997 112 295",
-    whatsapp1: "+963933135837",
-    whatsapp2: "+963997112295",
-    instagramUrl: "",
-    linkedin1Url: "",
-    linkedin2Url: "",
-    location: "Remote Worldwide",
-    tagline: "Building ideas into digital products. Websites, apps and full systems.",
-  };
+  const HIDDEN_SECTIONS = ["Services", "Contact"];
 
-  const s = settings || defaultSettings;
+  const year = new Date().getFullYear();
+
+  const contactLinks: { href: string; label: string; icon: React.ReactNode; external?: boolean }[] = [];
+
+  if (settings?.email) {
+    contactLinks.push({
+      href: `mailto:${settings.email}`,
+      label: "Email",
+      icon: <Mail className="w-4 h-4" />,
+    });
+  }
+  if (settings?.phone1) {
+    contactLinks.push({
+      href: `tel:${settings.phone1.replace(/\s/g, "")}`,
+      label: "Phone 1",
+      icon: <Phone className="w-4 h-4" />,
+    });
+  }
+  if (settings?.phone2) {
+    contactLinks.push({
+      href: `tel:${settings.phone2.replace(/\s/g, "")}`,
+      label: "Phone 2",
+      icon: <Phone className="w-4 h-4" />,
+    });
+  }
+  if (settings?.whatsapp1) {
+    contactLinks.push({
+      href: `https://wa.me/${settings.whatsapp1.replace(/[^0-9]/g, "")}`,
+      label: "WhatsApp 1",
+      icon: <MessageCircle className="w-4 h-4" />,
+      external: true,
+    });
+  }
+  if (settings?.whatsapp2) {
+    contactLinks.push({
+      href: `https://wa.me/${settings.whatsapp2.replace(/[^0-9]/g, "")}`,
+      label: "WhatsApp 2",
+      icon: <MessageCircle className="w-4 h-4" />,
+      external: true,
+    });
+  }
+  if (settings?.instagramUrl) {
+    contactLinks.push({
+      href: settings.instagramUrl,
+      label: "Instagram",
+      icon: <Instagram className="w-4 h-4" />,
+      external: true,
+    });
+  }
+  if (settings?.linkedin1Url) {
+    contactLinks.push({
+      href: settings.linkedin1Url,
+      label: "LinkedIn 1",
+      icon: <Linkedin className="w-4 h-4" />,
+      external: true,
+    });
+  }
+  if (settings?.linkedin2Url) {
+    contactLinks.push({
+      href: settings.linkedin2Url,
+      label: "LinkedIn 2",
+      icon: <Linkedin className="w-4 h-4" />,
+      external: true,
+    });
+  }
+
+  // Also filter out "Contact" label from any visible section
+  const visibleSections = Object.entries(grouped)
+    .filter(([section]) => !HIDDEN_SECTIONS.includes(section))
+    .map(([section, sectionLinks]) => [
+      section,
+      sectionLinks.filter((link) => link.label !== "Contact"),
+    ] as [string, typeof sectionLinks])
+    .filter(([, sectionLinks]) => sectionLinks.length > 0);
 
   return (
-    <footer className="relative bg-card border-t border-border" role="contentinfo">
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-12 py-16 lg:py-20">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12 lg:mb-16">
-          {/* Brand */}
-          <div className="lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2 text-text font-bold text-xl mb-6" aria-label="Code Craft Home">
-              <div className="w-10 h-10 rounded-xl bg-text flex items-center justify-center">
-                <Code2 className="w-5 h-5 text-background" />
-              </div>
-              <span>Code Craft</span>
-            </Link>
-            <p className="text-text-muted text-sm leading-relaxed mb-8 max-w-xs">
-              {s.tagline}
-            </p>
-            <div className="flex gap-4">
-              {s.instagramUrl && (
-                <a
-                  href={s.instagramUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Instagram"
-                  className="w-10 h-10 rounded-lg bg-background border border-border flex items-center justify-center text-text-muted hover:text-lime hover:border-lime/50 transition-all"
-                >
-                  <Instagram className="w-5 h-5" />
-                </a>
-              )}
-              {s.linkedin1Url && (
-                <a
-                  href={s.linkedin1Url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="LinkedIn"
-                  className="w-10 h-10 rounded-lg bg-background border border-border flex items-center justify-center text-text-muted hover:text-lime hover:border-lime/50 transition-all"
-                >
-                  <Linkedin className="w-5 h-5" />
-                </a>
-              )}
-              {s.linkedin2Url && (
-                <a
-                  href={s.linkedin2Url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="LinkedIn 2"
-                  className="w-10 h-10 rounded-lg bg-background border border-border flex items-center justify-center text-text-muted hover:text-lime hover:border-lime/50 transition-all"
-                >
-                  <Linkedin className="w-5 h-5" />
-                </a>
-              )}
-              <a
-                href={`mailto:${s.email}`}
-                aria-label="Email"
-                className="w-10 h-10 rounded-lg bg-background border border-border flex items-center justify-center text-text-muted hover:text-lime hover:border-lime/50 transition-all"
+    <footer className="relative bg-card border-t border-border">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 py-16 lg:py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+          {/* Brand + contact icons */}
+          <div>
+            <Link href="/" className="inline-flex items-center gap-3 text-text font-bold text-xl mb-6 group">
+              <div
+                className="relative w-8 h-8 transition-transform duration-300 group-hover:scale-105"
+                style={{ filter: "drop-shadow(0 0 8px rgba(34, 211, 238, 0.5))" }}
               >
-                <Mail className="w-5 h-5" />
-              </a>
-            </div>
+                <Image
+                  src="/logo.svg"
+                  alt="Code Craft"
+                  fill
+                  sizes="32px"
+                  className="object-contain"
+                />
+              </div>
+              Code Craft
+            </Link>
+            <p className="text-text-muted text-sm leading-relaxed max-w-xs mb-8">
+              Building ideas into digital products.
+              <br />
+              Websites, apps and full systems.
+            </p>
+
+            {contactLinks.length > 0 && (
+              <div className="flex flex-wrap gap-2.5">
+                {contactLinks.map((link, i) => {
+                  const className = "btn-icon";
+                  if (link.external) {
+                    return (
+                      <a
+                        key={i}
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={link.label}
+                        title={link.label}
+                        className={className}
+                      >
+                        {link.icon}
+                      </a>
+                    );
+                  }
+                  return (
+                    <a key={i} href={link.href} aria-label={link.label} title={link.label} className={className}>
+                      {link.icon}
+                    </a>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
-          {/* Company */}
-          <nav aria-label="Company links">
-            <h3 className="font-semibold text-text mb-4">Company</h3>
-            <ul className="space-y-3" role="list">
-              {groupedLinks.Company?.map((link) => (
-                <li key={link.id}>
-                  <Link
-                    href={link.href}
-                    className="text-text-muted hover:text-lime transition-colors text-sm"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          {/* Services */}
-          <nav aria-label="Services links">
-            <h3 className="font-semibold text-text mb-4">Services</h3>
-            <ul className="space-y-3" role="list">
-              {groupedLinks.Services?.map((link) => (
-                <li key={link.id}>
-                  <Link
-                    href={link.href}
-                    className="text-text-muted hover:text-lime transition-colors text-sm"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          {/* Contact */}
-          <div>
-            <h3 className="font-semibold text-text mb-4">Contact</h3>
-            <ul className="space-y-3 text-sm text-text-muted" role="list">
-              <li className="flex items-center gap-2">
-                <Mail className="w-4 h-4 flex-shrink-0" />
-                <a href={`mailto:${s.email}`} className="hover:text-lime transition-colors">{s.email}</a>
-              </li>
-              <li className="flex items-center gap-2">
-                <Phone className="w-4 h-4 flex-shrink-0" />
-                <a href={`tel:${s.phone1.replace(/\s/g, "")}`} className="hover:text-lime transition-colors">{s.phone1}</a>
-              </li>
-              <li className="flex items-center gap-2">
-                <Phone className="w-4 h-4 flex-shrink-0" />
-                <a href={`tel:${s.phone2.replace(/\s/g, "")}`} className="hover:text-lime transition-colors">{s.phone2}</a>
-              </li>
-              <li className="flex items-center gap-2">
-                <MessageCircle className="w-4 h-4 flex-shrink-0 text-lime" />
-                <a href={`https://wa.me/${s.whatsapp1.replace(/\D/g, "")}`} target="_blank" rel="noopener noreferrer" className="hover:text-lime transition-colors flex items-center gap-1">
-                  WhatsApp 1
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-              </li>
-              <li className="flex items-center gap-2">
-                <MessageCircle className="w-4 h-4 flex-shrink-0 text-lime" />
-                <a href={`https://wa.me/${s.whatsapp2.replace(/\D/g, "")}`} target="_blank" rel="noopener noreferrer" className="hover:text-lime transition-colors flex items-center gap-1">
-                  WhatsApp 2
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-              </li>
-            </ul>
+          {/* Link columns */}
+          <div className="grid grid-cols-2 gap-8 sm:gap-12">
+            {visibleSections.map(([section, sectionLinks]) => (
+              <div key={section}>
+                <h3 className="text-xs uppercase tracking-[0.2em] text-text-muted mb-5 font-medium">
+                  {section}
+                </h3>
+                <ul className="space-y-3">
+                  {sectionLinks.map((link) => (
+                    <li key={link.id}>
+                      <Link
+                        href={link.href}
+                        className="text-sm text-text hover:text-lime transition-colors"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="border-t border-border mb-8 lg:mb-10" />
-
-        {/* Bottom */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-text-muted">
-            © {new Date().getFullYear()} Code Craft. All rights reserved.
+        {/* Bottom bar */}
+        <div className="mt-20 lg:mt-28 pt-10 border-t border-border">
+          <p className="text-xs text-text-muted text-center md:text-left">
+            © {year} Code Craft. All rights reserved.
           </p>
-          <nav aria-label="Legal links">
-            <ul className="flex gap-6" role="list">
-              {groupedLinks.Legal?.map((link) => (
-                <li key={link.id}>
-                  <Link
-                    href={link.href}
-                    className="text-xs text-text-muted hover:text-lime transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
         </div>
       </div>
     </footer>

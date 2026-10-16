@@ -92,8 +92,8 @@ export default function PricingSection({ title, subtitle, content }: PricingSect
                 className={cn(
                   "w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md font-medium uppercase tracking-wider transition-all text-xs",
                   plan.featured
-                    ? "bg-text text-background hover:bg-lime hover:text-background"
-                    : "bg-transparent border border-border text-text-muted hover:border-lime/50 hover:text-text hover:bg-card-hover"
+                    ? "bg-text text-background hover:bg-lime hover:text-background hover:scale-[1.02] transition-all duration-200 ease-out"
+                    : "bg-transparent border border-border text-text-muted hover:border-lime/50 hover:text-text hover:bg-card-hover hover:border-coral hover:text-coral transition-all duration-200 ease-out"
                 )}
               >
                 {plan.ctaLabel}

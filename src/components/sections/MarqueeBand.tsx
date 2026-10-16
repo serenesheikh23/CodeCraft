@@ -13,15 +13,17 @@ const items = [
 
 export default function MarqueeBand() {
   return (
-    <section className="relative py-6 border-y border-border overflow-hidden bg-background">
+    <section className="relative py-8 border-y border-border overflow-hidden tint-blue">
+      <div className="absolute top-0 left-0 right-0 h-px brand-gradient-bg opacity-60" />
+      <div className="absolute bottom-0 left-0 right-0 h-px brand-gradient-bg opacity-60" />
+
       <div className="flex animate-marquee whitespace-nowrap">
         {[...items, ...items].map((item, i) => (
           <span
             key={i}
-            className="mx-8 text-xs uppercase tracking-[0.3em] text-text-muted flex items-center gap-8"
+            className="mx-10 text-sm uppercase tracking-[0.3em] text-text-muted"
           >
             {item}
-            <span className="w-1 h-1 rounded-full bg-lime" />
           </span>
         ))}
       </div>

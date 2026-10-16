@@ -1,9 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 
 interface HeroContent {
   badge?: string;
@@ -11,136 +9,95 @@ interface HeroContent {
   subheadline?: string;
   cta1Label?: string;
   cta1Href?: string;
-  cta2Label?: string;
-  cta2Href?: string;
 }
 
-const terminalLines = [
-  "$ npx create-code-craft-app",
-  "✓ Scaffolding project",
-  "✓ Installing dependencies",
-  "✓ Configuring database",
-  "✓ Building pages",
-  "✓ Deploying to production",
-  "✓ Ready on https://yourproject.dev",
+const terminalLines: Array<{ text: string; delay: number; type: "command" | "info" | "success" | "final" }> = [
+  { text: '$ npx codecraft create "your-next-big-thing"', delay: 40, type: "command" },
+  { text: "✓ Initializing Code Craft workspace", delay: 18, type: "success" },
+  { text: "✓ Scaffolding project structure", delay: 15, type: "success" },
+  { text: "✓ Installing 312 dependencies", delay: 15, type: "success" },
+  { text: "→ Configuring database & auth", delay: 20, type: "info" },
+  { text: "✓ Schema migrated", delay: 15, type: "success" },
+  { text: "→ Building optimized bundle", delay: 20, type: "info" },
+  { text: "✓ Bundle ready (89.2 KB gzipped)", delay: 15, type: "success" },
+  { text: "→ Deploying to edge network", delay: 20, type: "info" },
+  { text: "✓ Live at https://your-next-big-thing.dev", delay: 15, type: "success" },
+  { text: "  Shipped in 3.4s — welcome to production.", delay: 25, type: "final" },
 ];
 
-function Terminal() {
-  const [displayedLines, setDisplayedLines] = useState<string[]>([]);
-  const [currentLineIndex, setCurrentLineIndex] = useState(0);
-  const [currentCharIndex, setCurrentCharIndex] = useState(0);
-  const [isTyping, setIsTyping] = useState(true);
-  const [showCursor, setShowCursor] = useState(true);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const cursorIntervalRef = useRef<NodeJS.Timeout | null>(null);
+function HeroTerminal() {
+  const [visibleLines, setVisibleLines] = useState<number[]>([]);
+  const [currentChar, setCurrentChar] = useState(0);
+  const [currentLine, setCurrentLine] = useState(0);
+  const [isDone, setIsDone] = useState(false);
 
   useEffect(() => {
-    cursorIntervalRef.current = setInterval(() => {
-      setShowCursor((prev) => !prev);
-    }, 500);
-
-    return () => {
-      if (cursorIntervalRef.current) clearInterval(cursorIntervalRef.current);
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!isTyping) {
-      if (currentLineIndex === terminalLines.length - 1) {
-        intervalRef.current = setTimeout(() => {
-          setDisplayedLines([]);
-          setCurrentLineIndex(0);
-          setCurrentCharIndex(0);
-          setIsTyping(true);
-        }, 4000);
-      } else {
-        intervalRef.current = setTimeout(() => {
-          setCurrentLineIndex((prev) => prev + 1);
-          setCurrentCharIndex(0);
-        }, 400);
-      }
+    if (isDone) {
+      const t = setTimeout(() => {
+        setVisibleLines([]);
+        setCurrentChar(0);
+        setCurrentLine(0);
+        setIsDone(false);
+      }, 5000);
+      return () => clearTimeout(t);
+    }
+    if (currentLine >= terminalLines.length) {
+      setIsDone(true);
       return;
     }
-
-    const currentLine = terminalLines[currentLineIndex];
-    if (currentCharIndex < currentLine.length) {
-      intervalRef.current = setTimeout(() => {
-        setDisplayedLines((prev) => {
-          const newLines = [...prev];
-          newLines[currentLineIndex] = currentLine.slice(0, currentCharIndex + 1);
-          return newLines;
-        });
-        setCurrentCharIndex((prev) => prev + 1);
-      }, 40);
+    const line = terminalLines[currentLine];
+    if (currentChar < line.text.length) {
+      const t = setTimeout(() => setCurrentChar((c) => c + 1), line.delay);
+      return () => clearTimeout(t);
     } else {
-      setIsTyping(false);
+      const t = setTimeout(() => {
+        setVisibleLines((prev) => [...prev, currentLine]);
+        setCurrentLine((l) => l + 1);
+        setCurrentChar(0);
+      }, 200);
+      return () => clearTimeout(t);
     }
-  }, [currentCharIndex, currentLineIndex, isTyping]);
+  }, [currentChar, currentLine, isDone]);
+
+  const colorFor = (type: string) =>
+    type === "command"
+      ? "text-text"
+      : type === "success"
+      ? "text-lime"
+      : type === "final"
+      ? "text-coral font-semibold"
+      : "text-text-muted";
+
+  const renderLine = (idx: number) => {
+    const line = terminalLines[idx];
+    const isCurrent = idx === currentLine && !isDone;
+    const text = isCurrent ? line.text.slice(0, currentChar) : line.text;
+    return (
+      <div key={idx} className={`${colorFor(line.type)} whitespace-pre-wrap break-all`}>
+        {text}
+        {isCurrent && (
+          <span className="inline-block w-2 h-4 bg-lime ml-0.5 align-middle animate-pulse" />
+        )}
+      </div>
+    );
+  };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 0.6 }}
-      className="hidden lg:block lg:col-span-4"
-    >
-      <div className="bg-card border border-border rounded-lg overflow-hidden">
-        <div className="flex items-center gap-1.5 px-4 py-3 bg-background border-b border-border">
-          <div className="w-3 h-3 rounded-full bg-red-500" />
-          <div className="w-3 h-3 rounded-full bg-yellow-500" />
-          <div className="w-3 h-3 rounded-full bg-green-500" />
+    <div className="relative">
+      <div className="absolute -inset-8 glow-cyan opacity-60 blur-2xl pointer-events-none" />
+      <div className="relative border border-border bg-card rounded-lg overflow-hidden shadow-2xl">
+        <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-background/40">
+          <span className="w-3 h-3 rounded-full bg-[#FF5F56]" />
+          <span className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
+          <span className="w-3 h-3 rounded-full bg-[#27C93F]" />
+          <span className="ml-3 text-xs text-text-muted font-mono">codecraft — zsh</span>
         </div>
-        <div className="p-6 font-mono text-sm leading-relaxed text-text min-h-[320px]">
-          {displayedLines.map((line, i) => (
-            <div key={i} className="flex items-start gap-2">
-              {line.startsWith("✓") && (
-                <span className="text-lime flex-shrink-0">✓</span>
-              )}
-              {!line.startsWith("✓") && !line.startsWith("$") && (
-                <span className="w-5 flex-shrink-0" />
-              )}
-              <span
-                className={
-                  line.startsWith("$")
-                    ? "text-text-muted"
-                    : line.startsWith("✓")
-                    ? "text-text"
-                    : "text-text"
-                }
-              >
-                {line.startsWith("$") ? line : line.replace("✓ ", "")}
-              </span>
-            </div>
-          ))}
-          {isTyping && currentLineIndex < terminalLines.length && (
-            <div className="flex items-start gap-2">
-              {terminalLines[currentLineIndex].startsWith("✓") && (
-                <span className="text-lime flex-shrink-0">✓</span>
-              )}
-              {!terminalLines[currentLineIndex].startsWith("✓") &&
-                !terminalLines[currentLineIndex].startsWith("$") && (
-                  <span className="w-5 flex-shrink-0" />
-                )}
-              <span
-                className={
-                  terminalLines[currentLineIndex].startsWith("$")
-                    ? "text-text-muted"
-                    : "text-text"
-                }
-              >
-                {terminalLines[currentLineIndex].startsWith("$")
-                  ? terminalLines[currentLineIndex].slice(0, currentCharIndex)
-                  : terminalLines[currentLineIndex].replace("✓ ", "").slice(0, currentCharIndex)}
-              </span>
-              {showCursor && (
-                <span className="w-2 h-4 bg-lime animate-pulse ml-1 inline-block" />
-              )}
-            </div>
-          )}
+        <div className="p-5 font-mono text-xs lg:text-sm leading-relaxed space-y-1 min-h-[260px]">
+          {visibleLines.map((idx) => renderLine(idx))}
+          {!isDone && currentLine < terminalLines.length && renderLine(currentLine)}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -159,35 +116,33 @@ export default function HeroSection({
   return (
     <section className="relative min-h-[85vh] flex items-center bg-background overflow-hidden">
       <div
-        className="absolute inset-0 opacity-[0.04]"
+        className="absolute inset-0 opacity-[0.05]"
         style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(rgba(34,211,238,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.4) 1px, transparent 1px)`,
           backgroundSize: "80px 80px",
         }}
       />
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-12 py-32 lg:py-48 w-full">
+      <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] glow-cyan opacity-70 blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] glow-blue opacity-60 blur-3xl pointer-events-none" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          {/* Left column */}
-          <div className="lg:col-span-8">
+          <div className="lg:col-span-7">
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="uppercase tracking-[0.25em] text-xs text-text-muted mb-8 inline-flex items-center gap-3"
+              className="section-label text-lime mb-8"
             >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-lime opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-lime" />
-              </span>
               {content.badge || "Available for work · 2026"}
             </motion.p>
 
             <motion.h1
-              initial={{ opacity: 0, clipPath: "inset(100% 0 0 0)" }}
-              animate={{ opacity: 1, clipPath: "inset(0 0 0 0)" }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className="font-serif text-7xl lg:text-8xl leading-[0.9] tracking-tight text-text whitespace-pre-line"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="font-serif text-5xl sm:text-6xl lg:text-7xl xl:text-8xl leading-[0.95] tracking-tight text-text whitespace-pre-line"
             >
               {headline}
             </motion.h1>
@@ -196,31 +151,20 @@ export default function HeroSection({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="mt-8 text-lg text-text-muted max-w-lg leading-relaxed"
+              className="mt-8 text-lg text-text-muted max-w-xl leading-relaxed"
             >
               {subheadline}
             </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="mt-10 flex flex-wrap gap-4"
-            >
-              {content.cta1Label && content.cta1Href && (
-                <Link
-                  href={content.cta1Href}
-                  className="inline-flex items-center gap-2 px-7 py-3.5 bg-text text-background rounded-md text-xs font-semibold uppercase tracking-wider hover:bg-lime hover:text-background transition-colors"
-                >
-                  {content.cta1Label}
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-              )}
-            </motion.div>
           </div>
 
-          {/* Right column: animated terminal */}
-          <Terminal />
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="lg:col-span-5 mt-8 lg:mt-0"
+          >
+            <HeroTerminal />
+          </motion.div>
         </div>
       </div>
     </section>

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ChevronRight, Layout, Building, Code, ShoppingCart, Smartphone, Layers, GitBranch, Package } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
+import ServicesTerminal from "@/components/sections/ServicesTerminal";
 
 interface Service {
   id: string;
@@ -11,13 +12,13 @@ interface Service {
   description: string;
   minPrice: number;
   maxPrice: number;
-  features: string; 
+  features: string;
   icon: string;
   order: number;
   isActive: boolean;
 }
 
-const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+const iconMap: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
   layout: Layout,
   building: Building,
   code: Code,
@@ -36,12 +37,15 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   star: Package,
 };
 
+const BRAND_BLUE = "#3B82F6";
+const BRAND_BLUE_DARK = "#2563EB";
+const BRAND_BLUE_GLOW = "0 0 12px rgba(59, 130, 246, 0.5)";
+
 export default function ServicesSection({ services }: { services: Service[] }) {
   const activeServices = services.filter(s => s.isActive);
 
   if (activeServices.length === 0) return null;
 
-  // Split into rows: first 2, next 3, then remaining
   const row1 = activeServices.slice(0, 2);
   const row2 = activeServices.slice(2, 5);
   const row3 = activeServices.slice(5);
@@ -52,6 +56,9 @@ export default function ServicesSection({ services }: { services: Service[] }) {
       className="relative py-32 lg:py-48 overflow-hidden"
       aria-labelledby="services-heading"
     >
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] glow-blue opacity-40 blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] glow-cyan opacity-30 blur-3xl pointer-events-none" />
+
       <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -60,9 +67,7 @@ export default function ServicesSection({ services }: { services: Service[] }) {
           transition={{ duration: 0.6 }}
           className="mb-16 lg:mb-24"
         >
-          <div className="text-text-muted text-xs uppercase tracking-[0.2em] font-medium mb-4">
-            WHAT WE DO
-          </div>
+          <div className="section-label text-lime mb-4">WHAT WE DO</div>
           <h2 id="services-heading" className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight text-text">
             We build things
             <br />
@@ -73,7 +78,6 @@ export default function ServicesSection({ services }: { services: Service[] }) {
           </p>
         </motion.div>
 
-        {/* Row 1: 2 services - larger cards */}
         {row1.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -84,39 +88,46 @@ export default function ServicesSection({ services }: { services: Service[] }) {
             role="list"
             aria-label="Services"
           >
-            {row1.map((service, index) => {
+            {row1.map((service) => {
               const Icon = iconMap[service.icon] || Layout;
               const features = JSON.parse(service.features || "[]") as string[];
 
               return (
                 <article
                   key={service.id}
-                  className="group relative border border-border p-8 lg:p-10 transition-colors duration-300 hover:border-lime/40"
+                  className="group relative border border-border p-8 lg:p-10 transition-colors duration-300 hover:border-coral/40"
                   role="listitem"
                 >
-                  <div className="flex items-start gap-3 mb-6">
-                    <Icon className="w-5 h-5 text-text-muted flex-shrink-0 mt-0.5" aria-hidden="true" />
+                  <div className="flex items-start gap-4 mb-6">
+                    <Icon
+                      className="w-9 h-9 flex-shrink-0 mt-1"
+                      style={{ color: BRAND_BLUE, filter: `drop-shadow(${BRAND_BLUE_GLOW})` }}
+                      aria-hidden="true"
+                    />
                     <h3 className="font-serif text-2xl lg:text-3xl font-bold text-text leading-snug">{service.name}</h3>
                   </div>
 
                   <p className="text-text-muted mb-6 leading-relaxed text-base lg:text-lg">{service.description}</p>
 
                   <div className="flex items-baseline gap-2 mb-6">
-                    <span className="font-serif text-3xl lg:text-4xl font-bold text-text">
+                    <span className="font-serif text-3xl lg:text-4xl font-bold" style={{ color: BRAND_BLUE }}>
                       {formatPrice(service.minPrice, service.maxPrice)}
                     </span>
-                    <span className="text-text-muted">USD</span>
+                    <span className="text-text text-sm">USD</span>
                   </div>
 
                   <ul className="space-y-3 mb-8" role="list">
                     {features.slice(0, 6).map((feature, featureIndex) => (
                       <li key={feature + featureIndex} className="flex items-start gap-3 text-text-muted">
-                        <span className="w-1 h-1 rounded-full bg-lime flex-shrink-0 mt-2" />
+                        <span
+                          className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-2"
+                          style={{ backgroundColor: "#F8FAFC" }}
+                        />
                         <span className="text-base leading-relaxed">{feature}</span>
                       </li>
                     ))}
                     {features.length > 6 && (
-                      <li className="flex items-center gap-2 text-sm text-lime font-medium">
+                      <li className="flex items-center gap-2 text-sm font-medium" style={{ color: BRAND_BLUE }}>
                         <ChevronRight className="w-4 h-4 flex-shrink-0" />
                         <span>+{features.length - 6} more features</span>
                       </li>
@@ -125,10 +136,23 @@ export default function ServicesSection({ services }: { services: Service[] }) {
 
                   <Link
                     href="#contact"
-                    className="w-full border border-border text-text-muted hover:border-lime/50 hover:text-text hover:bg-card-hover transition-all inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md font-medium uppercase tracking-wider text-xs"
+                    className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md font-semibold uppercase tracking-wider text-xs transition-all duration-200"
+                    style={{
+                      backgroundColor: BRAND_BLUE,
+                      color: "#F8FAFC",
+                      border: `1px solid ${BRAND_BLUE}`,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = BRAND_BLUE_DARK;
+                      e.currentTarget.style.borderColor = BRAND_BLUE_DARK;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = BRAND_BLUE;
+                      e.currentTarget.style.borderColor = BRAND_BLUE;
+                    }}
                   >
                     Discuss a project
-                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                    <ChevronRight className="w-4 h-4" />
                   </Link>
                 </article>
               );
@@ -136,7 +160,6 @@ export default function ServicesSection({ services }: { services: Service[] }) {
           </motion.div>
         )}
 
-        {/* Row 2: 3 services */}
         {row2.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -147,39 +170,46 @@ export default function ServicesSection({ services }: { services: Service[] }) {
             role="list"
             aria-label="Services"
           >
-            {row2.map((service, index) => {
+            {row2.map((service) => {
               const Icon = iconMap[service.icon] || Layout;
               const features = JSON.parse(service.features || "[]") as string[];
 
               return (
                 <article
                   key={service.id}
-                  className="group relative border border-border p-6 transition-colors duration-300 hover:border-lime/40"
+                  className="group relative border border-border p-6 transition-colors duration-300 hover:border-coral/40"
                   role="listitem"
                 >
                   <div className="flex items-start gap-3 mb-4">
-                    <Icon className="w-5 h-5 text-text-muted flex-shrink-0 mt-0.5" aria-hidden="true" />
+                    <Icon
+                      className="w-7 h-7 flex-shrink-0 mt-1"
+                      style={{ color: BRAND_BLUE, filter: `drop-shadow(${BRAND_BLUE_GLOW})` }}
+                      aria-hidden="true"
+                    />
                     <h3 className="font-serif text-xl font-bold text-text leading-snug">{service.name}</h3>
                   </div>
 
                   <p className="text-text-muted mb-4 leading-relaxed text-sm">{service.description}</p>
 
                   <div className="flex items-baseline gap-2 mb-4">
-                    <span className="font-serif text-2xl font-bold text-text">
+                    <span className="font-serif text-2xl font-bold" style={{ color: BRAND_BLUE }}>
                       {formatPrice(service.minPrice, service.maxPrice)}
                     </span>
-                    <span className="text-text-muted">USD</span>
+                    <span className="text-text text-xs">USD</span>
                   </div>
 
                   <ul className="space-y-2 mb-6" role="list">
                     {features.slice(0, 4).map((feature, featureIndex) => (
                       <li key={feature + featureIndex} className="flex items-start gap-2 text-sm text-text-muted">
-                        <span className="w-1 h-1 rounded-full bg-lime flex-shrink-0 mt-1.5" />
+                        <span
+                          className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-1.5"
+                          style={{ backgroundColor: "#F8FAFC" }}
+                        />
                         <span>{feature}</span>
                       </li>
                     ))}
                     {features.length > 4 && (
-                      <li className="flex items-center gap-2 text-xs text-lime font-medium">
+                      <li className="flex items-center gap-2 text-xs font-medium" style={{ color: BRAND_BLUE }}>
                         <ChevronRight className="w-3 h-3 flex-shrink-0" />
                         <span>+{features.length - 4} more</span>
                       </li>
@@ -188,10 +218,23 @@ export default function ServicesSection({ services }: { services: Service[] }) {
 
                   <Link
                     href="#contact"
-                    className="w-full border border-border text-text-muted hover:border-lime/50 hover:text-text hover:bg-card-hover transition-all inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-md font-medium uppercase tracking-wider text-xs"
+                    className="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-md font-semibold uppercase tracking-wider text-xs transition-all duration-200"
+                    style={{
+                      backgroundColor: BRAND_BLUE,
+                      color: "#F8FAFC",
+                      border: `1px solid ${BRAND_BLUE}`,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = BRAND_BLUE_DARK;
+                      e.currentTarget.style.borderColor = BRAND_BLUE_DARK;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = BRAND_BLUE;
+                      e.currentTarget.style.borderColor = BRAND_BLUE;
+                    }}
                   >
                     Discuss a project
-                    <ChevronRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
+                    <ChevronRight className="w-3 h-3" />
                   </Link>
                 </article>
               );
@@ -199,7 +242,6 @@ export default function ServicesSection({ services }: { services: Service[] }) {
           </motion.div>
         )}
 
-        {/* Row 3: remaining services */}
         {row3.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -210,39 +252,46 @@ export default function ServicesSection({ services }: { services: Service[] }) {
             role="list"
             aria-label="Services"
           >
-            {row3.map((service, index) => {
+            {row3.map((service) => {
               const Icon = iconMap[service.icon] || Layout;
               const features = JSON.parse(service.features || "[]") as string[];
 
               return (
                 <article
                   key={service.id}
-                  className="group relative border border-border p-6 transition-colors duration-300 hover:border-lime/40"
+                  className="group relative border border-border p-6 transition-colors duration-300 hover:border-coral/40"
                   role="listitem"
                 >
                   <div className="flex items-start gap-3 mb-4">
-                    <Icon className="w-5 h-5 text-text-muted flex-shrink-0 mt-0.5" aria-hidden="true" />
+                    <Icon
+                      className="w-7 h-7 flex-shrink-0 mt-1"
+                      style={{ color: BRAND_BLUE, filter: `drop-shadow(${BRAND_BLUE_GLOW})` }}
+                      aria-hidden="true"
+                    />
                     <h3 className="font-serif text-xl font-bold text-text leading-snug">{service.name}</h3>
                   </div>
 
                   <p className="text-text-muted mb-4 leading-relaxed text-sm">{service.description}</p>
 
                   <div className="flex items-baseline gap-2 mb-4">
-                    <span className="font-serif text-2xl font-bold text-text">
+                    <span className="font-serif text-2xl font-bold" style={{ color: BRAND_BLUE }}>
                       {formatPrice(service.minPrice, service.maxPrice)}
                     </span>
-                    <span className="text-text-muted">USD</span>
+                    <span className="text-text text-xs">USD</span>
                   </div>
 
                   <ul className="space-y-2 mb-6" role="list">
                     {features.slice(0, 4).map((feature, featureIndex) => (
                       <li key={feature + featureIndex} className="flex items-start gap-2 text-sm text-text-muted">
-                        <span className="w-1 h-1 rounded-full bg-lime flex-shrink-0 mt-1.5" />
+                        <span
+                          className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-1.5"
+                          style={{ backgroundColor: "#F8FAFC" }}
+                        />
                         <span>{feature}</span>
                       </li>
                     ))}
                     {features.length > 4 && (
-                      <li className="flex items-center gap-2 text-xs text-lime font-medium">
+                      <li className="flex items-center gap-2 text-xs font-medium" style={{ color: BRAND_BLUE }}>
                         <ChevronRight className="w-3 h-3 flex-shrink-0" />
                         <span>+{features.length - 4} more</span>
                       </li>
@@ -251,10 +300,23 @@ export default function ServicesSection({ services }: { services: Service[] }) {
 
                   <Link
                     href="#contact"
-                    className="w-full border border-border text-text-muted hover:border-lime/50 hover:text-text hover:bg-card-hover transition-all inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-md font-medium uppercase tracking-wider text-xs"
+                    className="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-md font-semibold uppercase tracking-wider text-xs transition-all duration-200"
+                    style={{
+                      backgroundColor: BRAND_BLUE,
+                      color: "#F8FAFC",
+                      border: `1px solid ${BRAND_BLUE}`,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = BRAND_BLUE_DARK;
+                      e.currentTarget.style.borderColor = BRAND_BLUE_DARK;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = BRAND_BLUE;
+                      e.currentTarget.style.borderColor = BRAND_BLUE;
+                    }}
                   >
                     Discuss a project
-                    <ChevronRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
+                    <ChevronRight className="w-3 h-3" />
                   </Link>
                 </article>
               );
@@ -262,21 +324,7 @@ export default function ServicesSection({ services }: { services: Service[] }) {
           </motion.div>
         )}
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ delay: 0.3 }}
-          className="text-center"
-        >
-          <Link
-            href="#contact"
-            className="bg-transparent border border-border text-text inline-flex items-center gap-2 px-6 py-3 rounded-md font-medium uppercase tracking-wider text-xs hover:bg-lime hover:text-background hover:border-lime transition-colors"
-          >
-            All services
-            <ChevronRight className="w-4 h-4" />
-          </Link>
-        </motion.div>
+        <ServicesTerminal />
       </div>
     </section>
   );

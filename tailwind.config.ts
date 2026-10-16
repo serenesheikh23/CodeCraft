@@ -9,7 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        lime: "#D4FF4A",
+        lime: "#22D3EE",
         background: "#0B1220",
         primary: "#2563EB",
         accent: "#22D3EE",
@@ -17,6 +17,7 @@ const config: Config = {
         "text-muted": "#94A3B8",
         card: "#111A2E",
         "card-hover": "#17223B",
+        coral: "#3B82F6",
         border: "#1E2A44",
       },
       fontFamily: {
