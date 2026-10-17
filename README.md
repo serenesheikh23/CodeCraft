@@ -1,122 +1,75 @@
-# Code Craft - Modern Digital Agency Website
+# Code Craft
 
-A modern, dark-themed personal agency website built with Next.js 14, TypeScript, Tailwind CSS, and Prisma.
+A Next.js 14 digital-agency website with a built-in admin CMS for managing services, projects, testimonials, legal pages, and site settings.
 
-## Features
+## Key features
 
-- **Modern Dark Theme**: Custom color scheme with glassmorphism effects
-- **Smooth Animations**: Framer Motion powered animations and transitions
-- **Admin Panel**: Full CMS with authentication (NextAuth.js)
-- **Database**: SQLite with Prisma ORM
-- **Contact Form**: Email integration with Resend
-- **Responsive Design**: Mobile-first approach
-- **TypeScript**: Full type safety
+- Admin panel protected by NextAuth credentials authentication
+- CRUD management for services, add-ons, projects, testimonials, nav links, footer links, legal pages, custom pages, and site settings
+- Dynamic homepage sections driven by a `HomepageSection` model
+- Projects index and per-project detail pages at `/projects` and `/projects/[slug]`
+- Legal and custom page routing at `/legal/[slug]` and `/p/[slug]`
+- Contact form with email delivery via Resend
+- File upload endpoint writing to `public/uploads`
+- Dark theme with Framer Motion animations and Tailwind CSS
+- Route-level protection of `/admin/*` via middleware
 
-## Tech Stack
+## Tech stack
 
-- **Framework**: Next.js 14 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Database**: SQLite + Prisma ORM
-- **Authentication**: NextAuth.js (Credentials Provider)
-- **Animations**: Framer Motion
-- **Icons**: Lucide React
-- **Email**: Resend
-- **Validation**: Zod (via NextAuth)
+- **Language:** TypeScript
+- **Framework:** Next.js 14 (App Router)
+- **UI:** React, Tailwind CSS, Framer Motion, Lucide React
+- **Database:** SQLite via Prisma ORM
+- **Auth:** NextAuth.js (Credentials provider)
+- **Email:** Resend
+- **Testing:** Vitest
+- **Deployment:** Vercel
 
-## Getting Started
+## Architecture overview
+
+- `src/app/` — App Router pages and `/api/*` route handlers (27 route files, 56 exported HTTP handlers)
+- `src/components/` — section components in `sections/` and admin UI in `admin/`
+- `src/lib/` — `auth.ts` (NextAuth configuration), `prisma.ts` (Prisma client singleton), `utils.ts`
+- `prisma/schema.prisma` — 12 models; `prisma/seed.ts` seeds demo content
+- `src/middleware.ts` — protects `/admin/*` and redirects unauthenticated users to `/admin/login`
+
+**Data flow:** React pages call `/api/*` route handlers, which use Prisma to read and write SQLite. Admin mutations require a valid NextAuth session. Middleware enforces the redirect before a request reaches any admin page or handler.
+
+**Roles:** A single authenticated admin role. The `AdminUser` model backs the credentials provider. There is no public user account system.
+
+## Getting started
 
 ### Prerequisites
 
-- Node.js 18+
-- npm or yarn
+Node.js 18 or newer, and npm.
 
 ### Installation
 
-```bash
-# Install dependencies
-npm install
+Clone the repository and install dependencies with npm. Copy `.env.example` to `.env` and fill in the values listed below.
 
-# Set up database
-npm run db:push
-npm run db:seed
+### Environment variables
 
-# Start development server
-npm run dev
-```
+Defined in `.env.example`:
 
-### Environment Variables
+- `DATABASE_URL` — SQLite connection string
+- `NEXTAUTH_SECRET` — secret used by NextAuth to sign sessions
+- `NEXTAUTH_URL` — base URL of the running app
+- `RESEND_API_KEY` — API key used by the contact form
 
-Create a `.env` file in the root directory:
+### Database setup
 
-```env
-DATABASE_URL="file:./dev.db"
-NEXTAUTH_SECRET="your-secret-key"
-RESEND_API_KEY="your-resend-api-key"
-NEXTAUTH_URL="http://localhost:3000"
-```
+Apply the Prisma migration to create the SQLite schema, then run the seed script to populate demo content. The seed covers services, add-ons, projects, testimonials, nav links, footer links, legal pages, custom pages, and homepage sections.
 
-## Project Structure
+### Running locally
 
-```
-src/
-├── app/
-│   ├── api/           # API routes
-│   │   ├── auth/      # NextAuth endpoints
-│   │   ├── contact/   # Contact form
-│   │   ├── services/  # Services CRUD
-│   │   └── addons/    # Add-ons CRUD
-│   ├── admin/         # Admin panel pages
-│   │   ├── dashboard/ # Dashboard with CRUD
-│   │   └── login/     # Login page
-│   ├── globals.css    # Global styles
-│   ├── layout.tsx     # Root layout
-│   └── page.tsx       # Home page
-├── components/        # React components
-├── lib/               # Utility functions
-│   ├── auth.ts        # NextAuth config
-│   ├── prisma.ts      # Prisma client
-│   └── utils.ts       # Helper functions
-├── middleware.ts      # Auth middleware
-└── prisma/
-    ├── schema.prisma  # Database schema
-    └── seed.ts        # Seed script
-```
+Start the development server using the `dev` script in `package.json`. The site is served at `http://localhost:3000` and the admin panel at `/admin/login`. See `package.json` for the full list of scripts.
 
-## Admin Panel
+### Tests
 
-Access the admin panel at `/admin/login`
-
-**Default credentials:**
-- Email: `admin@codecraft.com`
-- Password: `XYZ123abc333!!!`
-
-## Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-- `npm run db:push` - Push schema to database
-- `npm run db:seed` - Seed database with sample data
-- `npm run db:studio` - Open Prisma Studio
+API route tests use Vitest. They import the route handlers directly and exercise the read endpoints for services and projects against the configured SQLite database. Run with `npm test`.
 
 ## Deployment
 
-### Vercel (Recommended)
+The project is configured for Vercel. Deployment requires setting the environment variables above in the Vercel dashboard and running Prisma migrations against the production database.
 
-1. Push to GitHub
-2. Import project in Vercel
-3. Add environment variables
-4. Deploy
-
-### Docker
-
-```bash
-docker build -t code-craft .
-docker run -p 3000:3000 code-craft
-```
-
-## License
-
-MIT
+The upload endpoint writes to `public/uploads`, which is not persistent on Vercel's filesystem. Uploads therefore work in local development only unless the storage layer is replaced with object storage.
