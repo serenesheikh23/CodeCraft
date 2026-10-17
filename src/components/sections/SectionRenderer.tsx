@@ -66,7 +66,7 @@ export default async function SectionRenderer({ section }: { section: Section })
         where: { isActive: true, featured: true },
         orderBy: { order: "asc" },
       });
-      return <ProjectsList projects={projects} />;
+      return <ProjectsList projects={projects as any} />;
     }
     case "testimonials": {
       const testimonials = await prisma.testimonial.findMany({
