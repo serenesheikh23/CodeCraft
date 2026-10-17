@@ -12,7 +12,8 @@ import {
   ScrollText,
 } from "lucide-react";
 import { prisma } from "@/lib/prisma";
-import { cn } from "@/lib/utils";
+
+export const dynamic = "force-dynamic";
 
 async function getDashboardData() {
   const [servicesCount, addonsCount, projectsCount, testimonialsCount, recentItems] = await Promise.all([
@@ -32,13 +33,13 @@ async function getDashboardData() {
   ]);
 
   const allRecent = [
-    ...recentItems[0].map((item) => ({ ...item, type: "service", icon: Box, href: `/admin/dashboard/services/${item.id}/edit` })),
-    ...recentItems[1].map((item) => ({ ...item, type: "addon", icon: Package, href: `/admin/dashboard/addons/${item.id}/edit` })),
-    ...recentItems[2].map((item) => ({ ...item, type: "project", icon: FolderKanban, href: `/admin/dashboard/projects/${item.id}/edit` })),
-    ...recentItems[3].map((item) => ({ ...item, type: "testimonial", icon: MessageSquare, href: `/admin/dashboard/testimonials/${item.id}/edit` })),
-    ...recentItems[4].map((item) => ({ ...item, type: "footer link", icon: Link2, href: `/admin/dashboard/footer-links/${item.id}/edit` })),
-    ...recentItems[5].map((item) => ({ ...item, type: "legal page", icon: ScrollText, href: `/admin/dashboard/legal-pages/${item.id}/edit` })),
-    ...recentItems[6].map((item) => ({ ...item, type: "custom page", icon: FileText, href: `/admin/dashboard/pages/${item.id}/edit` })),
+    ...recentItems[0].map((item: any) => ({ ...item, type: "service", icon: Box, href: `/admin/dashboard/services/${item.id}/edit` })),
+    ...recentItems[1].map((item: any) => ({ ...item, type: "addon", icon: Package, href: `/admin/dashboard/addons/${item.id}/edit` })),
+    ...recentItems[2].map((item: any) => ({ ...item, type: "project", icon: FolderKanban, href: `/admin/dashboard/projects/${item.id}/edit` })),
+    ...recentItems[3].map((item: any) => ({ ...item, type: "testimonial", icon: MessageSquare, href: `/admin/dashboard/testimonials/${item.id}/edit` })),
+    ...recentItems[4].map((item: any) => ({ ...item, type: "footer link", icon: Link2, href: `/admin/dashboard/footer-links/${item.id}/edit` })),
+    ...recentItems[5].map((item: any) => ({ ...item, type: "legal page", icon: ScrollText, href: `/admin/dashboard/legal-pages/${item.id}/edit` })),
+    ...recentItems[6].map((item: any) => ({ ...item, type: "custom page", icon: FileText, href: `/admin/dashboard/pages/${item.id}/edit` })),
   ]
     .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
     .slice(0, 10);
@@ -181,7 +182,7 @@ export default async function DashboardPage() {
             </div>
           ) : (
             <div className="divide-y divide-border">
-              {recentActivity.map((item) => {
+              {recentActivity.map((item: any) => {
                 const Icon = item.icon;
                 const displayName =
                   "name" in item

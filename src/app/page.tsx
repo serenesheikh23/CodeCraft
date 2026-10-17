@@ -8,6 +8,9 @@ import StackDiagram from "@/components/sections/StackDiagram";
 import QuoteEstimator from "@/components/sections/QuoteEstimator";
 import { prisma } from "@/lib/prisma";
 
+// This tells Next.js not to pre-render this page at build time
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Code Craft | Ideas in. Products out.",
   description: "Building ideas into digital products. Websites, apps and full systems.",
@@ -41,7 +44,7 @@ export default async function HomePage() {
     getAddons(),
   ]);
 
-  const contactIndex = sections.findIndex((s) => s.type === "contact");
+  const contactIndex = sections.findIndex((s: any) => s.type === "contact");
   const beforeContact = contactIndex >= 0 ? sections.slice(0, contactIndex) : sections;
   const contactAndAfter = contactIndex >= 0 ? sections.slice(contactIndex) : [];
 
@@ -49,7 +52,7 @@ export default async function HomePage() {
     <>
       <Navbar />
       <main id="main-content">
-        {beforeContact.map((section, i) => (
+        {beforeContact.map((section: any, i: number) => (
           <div key={section.id}>
             <SectionRenderer section={section} />
             {i === 0 && <MarqueeBand />}
@@ -60,7 +63,7 @@ export default async function HomePage() {
 
         <QuoteEstimator services={services} addons={addons} />
 
-        {contactAndAfter.map((section) => (
+        {contactAndAfter.map((section: any) => (
           <div key={section.id}>
             <SectionRenderer section={section} />
           </div>
