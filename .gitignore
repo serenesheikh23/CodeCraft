@@ -42,3 +42,7 @@ prisma/migrations/
 .vscode/
 *.swp
 *.swo
+*.db
+*.db.backup
+dev.db
+prisma/dev.db

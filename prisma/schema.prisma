@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
@@ -52,14 +53,14 @@ model Project {
   outcome      String
   imageUrl     String
   liveUrl      String
-  githubUrl String?
-  techStack String?   // JSON stringified array
+  githubUrl    String?
+  techStack    String?
   featured     Boolean  @default(false)
   order        Int      @default(0)
   isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  images String @default("[]")
+  images       String   @default("[]")
 }
 
 model Testimonial {
