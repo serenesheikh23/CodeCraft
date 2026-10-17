@@ -89,7 +89,7 @@ Access the admin panel at `/admin/login`
 
 **Default credentials:**
 - Email: `admin@codecraft.com`
-- Password: `admin123`
+- Password: `XYZ123abc333!!!`
 
 ## Available Scripts
 
