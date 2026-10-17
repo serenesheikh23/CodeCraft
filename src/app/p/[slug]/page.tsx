@@ -32,7 +32,7 @@ export default async function CustomPage({
       <>
         <Navbar />
         <main id="main-content">
-          {sections.map((section) => (
+          {sections.map((section: any) => (
             <SectionRenderer key={section.id} section={section} />
           ))}
         </main>
@@ -69,7 +69,7 @@ export default async function CustomPage({
           <div className="h-px bg-border mb-12" />
 
           <article className="space-y-6">
-            {paragraphs.map((para, i) => (
+            {paragraphs.map((para: string, i: number) => (
               <p key={i} className="text-lg text-text-muted leading-relaxed">
                 {para}
               </p>
