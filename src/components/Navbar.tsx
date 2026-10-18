@@ -128,7 +128,8 @@ export default function Navbar() {
                   priority
                 />
               </div>
-              <span className="hidden sm:block">Code Craft</span>
+              {/* REMOVED hidden sm:block FROM THE LINE BELOW */}
+              <span className="block text-lg sm:text-xl">Code Craft</span>
             </Link>
 
             {/* Desktop links */}
