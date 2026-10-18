@@ -20,7 +20,7 @@ const BRAND_BLUE = "#3B82F6";
 export default function ProjectsSection({ projects }: { projects: Project[] }) {
   if (!projects || projects.length === 0) {
     return (
-      <section className="relative py-32 lg:py-48">
+      <section id="projects" className="relative py-32 lg:py-48">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="section-label text-lime mb-4">SELECTED WORK</div>
           <h2 className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight text-text mb-6">
@@ -45,7 +45,7 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
   }
 
   return (
-    <section className="relative py-32 lg:py-48 overflow-hidden">
+    <section id="projects" className="relative py-32 lg:py-48 overflow-hidden">
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] glow-cyan opacity-30 blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-[500px] h-[500px] glow-blue opacity-30 blur-3xl pointer-events-none" />
 
