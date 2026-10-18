@@ -1,6 +1,10 @@
 # Code Craft
 
-A Next.js 14 digital-agency website with a built-in admin CMS for managing services, projects, testimonials, legal pages, and site settings.
+A Next.js digital-agency website with a built-in admin CMS for managing services, projects, testimonials, legal pages, and site settings.
+
+## Live demo
+
+[https://codecraft.pxxlspace.cv](https://codecraft.pxxlspace.cv)
 
 ## Key features
 
@@ -17,19 +21,19 @@ A Next.js 14 digital-agency website with a built-in admin CMS for managing servi
 ## Tech stack
 
 - **Language:** TypeScript
-- **Framework:** Next.js 14 (App Router)
-- **UI:** React, Tailwind CSS, Framer Motion, Lucide React
-- **Database:** SQLite via Prisma ORM
+- **Framework:** Next.js 15 (App Router), React 19
+- **UI:** Tailwind CSS, Framer Motion, Lucide React
+- **Database:** SQLite via Prisma ORM v6, hosted on Turso (libSQL)
 - **Auth:** NextAuth.js (Credentials provider)
 - **Email:** Resend
 - **Testing:** Vitest
-- **Deployment:** Vercel
+- **Deployment:** Pxxl
 
 ## Architecture overview
 
 - `src/app/` — App Router pages and `/api/*` route handlers (27 route files, 56 exported HTTP handlers)
 - `src/components/` — section components in `sections/` and admin UI in `admin/`
-- `src/lib/` — `auth.ts` (NextAuth configuration), `prisma.ts` (Prisma client singleton), `utils.ts`
+- `src/lib/` — `auth.ts` (NextAuth configuration), `prisma.ts` (Prisma client singleton with Turso adapter), `utils.ts`
 - `prisma/schema.prisma` — 12 models; `prisma/seed.ts` seeds demo content
 - `src/middleware.ts` — protects `/admin/*` and redirects unauthenticated users to `/admin/login`
 
@@ -51,14 +55,17 @@ Clone the repository and install dependencies with npm. Copy `.env.example` to `
 
 Defined in `.env.example`:
 
-- `DATABASE_URL` — SQLite connection string
+- `TURSO_DATABASE_URL` — libSQL connection string (or `DATABASE_URL` for local file)
+- `TURSO_AUTH_TOKEN` — Turso authentication token
 - `NEXTAUTH_SECRET` — secret used by NextAuth to sign sessions
 - `NEXTAUTH_URL` — base URL of the running app
 - `RESEND_API_KEY` — API key used by the contact form
 
 ### Database setup
 
-Apply the Prisma migration to create the SQLite schema, then run the seed script to populate demo content. The seed covers services, add-ons, projects, testimonials, nav links, footer links, legal pages, custom pages, and homepage sections.
+For local development, apply the Prisma migration to create the SQLite schema, then run the seed script to populate demo content. The seed covers services, add-ons, projects, testimonials, nav links, footer links, legal pages, custom pages, and homepage sections.
+
+For production (Turso), use `npx prisma migrate diff` to generate the SQL and apply it via the Turso CLI, then run the seed script with the Turso environment variables set.
 
 ### Running locally
 
@@ -70,6 +77,6 @@ API route tests use Vitest. They import the route handlers directly and exercise
 
 ## Deployment
 
-The project is configured for Vercel. Deployment requires setting the environment variables above in the Vercel dashboard and running Prisma migrations against the production database.
+The project is deployed on Pxxl. The build requires the environment variables listed above to be set in the Pxxl dashboard. 
 
-The upload endpoint writes to `public/uploads`, which is not persistent on Vercel's filesystem. Uploads therefore work in local development only unless the storage layer is replaced with object storage.
+Note: The upload endpoint writes to `public/uploads`, which is not persistent on ephemeral hosting platforms. Uploads work in local development only unless the storage layer is replaced with object storage.
