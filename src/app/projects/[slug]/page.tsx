@@ -40,78 +40,83 @@ export default async function ProjectDetailPage({
     <>
       <Navbar />
 
-      <main className="relative bg-background">
+      {/* ADDED overflow-hidden HERE to fix the horizontal scrolling issue */}
+      <main className="relative bg-background overflow-hidden">
         <div className="absolute top-0 left-0 w-[600px] h-[600px] glow-cyan opacity-30 blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 right-0 w-[600px] h-[600px] glow-blue opacity-30 blur-3xl pointer-events-none" />
 
-        <div className="relative max-w-5xl mx-auto px-6 lg:px-12 py-16 lg:py-24">
+        <div className="relative max-w-4xl mx-auto px-6 lg:px-8 py-16 lg:py-24">
           {/* Back link — larger bottom margin */}
           <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-text-muted hover:text-coral transition-colors text-sm mb-16 lg:mb-20"
+            href="/#projects"
+            className="inline-flex items-center gap-2 text-text-muted hover:text-coral transition-colors text-sm mb-12 lg:mb-16"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to home
+            Back to work
           </Link>
 
           {/* Category label */}
-          <div className="section-label text-lime mb-6">CASE STUDY</div>
+          <div className="text-xs uppercase tracking-[0.2em] text-lime mb-4 font-semibold">
+            CASE STUDY
+          </div>
 
-          <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight text-text mb-6">
+          <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl leading-tight tracking-tight text-text mb-6">
             {project.title}
           </h1>
 
-          <p className="text-xl text-text-muted leading-relaxed max-w-3xl mb-16">
+          <p className="text-lg lg:text-xl text-text-muted leading-relaxed max-w-3xl mb-12">
             {project.description}
           </p>
 
           {/* Slideshow */}
           {images.length > 0 && (
-            <div className="mb-20">
+            <div className="mb-16 lg:mb-20 rounded-xl overflow-hidden border border-border bg-card">
               <ProjectSlideshow images={images} title={project.title} />
             </div>
           )}
 
-          {project.problem && (
-            <section className="mb-16">
-              <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-4 font-semibold">
-                The problem
-              </div>
-              <p className="text-lg text-text leading-relaxed max-w-3xl">
-                {project.problem}
-              </p>
-            </section>
-          )}
+          <div className="space-y-12 lg:space-y-16">
+            {project.problem && (
+              <section>
+                <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-4 font-semibold">
+                  The problem
+                </div>
+                <p className="text-base lg:text-lg text-text leading-relaxed max-w-3xl whitespace-pre-wrap">
+                  {project.problem}
+                </p>
+              </section>
+            )}
 
-          {project.solution && (
-            <section className="mb-16">
-              <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-4 font-semibold">
-                The solution
-              </div>
-              <p className="text-lg text-text leading-relaxed max-w-3xl">
-                {project.solution}
-              </p>
-            </section>
-          )}
+            {project.solution && (
+              <section>
+                <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-4 font-semibold">
+                  The solution
+                </div>
+                <p className="text-base lg:text-lg text-text leading-relaxed max-w-3xl whitespace-pre-wrap">
+                  {project.solution}
+                </p>
+              </section>
+            )}
 
-          {project.outcome && (
-            <section className="mb-20 pb-20 border-b border-border">
-              <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-4 font-semibold">
-                The outcome
-              </div>
-              <p className="text-lg text-text leading-relaxed max-w-3xl">
-                {project.outcome}
-              </p>
-            </section>
-          )}
+            {project.outcome && (
+              <section className="pb-12 lg:pb-16 border-b border-border">
+                <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-4 font-semibold">
+                  The outcome
+                </div>
+                <p className="text-base lg:text-lg text-text leading-relaxed max-w-3xl whitespace-pre-wrap">
+                  {project.outcome}
+                </p>
+              </section>
+            )}
+          </div>
 
           {project.liveUrl && (
-            <div className="mb-20">
+            <div className="mt-12 mb-20">
               <a
                 href={project.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-base text-coral hover:text-lime transition-colors"
+                className="inline-flex items-center gap-2 text-base text-coral hover:text-lime transition-colors font-medium"
               >
                 <ExternalLink className="w-5 h-5" />
                 View live site
@@ -121,17 +126,17 @@ export default async function ProjectDetailPage({
 
           <section
             id="contact"
-            className="relative border border-border p-10 lg:p-16 overflow-hidden"
+            className="relative border border-border rounded-xl p-8 lg:p-12 overflow-hidden"
           >
             <div
               className="absolute -top-40 -right-40 w-[400px] h-[400px] rounded-full pointer-events-none opacity-40 blur-3xl"
               style={{ background: "radial-gradient(circle, rgba(59,130,246,0.4) 0%, transparent 70%)" }}
             />
 
-            <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               <div className="lg:col-span-8">
-                <div className="section-label text-lime mb-4">HAVE A PROJECT LIKE THIS?</div>
-                <h2 className="font-serif text-4xl lg:text-5xl leading-tight text-text">
+                <div className="text-xs uppercase tracking-[0.2em] text-lime mb-3 font-semibold">HAVE A PROJECT LIKE THIS?</div>
+                <h2 className="font-serif text-3xl lg:text-4xl leading-tight text-text">
                   Let&apos;s build
                   <br />
                   yours next.
@@ -140,7 +145,7 @@ export default async function ProjectDetailPage({
               <div className="lg:col-span-4 lg:text-right">
                 <Link
                   href="/#contact"
-                  className="inline-flex items-center gap-2 px-8 py-4 rounded-md font-semibold uppercase tracking-wider text-xs transition-all duration-200"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-md font-semibold uppercase tracking-wider text-xs transition-all duration-200"
                   style={{
                     backgroundColor: BRAND_BLUE,
                     color: "#F8FAFC",
