@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 
 interface HeroContent {
   badge?: string;
@@ -108,37 +107,22 @@ export default function HeroSection({
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           <div className="lg:col-span-7">
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="section-label text-lime mb-8"
-            >
+            <p className="section-label text-lime mb-8">
               {content.badge || "Available for work · 2026"}
-            </motion.p>
+            </p>
 
             <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl xl:text-8xl leading-[0.95] tracking-tight text-text whitespace-pre-line">
               {headline}
             </h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="mt-8 text-lg text-text-muted max-w-xl leading-relaxed"
-            >
+            <p className="mt-8 text-lg text-text-muted max-w-xl leading-relaxed">
               {subheadline}
-            </motion.p>
+            </p>
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="lg:col-span-5 mt-8 lg:mt-0"
-          >
+          <div className="lg:col-span-5 mt-8 lg:mt-0">
             <HeroTerminal />
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
