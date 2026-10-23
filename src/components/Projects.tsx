@@ -2,7 +2,9 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { ExternalLink, ArrowUpRight } from "lucide-react";
+import { toWebp } from "@/lib/imageUrl";
 
 interface Project {
   id: string;
@@ -80,11 +82,13 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
             >
               <Link href={`/projects/${project.slug}`} className="block relative aspect-video overflow-hidden bg-card">
                 {project.imageUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={project.imageUrl}
+                  <Image
+                    src={toWebp(project.imageUrl)}
                     alt={project.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
+                    priority={index === 0}
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-text-muted">

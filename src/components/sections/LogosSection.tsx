@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
+import { toWebp } from "@/lib/imageUrl";
 
 interface LogosSectionProps {
   title: string;
@@ -50,19 +52,25 @@ export default function LogosSection({ title, subtitle, content }: LogosSectionP
         )}
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-12 items-center" role="list" aria-label="Client logos">
-          {logos.map((logo, index) => (
-            <div
-              key={logo.alt + index}
-              className="filter grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
-              role="listitem"
-            >
-              <img
-                src={logo.url}
-                alt={logo.alt}
-                className="mx-auto max-h-12 w-auto object-contain"
-              />
-            </div>
-          ))}
+          {logos.map((logo, index) => {
+            const isSvg = /\.svg($|\?)/i.test(logo.url);
+            return (
+              <div
+                key={logo.alt + index}
+                className="filter grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
+                role="listitem"
+              >
+                <Image
+                  src={isSvg ? logo.url : toWebp(logo.url)}
+                  alt={logo.alt}
+                  width={200}
+                  height={48}
+                  unoptimized={isSvg}
+                  className="mx-auto max-h-12 w-auto object-contain"
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

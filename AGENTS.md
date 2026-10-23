@@ -1,70 +1,38 @@
-# Code Craft — agent rules
+# Code Craft — Agent Rules
 
-## Stack
-Next.js 15 App Router, React 19, TypeScript, Tailwind, Framer Motion,
-Prisma v6 (adapter-libsql, Turso), NextAuth credentials, Resend, Vitest.
-Deployed on Pxxl from `main`. Baseline tag: `baseline-before-ai`.
+## Stack & Deployment
+Next.js 15 App Router, React 19, TypeScript, Tailwind, Framer Motion, Prisma v6 (adapter-libsql, Turso), NextAuth, Resend, Vitest.
+Deployed on **Vercel**. 
 
-## Hard rules
-- ONE logical change per task. No drive-by refactors, no "while we're here."
-- Do NOT touch: `src/lib/auth.ts`, `src/middleware.ts`, `prisma/schema.prisma`,
-  `prisma/migrations/**`, anything under `src/app/admin/**` or `src/app/api/auth/**`.
+## Hard Rules
+- ONE logical change per task. No drive-by refactors.
+- Do NOT touch: `src/lib/auth.ts`, `src/middleware.ts`, `prisma/schema.prisma`, `prisma/migrations/**`, anything under `src/app/admin/**` or `src/app/api/auth/**`.
 - Do NOT run `prisma migrate`, `db push`, `db:seed`, or anything that writes to the DB.
-- Do NOT delete files. Do NOT change `package.json` versions. Do NOT run
-  `npm audit fix`, `npm update`, or `npm install <pkg>` unless I name the exact package.
-- Do NOT commit unless I ask. Show me `git diff` first.
+- Do NOT delete files. Do NOT change `package.json` versions or install new packages without asking.
 - Preserve existing behavior, copy, styling, and routing unless the task says otherwise.
-- Prefer server components. Keep `use client` components small.
-- Use `next/image`, `next/font`, and accessible markup for any UI change.
 
-## After every code change
-- `npx tsc --noEmit`
-- `npm run build`
-- `npm test`
-- Report: files changed, commands run, pass/fail, anything you could not verify.
+## Performance & LCP Rules (CRITICAL)
+- **NEVER** use `initial={{ opacity: 0 }}` on above-the-fold content (like the Hero `<h1>` or main badge). This delays Largest Contentful Paint (LCP) until hydration finishes and tanks the performance score. 
+- Above-the-fold content must render immediately in the Server-Side HTML (SSR).
+- Prefer Server Components. Keep `"use client"` components as small and low in the tree as possible.
+- Always use `next/image` with correct `sizes`, `width`, and `height` (or `fill`).
+- *Local Environment Note:* Running `npm run build` locally may fail with a `prisma: command not found` error due to engine downloads. Use `npx tsc --noEmit` to check types, and rely on Vercel for the production build.
 
-## If unsure
-Stop and ask. Do not guess at auth, admin, env, DB, or deployment behavior.
+## Aesthetic Rules — Do Not Look AI-Generated
+- **NO** glowing neon background blobs (`blur-3xl` with cyan/blue).
+- **NO** fake terminal windows, fake code editors, typing animations, or "zsh" mockups.
+- **NO** uniform bento-box grids where every card looks identical.
+- **NO** generic agency copy (e.g., "Ideas in. Products out.", "Built to last", "How we think", "Fast. Clean. Modern.").
+- **NO** scrolling marquees of adjectives.
+- **NO** glassmorphism or default dark mode + neon accents.
+- **YES** to editorial, asymmetric layouts.
+- **YES** to massive, bold, tightly-tracked typography.
+- **YES** to generous whitespace and sophisticated dark mode (warm charcoal, not pure black).
+- **YES** to subtle, intentional motion (e.g., hover states) rather than fading in every paragraph.
+- Any new UI element must pass this test: would a high-end freelance designer ship this, or would they roll their eyes?
 
-## Environment notes
-- Node 24 works. Prisma postinstall needs `PRISMA_ENGINES_MIRROR` (already in ~/.zshrc).
-- `.npmrc` is gitignored — do not recreate it.
-- `next.config.js` sets `outputFileTracingRoot` — do not remove.
-- A stray `/Users/mac/package-lock.json` exists outside the repo — do not touch it.
-
-## Aesthetic rules — do not look AI-generated
-
-### Copy
-- No em dashes (—). Use commas, periods, or parentheses.
-- No words: seamlessly, effortlessly, elevate, unlock, harness, empower,
-  supercharge, "in today's", "digital landscape", "cutting-edge", "revolutionize".
-- No marquees of adjectives ("Fast. Clean. Modern. Scalable.").
-- No generic headlines: "Built to last", "How it's built", "Building ideas into
-  digital products", "Empowering X through Y".
-- No "Available for work" pill badges. If availability must be shown, say it
-  once, plainly, in the footer or contact section.
-- No repeated CTA text 8× in a card grid. Vary the CTA per service, or use one
-  shared CTA above the grid.
-- No fake terminal windows, fake code editors, blinking cursors, or "zsh"
-  mockups. If code must be shown, show real, running code from the repo.
-- Prefer short, specific sentences over abstract ones. "We ship in 2 weeks,
-  not 2 months" beats "We value speed".
-- If a line could appear on any agency site, rewrite it.
-
-### Visual
-- No animated gradient blobs behind the hero.
-- No glassmorphism, no bento-box layouts unless there is a real reason.
-- Do not default to dark mode + neon accent. If a section is dark, it must
-  contrast with a light section, not be the whole page.
-- No uniform card grids with icon + title + description unless the content
-  genuinely requires 4+ equal items.
-- Typography: do not pair Inter with JetBrains Mono by default. Use the
-  existing font stack from `next/font` unless I explicitly ask for a change.
-- Any new UI element must pass this test: would a freelance designer in 2024
-  have shipped this, or would they have rolled their eyes?
-
-### Process
+## Workflow
 - Before writing user-facing copy, show me 3 variants and wait for approval.
-- Do not change any visible copy as part of a technical task.
-- If a task requires new copy, put it in a separate commit titled
-  "copy: ..." so it can be reviewed independently.
+- Do not change any visible copy as part of a technical task. Put copy changes in a separate commit titled "copy: ...".
+- After every code change, run `npx tsc --noEmit` and `npm test`. 
+- If unsure, STOP and ask. Do not guess at auth, admin, env, DB, or deployment behavior.
