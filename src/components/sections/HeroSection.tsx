@@ -32,32 +32,11 @@ function HeroTerminal() {
   const [isDone, setIsDone] = useState(false);
 
   useEffect(() => {
-    if (isDone) {
-      const t = setTimeout(() => {
-        setVisibleLines([]);
-        setCurrentChar(0);
-        setCurrentLine(0);
-        setIsDone(false);
-      }, 5000);
-      return () => clearTimeout(t);
-    }
-    if (currentLine >= terminalLines.length) {
-      setIsDone(true);
-      return;
-    }
-    const line = terminalLines[currentLine];
-    if (currentChar < line.text.length) {
-      const t = setTimeout(() => setCurrentChar((c) => c + 1), line.delay);
-      return () => clearTimeout(t);
-    } else {
-      const t = setTimeout(() => {
-        setVisibleLines((prev) => [...prev, currentLine]);
-        setCurrentLine((l) => l + 1);
-        setCurrentChar(0);
-      }, 200);
-      return () => clearTimeout(t);
-    }
-  }, [currentChar, currentLine, isDone]);
+    // Render all lines immediately; animation is only the blinking cursor.
+    setVisibleLines(terminalLines.map((_, i) => i));
+    setCurrentLine(terminalLines.length);
+    setIsDone(true);
+  }, []);
 
   const colorFor = (type: string) =>
     type === "command"
