@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 interface HeroContent {
   badge?: string;
@@ -25,17 +26,38 @@ const terminalLines: Array<{ text: string; delay: number; type: "command" | "inf
 ];
 
 function HeroTerminal() {
-  // Initialize with all lines visible so SSR HTML paints them all at FCP.
-  const [visibleLines] = useState<number[]>(
-    terminalLines.map((_, i) => i)
-  );
+  const [visibleLines, setVisibleLines] = useState<number[]>([]);
   const [currentChar, setCurrentChar] = useState(0);
-  const [currentLine] = useState(terminalLines.length);
-  const [isDone] = useState(true);
+  const [currentLine, setCurrentLine] = useState(0);
+  const [isDone, setIsDone] = useState(false);
 
   useEffect(() => {
-    // No-op: lines are already rendered in SSR.
-  }, []);
+    if (isDone) {
+      const t = setTimeout(() => {
+        setVisibleLines([]);
+        setCurrentChar(0);
+        setCurrentLine(0);
+        setIsDone(false);
+      }, 5000);
+      return () => clearTimeout(t);
+    }
+    if (currentLine >= terminalLines.length) {
+      setIsDone(true);
+      return;
+    }
+    const line = terminalLines[currentLine];
+    if (currentChar < line.text.length) {
+      const t = setTimeout(() => setCurrentChar((c) => c + 1), line.delay);
+      return () => clearTimeout(t);
+    } else {
+      const t = setTimeout(() => {
+        setVisibleLines((prev) => [...prev, currentLine]);
+        setCurrentLine((l) => l + 1);
+        setCurrentChar(0);
+      }, 200);
+      return () => clearTimeout(t);
+    }
+  }, [currentChar, currentLine, isDone]);
 
   const colorFor = (type: string) =>
     type === "command"
@@ -107,22 +129,42 @@ export default function HeroSection({
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           <div className="lg:col-span-7">
-            <p className="section-label text-lime mb-8">
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="section-label text-lime mb-8"
+            >
               {content.badge || "Available for work · 2026"}
-            </p>
+            </motion.p>
 
-            <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl xl:text-8xl leading-[0.95] tracking-tight text-text whitespace-pre-line">
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="font-serif text-5xl sm:text-6xl lg:text-7xl xl:text-8xl leading-[0.95] tracking-tight text-text whitespace-pre-line"
+            >
               {headline}
-            </h1>
+            </motion.h1>
 
-            <p className="mt-8 text-lg text-text-muted max-w-xl leading-relaxed">
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="mt-8 text-lg text-text-muted max-w-xl leading-relaxed"
+            >
               {subheadline}
-            </p>
+            </motion.p>
           </div>
 
-          <div className="lg:col-span-5 mt-8 lg:mt-0">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="lg:col-span-5 mt-8 lg:mt-0"
+          >
             <HeroTerminal />
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
