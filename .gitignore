@@ -46,3 +46,4 @@ prisma/migrations/
 *.db.backup
 dev.db
 prisma/dev.db
+.npmrc
