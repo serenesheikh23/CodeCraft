@@ -48,3 +48,5 @@ dev.db
 prisma/dev.db
 .npmrc
 .backups/
+report-*.json
+lighthouse-report*.json
