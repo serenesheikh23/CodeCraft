@@ -1,8 +1,44 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 
+// --- In-memory rate limit: 3 requests / 10 min / IP ---
+// Note: resets on server restart / per lambda instance. Good enough as
+// best-effort abuse protection; replace with Redis/Upstash if stricter.
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+const RATE_LIMIT_MAX = 3;
+const rateLimitMap = new Map<string, number[]>();
+
+function getClientIp(request: NextRequest): string {
+  const xff = request.headers.get("x-forwarded-for");
+  if (xff) return xff.split(",")[0].trim();
+  return request.headers.get("x-real-ip") ?? "unknown";
+}
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const timestamps = (rateLimitMap.get(ip) ?? []).filter(
+    (t) => now - t < RATE_LIMIT_WINDOW_MS
+  );
+  if (timestamps.length >= RATE_LIMIT_MAX) {
+    rateLimitMap.set(ip, timestamps);
+    return true;
+  }
+  timestamps.push(now);
+  rateLimitMap.set(ip, timestamps);
+  return false;
+}
+// --- end rate limit ---
+
 export async function POST(request: NextRequest) {
   try {
+    const ip = getClientIp(request);
+    if (isRateLimited(ip)) {
+      return NextResponse.json(
+        { error: "Too many requests, try again later" },
+        { status: 429 }
+      );
+    }
+
     // Move this INSIDE the function so it only runs when a request is made
     const resend = new Resend(process.env.RESEND_API_KEY);
 
