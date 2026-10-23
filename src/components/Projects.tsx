@@ -105,7 +105,7 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
                       {project.title}
                     </h3>
                   </Link>
-                  <Link href={`/projects/${project.slug}`} className="flex-shrink-0 mt-2">
+                  <Link href={`/projects/${project.slug}`} className="flex-shrink-0 mt-2" aria-label={`View ${project.title}`}>
                     <ArrowUpRight className="w-6 h-6 text-text-muted group-hover:text-coral transition-colors" />
                   </Link>
                 </div>

@@ -85,7 +85,6 @@ export default function ServicesSection({ services }: { services: Service[] }) {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6 }}
             className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16"
-            role="list"
             aria-label="Services"
           >
             {row1.map((service) => {
@@ -96,7 +95,6 @@ export default function ServicesSection({ services }: { services: Service[] }) {
                 <article
                   key={service.id}
                   className="group relative border border-border p-8 lg:p-10 transition-colors duration-300 hover:border-coral/40"
-                  role="listitem"
                 >
                   <div className="flex items-start gap-4 mb-6">
                     <Icon
@@ -167,7 +165,6 @@ export default function ServicesSection({ services }: { services: Service[] }) {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6 }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16"
-            role="list"
             aria-label="Services"
           >
             {row2.map((service) => {
@@ -178,7 +175,6 @@ export default function ServicesSection({ services }: { services: Service[] }) {
                 <article
                   key={service.id}
                   className="group relative border border-border p-6 transition-colors duration-300 hover:border-coral/40"
-                  role="listitem"
                 >
                   <div className="flex items-start gap-3 mb-4">
                     <Icon
@@ -249,7 +245,6 @@ export default function ServicesSection({ services }: { services: Service[] }) {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6 }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16"
-            role="list"
             aria-label="Services"
           >
             {row3.map((service) => {
@@ -260,7 +255,6 @@ export default function ServicesSection({ services }: { services: Service[] }) {
                 <article
                   key={service.id}
                   className="group relative border border-border p-6 transition-colors duration-300 hover:border-coral/40"
-                  role="listitem"
                 >
                   <div className="flex items-start gap-3 mb-4">
                     <Icon
