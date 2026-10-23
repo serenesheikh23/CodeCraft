@@ -25,16 +25,16 @@ const terminalLines: Array<{ text: string; delay: number; type: "command" | "inf
 ];
 
 function HeroTerminal() {
-  const [visibleLines, setVisibleLines] = useState<number[]>([]);
+  // Initialize with all lines visible so SSR HTML paints them all at FCP.
+  const [visibleLines] = useState<number[]>(
+    terminalLines.map((_, i) => i)
+  );
   const [currentChar, setCurrentChar] = useState(0);
-  const [currentLine, setCurrentLine] = useState(0);
-  const [isDone, setIsDone] = useState(false);
+  const [currentLine] = useState(terminalLines.length);
+  const [isDone] = useState(true);
 
   useEffect(() => {
-    // Render all lines immediately; animation is only the blinking cursor.
-    setVisibleLines(terminalLines.map((_, i) => i));
-    setCurrentLine(terminalLines.length);
-    setIsDone(true);
+    // No-op: lines are already rendered in SSR.
   }, []);
 
   const colorFor = (type: string) =>
