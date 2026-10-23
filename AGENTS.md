@@ -31,3 +31,40 @@ Stop and ask. Do not guess at auth, admin, env, DB, or deployment behavior.
 - `.npmrc` is gitignored — do not recreate it.
 - `next.config.js` sets `outputFileTracingRoot` — do not remove.
 - A stray `/Users/mac/package-lock.json` exists outside the repo — do not touch it.
+
+## Aesthetic rules — do not look AI-generated
+
+### Copy
+- No em dashes (—). Use commas, periods, or parentheses.
+- No words: seamlessly, effortlessly, elevate, unlock, harness, empower,
+  supercharge, "in today's", "digital landscape", "cutting-edge", "revolutionize".
+- No marquees of adjectives ("Fast. Clean. Modern. Scalable.").
+- No generic headlines: "Built to last", "How it's built", "Building ideas into
+  digital products", "Empowering X through Y".
+- No "Available for work" pill badges. If availability must be shown, say it
+  once, plainly, in the footer or contact section.
+- No repeated CTA text 8× in a card grid. Vary the CTA per service, or use one
+  shared CTA above the grid.
+- No fake terminal windows, fake code editors, blinking cursors, or "zsh"
+  mockups. If code must be shown, show real, running code from the repo.
+- Prefer short, specific sentences over abstract ones. "We ship in 2 weeks,
+  not 2 months" beats "We value speed".
+- If a line could appear on any agency site, rewrite it.
+
+### Visual
+- No animated gradient blobs behind the hero.
+- No glassmorphism, no bento-box layouts unless there is a real reason.
+- Do not default to dark mode + neon accent. If a section is dark, it must
+  contrast with a light section, not be the whole page.
+- No uniform card grids with icon + title + description unless the content
+  genuinely requires 4+ equal items.
+- Typography: do not pair Inter with JetBrains Mono by default. Use the
+  existing font stack from `next/font` unless I explicitly ask for a change.
+- Any new UI element must pass this test: would a freelance designer in 2024
+  have shipped this, or would they have rolled their eyes?
+
+### Process
+- Before writing user-facing copy, show me 3 variants and wait for approval.
+- Do not change any visible copy as part of a technical task.
+- If a task requires new copy, put it in a separate commit titled
+  "copy: ..." so it can be reviewed independently.
