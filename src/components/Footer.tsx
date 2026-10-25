@@ -109,7 +109,7 @@ export default async function Footer() {
             <Link href="/" className="inline-flex items-center gap-3 text-text font-bold text-xl mb-6 group">
               <div
                 className="relative w-8 h-8 transition-transform duration-300 group-hover:scale-105"
-                style={{ filter: "drop-shadow(0 0 8px rgba(34, 211, 238, 0.5))" }}
+                
               >
                 <Image
                   src="/logo.svg"

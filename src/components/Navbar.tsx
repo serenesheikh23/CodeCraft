@@ -115,7 +115,7 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3 text-text font-bold text-xl group">
-              <div className="relative w-9 h-9 transition-transform duration-300 group-hover:scale-105" style={{ filter: "drop-shadow(0 0 8px rgba(34, 211, 238, 0.5))" }}>
+              <div className="relative w-9 h-9 transition-transform duration-300 group-hover:scale-105" >
                 <Image
                   src="/logo.svg"
                   alt="Code Craft"
