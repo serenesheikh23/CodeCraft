@@ -51,3 +51,4 @@ prisma/dev.db
 report-*.json
 lighthouse-report*.json
 backups/
+.claude/
