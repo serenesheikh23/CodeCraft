@@ -160,7 +160,7 @@ export default async function Footer() {
           <div className="grid grid-cols-2 gap-8 sm:gap-12">
             {visibleSections.map(([section, sectionLinks]) => (
               <div key={section}>
-                <h3 className="text-xs uppercase tracking-[0.2em] text-text-muted mb-5 font-medium">
+                <h3 className="text-xs uppercase tracking-[0.2em] text-text-muted mb-6 font-medium">
                   {section}
                 </h3>
                 <ul className="space-y-3">

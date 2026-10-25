@@ -27,7 +27,7 @@ export default function TestimonialsSection({ testimonials }: TestimonialsProps)
   return (
     <section
       id="testimonials"
-      className="relative py-32 lg:py-48 overflow-hidden bg-card border-y border-border"
+      className="relative py-16 md:py-24 lg:py-32 overflow-hidden bg-card border-y border-border"
       aria-labelledby="testimonials-heading"
     >
       <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
@@ -41,7 +41,7 @@ export default function TestimonialsSection({ testimonials }: TestimonialsProps)
           <div className="text-text-muted text-xs uppercase tracking-[0.2em] font-medium mb-4">
             CLIENT WORDS
           </div>
-          <h2 id="testimonials-heading" className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight text-text">
+          <h2 id="testimonials-heading" className="font-display text-5xl sm:text-6xl lg:text-6xl leading-[0.95] tracking-tight text-text">
             People we've shipped with.
           </h2>
           <p className="mt-6 text-lg text-text-muted max-w-2xl leading-relaxed">
@@ -60,7 +60,7 @@ export default function TestimonialsSection({ testimonials }: TestimonialsProps)
               className="py-8 lg:py-12 border-t border-border first:border-0 lg:border-t-0 lg:border-l"
               role="listitem"
             >
-              <blockquote className="font-serif text-2xl lg:text-3xl leading-[1.1] tracking-tight text-text mb-8">
+              <blockquote className="font-display text-2xl lg:text-3xl leading-[1.1] tracking-tight text-text mb-8">
                 {testimonial.content}
               </blockquote>
 

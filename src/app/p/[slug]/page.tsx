@@ -62,7 +62,7 @@ export default async function CustomPage({
             <span className="text-sm uppercase tracking-widest text-text-muted">Page</span>
           </div>
 
-          <h1 className="font-serif text-5xl lg:text-6xl text-text leading-tight mb-8">
+          <h1 className="font-display text-5xl lg:text-6xl text-text leading-tight mb-8">
             {page.title}
           </h1>
 

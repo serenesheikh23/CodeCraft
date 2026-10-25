@@ -117,7 +117,7 @@ export default function QuoteEstimator({
   };
 
   return (
-    <section className="relative py-32 lg:py-48 overflow-hidden">
+    <section className="relative py-16 md:py-24 lg:py-32 overflow-hidden">
       <div className="absolute top-0 right-0 w-[500px] h-[500px] glow-blue opacity-30 blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] glow-cyan opacity-20 blur-3xl pointer-events-none" />
 
@@ -130,7 +130,7 @@ export default function QuoteEstimator({
           className="mb-16 lg:mb-24"
         >
           <div className="section-label text-lime mb-4">BUILD YOUR ESTIMATE</div>
-          <h2 className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight text-text">
+          <h2 className="font-display text-5xl sm:text-6xl lg:text-6xl leading-[0.95] tracking-tight text-text">
             {step === 1 ? "What do you need?" : "Any add-ons?"}
           </h2>
           <p className="mt-6 text-lg text-text-muted max-w-2xl leading-relaxed">
@@ -148,7 +148,7 @@ export default function QuoteEstimator({
             onClick={() => setStep(1)}
           >
             <span
-              className="w-6 h-6 rounded-full flex items-center justify-center text-[10px]"
+              className="w-6 h-6 rounded-full flex items-center justify-center text-xs"
               style={{
                 backgroundColor: step === 1 ? CYAN : "transparent",
                 border: `1px solid ${step === 1 ? CYAN : "#1a2332"}`,
@@ -165,7 +165,7 @@ export default function QuoteEstimator({
             style={{ color: step === 2 ? CYAN : "#64748B" }}
           >
             <span
-              className="w-6 h-6 rounded-full flex items-center justify-center text-[10px]"
+              className="w-6 h-6 rounded-full flex items-center justify-center text-xs"
               style={{
                 backgroundColor: step === 2 ? CYAN : "transparent",
                 border: `1px solid ${step === 2 ? CYAN : "#1a2332"}`,
@@ -231,7 +231,7 @@ export default function QuoteEstimator({
                             style={{ color: isSelected ? BRAND_BLUE : "#94A3B8" }}
                           />
                           <div className="min-w-0">
-                            <div className="font-serif text-2xl text-text mb-1">
+                            <div className="font-display text-2xl text-text mb-1">
                               {type.label}
                             </div>
                             <p className="text-sm text-text-muted leading-relaxed">
@@ -240,7 +240,7 @@ export default function QuoteEstimator({
                           </div>
                         </div>
                         <div className="text-right flex-shrink-0 flex items-center gap-4">
-                          <span className="font-serif text-lg" style={{ color: BRAND_BLUE }}>
+                          <span className="font-display text-lg" style={{ color: BRAND_BLUE }}>
                             {priceLabel}
                           </span>
                           <div
@@ -315,7 +315,7 @@ export default function QuoteEstimator({
                           </div>
                         </div>
                         <div className="text-right flex-shrink-0">
-                          <span className="font-serif text-base" style={{ color: BRAND_BLUE }}>
+                          <span className="font-display text-base" style={{ color: BRAND_BLUE }}>
                             ${addon.price.toLocaleString()}
                           </span>
                         </div>
@@ -395,7 +395,7 @@ export default function QuoteEstimator({
                       <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-2">
                         Estimated range
                       </div>
-                      <div className="font-serif text-3xl lg:text-4xl" style={{ color: BRAND_BLUE }}>
+                      <div className="font-display text-3xl lg:text-4xl" style={{ color: BRAND_BLUE }}>
                         ${minTotal.toLocaleString()}
                         <span className="text-text-muted text-2xl mx-2">—</span>
                         ${maxTotal.toLocaleString()}

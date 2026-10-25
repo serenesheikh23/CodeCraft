@@ -5,7 +5,7 @@ import { Zap, Clock, Code, Shield } from "lucide-react";
 
 export default function BentoGrid() {
   return (
-    <section className="relative py-32 lg:py-48">
+    <section className="relative py-16 md:py-24 lg:py-32">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -17,7 +17,7 @@ export default function BentoGrid() {
           <div className="text-coral text-xs uppercase tracking-[0.2em] font-medium mb-4">
             WHY CODE CRAFT
           </div>
-          <h2 className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight text-text">
+          <h2 className="font-display text-5xl sm:text-6xl lg:text-6xl leading-[0.95] tracking-tight text-text">
             Built different.
           </h2>
         </motion.div>
@@ -32,7 +32,7 @@ export default function BentoGrid() {
           >
             <Code className="w-8 h-8 text-lime" />
             <div>
-              <div className="font-serif text-4xl lg:text-5xl text-text leading-tight mb-4">
+              <div className="font-display text-4xl lg:text-5xl text-text leading-tight mb-4">
                 Full-stack<br />capability.
               </div>
               <p className="text-text-muted text-lg max-w-md leading-relaxed">
@@ -50,7 +50,7 @@ export default function BentoGrid() {
           >
             <Clock className="w-6 h-6 text-coral" />
             <div>
-              <div className="font-serif text-4xl text-text">24h</div>
+              <div className="font-display text-4xl text-text">24h</div>
               <div className="text-xs uppercase tracking-[0.2em] text-text-muted mt-2">Response time</div>
             </div>
           </motion.div>
@@ -64,7 +64,7 @@ export default function BentoGrid() {
           >
             <Shield className="w-6 h-6 text-lime" />
             <div>
-              <div className="font-serif text-3xl text-text leading-tight">100%</div>
+              <div className="font-display text-3xl text-text leading-tight">100%</div>
               <div className="text-xs uppercase tracking-[0.2em] text-text-muted mt-2">Code ownership</div>
             </div>
           </motion.div>
@@ -79,7 +79,7 @@ export default function BentoGrid() {
             <div className="flex items-center gap-6">
               <Zap className="w-6 h-6 text-lime flex-shrink-0" />
               <div>
-                <div className="font-serif text-2xl lg:text-3xl text-text">Weekly demos. No surprises.</div>
+                <div className="font-display text-2xl lg:text-3xl text-text">Weekly demos. No surprises.</div>
                 <div className="text-sm text-text-muted mt-1">You see progress every week — nothing to catch you off guard at launch.</div>
               </div>
             </div>

@@ -19,7 +19,7 @@ export default function CtaSection({
   content: CtaContent;
 }) {
   return (
-    <section className="relative py-32 lg:py-48 bg-background overflow-hidden">
+    <section className="relative py-16 md:py-24 lg:py-32 bg-background overflow-hidden">
       <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -31,7 +31,7 @@ export default function CtaSection({
             initial={{ opacity: 0, clipPath: "inset(100% 0 0 0)" }}
             animate={{ opacity: 1, clipPath: "inset(0 0 0 0)" }}
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-            className="font-serif text-6xl lg:text-7xl leading-[0.9] tracking-tight text-text"
+            className="font-display text-6xl lg:text-6xl leading-[0.9] tracking-tight text-text"
           >
             {content.headline || "Have a project in mind?"}
           </motion.h2>

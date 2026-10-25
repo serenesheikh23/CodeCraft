@@ -60,7 +60,7 @@ export default async function ProjectDetailPage({
             CASE STUDY
           </div>
 
-          <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl leading-tight tracking-tight text-text mb-6">
+          <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl leading-tight tracking-tight text-text mb-6">
             {project.title}
           </h1>
 
@@ -136,7 +136,7 @@ export default async function ProjectDetailPage({
             <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               <div className="lg:col-span-8">
                 <div className="text-xs uppercase tracking-[0.2em] text-lime mb-3 font-semibold">HAVE A PROJECT LIKE THIS?</div>
-                <h2 className="font-serif text-3xl lg:text-4xl leading-tight text-text">
+                <h2 className="font-display text-3xl lg:text-4xl leading-tight text-text">
                   Let&apos;s build
                   <br />
                   yours next.

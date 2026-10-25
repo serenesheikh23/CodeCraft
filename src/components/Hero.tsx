@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-16 lg:pt-20 overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center py-16 md:py-24 lg:py-32 overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0" aria-hidden="true">
         {/* Gradient orbs */}
@@ -30,7 +30,7 @@ export default function Hero() {
         }} />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           {/* Logo */}
           <motion.div
@@ -49,10 +49,10 @@ export default function Hero() {
 
           {/* Headline */}
           <motion.h1
-            initial={{ opacity: 0, y: 30 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-            className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-text leading-tight mb-6"
+            className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-text leading-tight mb-6"
           >
             Ideas in.
             <br />

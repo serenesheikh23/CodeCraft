@@ -23,7 +23,7 @@ export default function GallerySection({ title, subtitle, content }: GallerySect
   return (
     <section
       id="gallery"
-      className="relative py-24 lg:py-40 overflow-hidden"
+      className="relative py-16 md:py-24 lg:py-32 overflow-hidden"
       aria-labelledby="gallery-heading"
     >
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -43,7 +43,7 @@ export default function GallerySection({ title, subtitle, content }: GallerySect
             {title && (
               <h2
                 id="gallery-heading"
-                className="font-serif text-3xl sm:text-5xl leading-tight text-text"
+                className="font-display text-3xl sm:text-5xl leading-tight text-text"
               >
                 {title}
               </h2>

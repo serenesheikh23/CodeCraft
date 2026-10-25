@@ -22,10 +22,10 @@ const BRAND_BLUE = "#3B82F6";
 export default function ProjectsSection({ projects }: { projects: Project[] }) {
   if (!projects || projects.length === 0) {
     return (
-      <section id="projects" className="relative py-32 lg:py-48">
+      <section id="projects" className="relative py-16 md:py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="section-label text-lime mb-4">SELECTED WORK</div>
-          <h2 className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight text-text mb-6">
+          <h2 className="font-display text-5xl sm:text-6xl lg:text-6xl leading-[0.95] tracking-tight text-text mb-6">
             Recent builds.
             <br />
             Live in production.
@@ -47,7 +47,7 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
   }
 
   return (
-    <section id="projects" className="relative py-32 lg:py-48 overflow-hidden">
+    <section id="projects" className="relative py-16 md:py-24 lg:py-32 overflow-hidden">
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] glow-cyan opacity-30 blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-[500px] h-[500px] glow-blue opacity-30 blur-3xl pointer-events-none" />
 
@@ -60,7 +60,7 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
           className="mb-16 lg:mb-24"
         >
           <div className="section-label text-lime mb-4">SELECTED WORK</div>
-          <h2 className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight text-text">
+          <h2 className="font-display text-5xl sm:text-6xl lg:text-6xl leading-[0.95] tracking-tight text-text">
             Recent builds.
             <br />
             Live in production.
@@ -101,7 +101,7 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
               <div className="p-8">
                 <div className="flex items-start justify-between gap-4 mb-4">
                   <Link href={`/projects/${project.slug}`} className="flex-1">
-                    <h3 className="font-serif text-2xl lg:text-3xl font-bold text-text group-hover:text-coral transition-colors leading-tight">
+                    <h3 className="font-display text-2xl lg:text-3xl font-bold text-text group-hover:text-coral transition-colors leading-tight">
                       {project.title}
                     </h3>
                   </Link>

@@ -29,7 +29,7 @@ export default function PricingSection({ title, subtitle, content }: PricingSect
   return (
     <section
       id="pricing"
-      className="relative py-32 lg:py-48 overflow-hidden bg-card border-y border-border"
+      className="relative py-16 md:py-24 lg:py-32 overflow-hidden bg-card border-y border-border"
       aria-labelledby="pricing-heading"
     >
       <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
@@ -49,7 +49,7 @@ export default function PricingSection({ title, subtitle, content }: PricingSect
             {title && (
               <h2
                 id="pricing-heading"
-                className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight text-text"
+                className="font-display text-5xl sm:text-6xl lg:text-6xl leading-[0.95] tracking-tight text-text"
               >
                 {title}
               </h2>
@@ -69,10 +69,10 @@ export default function PricingSection({ title, subtitle, content }: PricingSect
               )}
               role="listitem"
             >
-              <h3 className="text-base font-semibold text-text mb-2">{plan.name}</h3>
+              <h3 className="text-base font-semibold text-text mb-4">{plan.name}</h3>
 
               <div className="flex items-baseline gap-2 mb-8">
-                <span className="font-serif text-4xl sm:text-5xl font-bold text-text">
+                <span className="font-display text-4xl sm:text-5xl font-bold text-text">
                   ${plan.price}
                 </span>
                 <span className="text-text-muted">/{plan.period}</span>

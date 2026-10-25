@@ -23,7 +23,7 @@ export default function LogosSection({ title, subtitle, content }: LogosSectionP
   return (
     <section
       id="logos"
-      className="relative py-24 lg:py-40 overflow-hidden"
+      className="relative py-16 md:py-24 lg:py-32 overflow-hidden"
       aria-labelledby="logos-heading"
     >
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -43,7 +43,7 @@ export default function LogosSection({ title, subtitle, content }: LogosSectionP
             {title && (
               <h2
                 id="logos-heading"
-                className="font-serif text-3xl sm:text-5xl leading-tight text-text"
+                className="font-display text-3xl sm:text-5xl leading-tight text-text"
               >
                 {title}
               </h2>

@@ -14,7 +14,7 @@ const LIGHT_BLUE_GLOW = "0 0 12px rgba(96, 165, 250, 0.6)";
 
 export default function ProcessTimeline() {
   return (
-    <section className="relative py-32 lg:py-48 bg-card border-y border-border overflow-hidden">
+    <section className="relative py-16 md:py-24 lg:py-32 bg-card border-y border-border overflow-hidden">
       <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] glow-cyan opacity-40 blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-[500px] h-[500px] glow-blue opacity-40 blur-3xl pointer-events-none" />
 
@@ -27,7 +27,7 @@ export default function ProcessTimeline() {
           className="mb-16 lg:mb-24"
         >
           <div className="section-label text-lime mb-4">HOW WE WORK</div>
-          <h2 className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight text-text">
+          <h2 className="font-display text-5xl sm:text-6xl lg:text-6xl leading-[0.95] tracking-tight text-text">
             From idea
             <br />
             to production.
@@ -81,7 +81,7 @@ export default function ProcessTimeline() {
                   {step.num}
                 </div>
 
-                <h3 className="font-serif text-3xl lg:text-4xl text-text mb-4">
+                <h3 className="font-display text-3xl lg:text-4xl text-text mb-4">
                   {step.title}
                 </h3>
                 <p className="text-text-muted text-lg leading-relaxed max-w-2xl">

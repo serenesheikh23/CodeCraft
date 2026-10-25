@@ -21,7 +21,7 @@ export default function StatsSection({ title, subtitle, content }: StatsSectionP
   return (
     <section
       id="stats"
-      className="relative py-32 lg:py-48 overflow-hidden bg-card border-y border-border"
+      className="relative py-16 md:py-24 lg:py-32 overflow-hidden bg-card border-y border-border"
       aria-labelledby="stats-heading"
     >
       <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
@@ -41,7 +41,7 @@ export default function StatsSection({ title, subtitle, content }: StatsSectionP
             {title && (
               <h2
                 id="stats-heading"
-                className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight text-text"
+                className="font-display text-5xl sm:text-6xl lg:text-6xl leading-[0.95] tracking-tight text-text"
               >
                 {title}
               </h2>
@@ -60,7 +60,7 @@ export default function StatsSection({ title, subtitle, content }: StatsSectionP
               className="group"
               role="listitem"
             >
-              <div className="font-serif text-6xl lg:text-7xl font-bold text-text mb-3 group-hover:text-lime transition-colors">
+              <div className="font-display text-6xl lg:text-6xl font-bold text-text mb-3 group-hover:text-lime transition-colors">
                 {item.value}
               </div>
               <div className="text-text-muted text-xs uppercase tracking-[0.2em] font-medium">

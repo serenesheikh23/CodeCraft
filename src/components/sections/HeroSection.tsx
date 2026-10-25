@@ -114,7 +114,7 @@ export default function HeroSection({
     "Building ideas into digital products. Websites, apps and full systems.";
 
   return (
-    <section className="relative min-h-[85vh] flex items-center bg-background overflow-hidden">
+    <section className="relative min-h-[85vh] flex items-center bg-background overflow-hidden py-16 md:py-24 lg:py-32">
       <div
         className="absolute inset-0 opacity-[0.05]"
         style={{
@@ -126,11 +126,11 @@ export default function HeroSection({
       <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] glow-cyan opacity-70 blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-[600px] h-[600px] glow-blue opacity-60 blur-3xl pointer-events-none" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32 w-full">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           <div className="lg:col-span-7">
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
               className="section-label text-lime mb-8"
@@ -138,12 +138,12 @@ export default function HeroSection({
               {content.badge || "Available for work · 2026"}
             </motion.p>
 
-            <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl xl:text-8xl leading-[0.95] tracking-tight text-text whitespace-pre-line">
+            <h1 className="font-display text-5xl sm:text-6xl lg:text-6xl leading-[0.95] tracking-tight text-text whitespace-pre-line">
               {headline}
             </h1>
 
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
               className="mt-8 text-lg text-text-muted max-w-xl leading-relaxed"
@@ -153,7 +153,7 @@ export default function HeroSection({
           </div>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
             className="lg:col-span-5 mt-8 lg:mt-0"

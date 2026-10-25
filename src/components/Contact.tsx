@@ -35,7 +35,7 @@ export default function ContactSection() {
   };
 
   return (
-    <section id="contact" className="relative py-32 lg:py-48 overflow-hidden">
+    <section id="contact" className="relative py-16 md:py-24 lg:py-32 overflow-hidden">
       <div className="absolute top-1/2 -right-32 w-[600px] h-[600px] glow-blue opacity-50 blur-3xl pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
@@ -48,7 +48,7 @@ export default function ContactSection() {
             className="lg:col-span-5"
           >
             <div className="section-label text-lime mb-4">GET IN TOUCH</div>
-            <h2 className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight text-text mb-6">
+            <h2 className="font-display text-5xl sm:text-6xl lg:text-6xl leading-[0.95] tracking-tight text-text mb-6">
               Tell us what
               <br />
               you&apos;re building.
@@ -89,7 +89,7 @@ export default function ContactSection() {
               <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
                 <a
                   href="tel:+963933135837"
-                  className="text-text hover:text-coral transition-colors text-lg font-serif whitespace-nowrap"
+                  className="text-text hover:text-coral transition-colors text-lg font-display whitespace-nowrap"
                 >
                   +963 933 135 837
                 </a>

@@ -47,7 +47,7 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${instrumentSerif.variable} ${geistSans.variable} scroll-smooth`}
     >
-      <body className="bg-background text-text antialiased font-sans">
+      <body className="bg-background text-text antialiased font-body">
         <ScrollToTop />        <Providers>{children}</Providers>
       </body>
     </html>

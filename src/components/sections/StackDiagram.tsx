@@ -11,7 +11,7 @@ const layers = [
 
 export default function StackDiagram() {
   return (
-    <section className="relative py-32 lg:py-48 bg-card border-y border-border">
+    <section className="relative py-16 md:py-24 lg:py-32 bg-card border-y border-border">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -23,7 +23,7 @@ export default function StackDiagram() {
           <div className="text-coral text-xs uppercase tracking-[0.2em] font-medium mb-4">
             HOW IT'S BUILT
           </div>
-          <h2 className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight text-text">
+          <h2 className="font-display text-5xl sm:text-6xl lg:text-6xl leading-[0.95] tracking-tight text-text">
             Built to last.
           </h2>
           <p className="mt-6 text-lg text-text-muted max-w-2xl leading-relaxed">
@@ -44,7 +44,7 @@ export default function StackDiagram() {
                 className={`flex items-center gap-8 ${layer.side === "left" ? "flex-row" : "flex-row-reverse"}`}
               >
                 <div className={`flex-1 ${layer.side === "left" ? "text-right" : "text-left"}`}>
-                  <div className="font-serif text-3xl lg:text-4xl text-text">{layer.label}</div>
+                  <div className="font-display text-3xl lg:text-4xl text-text">{layer.label}</div>
                   <div className="mt-2 text-sm text-text-muted">{layer.sub}</div>
                 </div>
                 <div className="relative w-4 h-4 flex-shrink-0 z-10">

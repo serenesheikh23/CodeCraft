@@ -17,13 +17,11 @@ interface NavLink {
 }
 
 export default function Navbar() {
-  const [mounted, setMounted] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [navLinks, setNavLinks] = useState<NavLink[]>([]);
 
   useEffect(() => {
-    setMounted(true);
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     handleScroll();
     window.addEventListener("scroll", handleScroll);
@@ -108,7 +106,6 @@ export default function Navbar() {
       <header
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-          mounted ? "opacity-100" : "opacity-0",
           isScrolled
             ? "bg-background/90 backdrop-blur-md border-b border-border"
             : "bg-transparent"

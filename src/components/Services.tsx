@@ -53,7 +53,7 @@ export default function ServicesSection({ services }: { services: Service[] }) {
   return (
     <section
       id="services"
-      className="relative py-32 lg:py-48 overflow-hidden"
+      className="relative py-16 md:py-24 lg:py-32 overflow-hidden"
       aria-labelledby="services-heading"
     >
       <div className="absolute top-0 right-0 w-[500px] h-[500px] glow-blue opacity-40 blur-3xl pointer-events-none" />
@@ -68,7 +68,7 @@ export default function ServicesSection({ services }: { services: Service[] }) {
           className="mb-16 lg:mb-24"
         >
           <div className="section-label text-lime mb-4">WHAT WE DO</div>
-          <h2 id="services-heading" className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight text-text">
+          <h2 id="services-heading" className="font-display text-5xl sm:text-6xl lg:text-6xl leading-[0.95] tracking-tight text-text">
             We build things
             <br />
             that actually ship.
@@ -102,13 +102,13 @@ export default function ServicesSection({ services }: { services: Service[] }) {
                       style={{ color: BRAND_BLUE, filter: `drop-shadow(${BRAND_BLUE_GLOW})` }}
                       aria-hidden="true"
                     />
-                    <h3 className="font-serif text-2xl lg:text-3xl font-bold text-text leading-snug">{service.name}</h3>
+                    <h3 className="font-display text-2xl lg:text-3xl font-bold text-text leading-snug">{service.name}</h3>
                   </div>
 
                   <p className="text-text-muted mb-6 leading-relaxed text-base lg:text-lg">{service.description}</p>
 
                   <div className="flex items-baseline gap-2 mb-6">
-                    <span className="font-serif text-3xl lg:text-4xl font-bold" style={{ color: BRAND_BLUE }}>
+                    <span className="font-display text-3xl lg:text-4xl font-bold" style={{ color: BRAND_BLUE }}>
                       {formatPrice(service.minPrice, service.maxPrice)}
                     </span>
                     <span className="text-text text-sm">USD</span>
@@ -182,13 +182,13 @@ export default function ServicesSection({ services }: { services: Service[] }) {
                       style={{ color: BRAND_BLUE, filter: `drop-shadow(${BRAND_BLUE_GLOW})` }}
                       aria-hidden="true"
                     />
-                    <h3 className="font-serif text-xl font-bold text-text leading-snug">{service.name}</h3>
+                    <h3 className="font-display text-xl font-bold text-text leading-snug">{service.name}</h3>
                   </div>
 
                   <p className="text-text-muted mb-4 leading-relaxed text-sm">{service.description}</p>
 
                   <div className="flex items-baseline gap-2 mb-4">
-                    <span className="font-serif text-2xl font-bold" style={{ color: BRAND_BLUE }}>
+                    <span className="font-display text-2xl font-bold" style={{ color: BRAND_BLUE }}>
                       {formatPrice(service.minPrice, service.maxPrice)}
                     </span>
                     <span className="text-text text-xs">USD</span>
@@ -262,13 +262,13 @@ export default function ServicesSection({ services }: { services: Service[] }) {
                       style={{ color: BRAND_BLUE, filter: `drop-shadow(${BRAND_BLUE_GLOW})` }}
                       aria-hidden="true"
                     />
-                    <h3 className="font-serif text-xl font-bold text-text leading-snug">{service.name}</h3>
+                    <h3 className="font-display text-xl font-bold text-text leading-snug">{service.name}</h3>
                   </div>
 
                   <p className="text-text-muted mb-4 leading-relaxed text-sm">{service.description}</p>
 
                   <div className="flex items-baseline gap-2 mb-4">
-                    <span className="font-serif text-2xl font-bold" style={{ color: BRAND_BLUE }}>
+                    <span className="font-display text-2xl font-bold" style={{ color: BRAND_BLUE }}>
                       {formatPrice(service.minPrice, service.maxPrice)}
                     </span>
                     <span className="text-text text-xs">USD</span>

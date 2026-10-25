@@ -53,7 +53,7 @@ function Circle({ value, label, delay }: { value: number; label: string; delay: 
           />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="font-serif text-4xl lg:text-5xl text-text">{count}</span>
+          <span className="font-display text-4xl lg:text-5xl text-text">{count}</span>
         </div>
       </div>
       <div className="mt-4 text-xs uppercase tracking-[0.2em] text-text-muted">{label}</div>
@@ -63,7 +63,7 @@ function Circle({ value, label, delay }: { value: number; label: string; delay: 
 
 export default function MetricsDashboard() {
   return (
-    <section className="relative py-32 lg:py-48">
+    <section className="relative py-16 md:py-24 lg:py-32">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

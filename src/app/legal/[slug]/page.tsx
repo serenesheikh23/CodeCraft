@@ -43,7 +43,7 @@ export default async function LegalPage({ params }: Props) {
             <article className="bg-card border border-border rounded-2xl p-8 lg:p-12">
               <header className="mb-8 pb-8 border-b border-border">
                 <FileText className="w-10 h-10 text-primary mb-4" aria-hidden="true" />
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-text">{page.title}</h1>
+                <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-text">{page.title}</h1>
               </header>
               <div className="prose prose-invert max-w-none whitespace-pre-wrap text-text-muted leading-relaxed">
                 {page.content}

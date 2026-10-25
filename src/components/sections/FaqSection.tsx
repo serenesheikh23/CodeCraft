@@ -24,7 +24,7 @@ export default function FaqSection({ title, subtitle, content }: FaqSectionProps
   return (
     <section
       id="faq"
-      className="relative py-32 lg:py-48 overflow-hidden"
+      className="relative py-16 md:py-24 lg:py-32 overflow-hidden"
       aria-labelledby="faq-heading"
     >
       <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
@@ -44,7 +44,7 @@ export default function FaqSection({ title, subtitle, content }: FaqSectionProps
             {title && (
               <h2
                 id="faq-heading"
-                className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight text-text"
+                className="font-display text-5xl sm:text-6xl lg:text-6xl leading-[0.95] tracking-tight text-text"
               >
                 {title}
               </h2>
