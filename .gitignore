@@ -50,3 +50,4 @@ prisma/dev.db
 .backups/
 report-*.json
 lighthouse-report*.json
+backups/
