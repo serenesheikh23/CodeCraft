@@ -1,4 +1,4 @@
-import { Inter, Instrument_Serif } from "next/font/google";
+import { Geist, Inter, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { Providers } from "@/components/Providers";
@@ -19,6 +19,13 @@ const instrumentSerif = Instrument_Serif({
   fallback: ["Georgia", "Times New Roman", "serif"],
 });
 
+const geistSans = Geist({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-geist-sans",
+  fallback: ["system-ui", "sans-serif"],
+});
+
 export const metadata: Metadata = {
   title: "Code Craft | Ideas in. Products out.",
   description: "Building ideas into digital products. Websites, apps and full systems.",
@@ -36,7 +43,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${instrumentSerif.variable} scroll-smooth`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${instrumentSerif.variable} ${geistSans.variable} scroll-smooth`}
+    >
       <body className="bg-background text-text antialiased font-sans">
         <ScrollToTop />        <Providers>{children}</Providers>
       </body>
