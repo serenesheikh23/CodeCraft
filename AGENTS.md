@@ -36,3 +36,37 @@ Deployed on **Vercel**.
 - Do not change any visible copy as part of a technical task. Put copy changes in a separate commit titled "copy: ...".
 - After every code change, run `npx tsc --noEmit` and `npm test`. 
 - If unsure, STOP and ask. Do not guess at auth, admin, env, DB, or deployment behavior.
+---
+
+## Session Rules — Presentation / Design Phases
+
+These rules apply on top of the rules above during the `design/presentation-v1` branch and must not override the LCP and Aesthetic rules above.
+
+### Hard boundaries — never touch or run
+- `prisma/schema.prisma`, `prisma/seed.ts`, `prisma/migrations/**`, `prisma/dev.db.current-backup`
+- Any file under `src/app/api/**` — you may READ to learn response shapes, never EDIT (including GET handlers)
+- `src/lib/auth.ts`, `src/middleware.ts`
+- `.env`, `.env.example`, `.env.*`
+- Any `prisma migrate` / `dev` / `reset` / `deploy` / `db push` / `db seed` command
+
+### Admin exception (scoped)
+The rule above says do not touch `src/app/admin/**`. During this design branch, an explicit exception is allowed:
+you MAY edit `src/app/admin/**` and `src/components/admin/**` for PRESENTATIONAL changes only —
+loading skeletons, empty states, error display, focus/hover/disabled styles, spacing, typography, and color tokens.
+
+You may NOT edit: any `fetch()` call, any `onSubmit`, any API call, any `useEffect`, any state management, any type definition, or `src/app/admin/layout.tsx` if it wires auth.
+
+### Shared components
+Components under `src/components/` are used by both the public site and admin. Restyle them freely, but do NOT change their props, exports, or required className behavior. After editing a shared component, grep for usages under `src/app/admin/` and confirm call sites still typecheck.
+
+### Design tokens (decided — do not change)
+- Display font: **Instrument Serif**
+- Body font: **Geist Sans**
+- Spacing scale: 4 8 12 16 24 32 48 64 96 128 only
+- Border radius: 4, 8, 12, 16 only
+- One accent color family, 3 stops. **No purple. No gradients.**
+
+### Verification before reporting done
+1. `npm run build` passes.
+2. Report every file changed.
+3. Confirm you did not touch any forbidden file.
