@@ -118,8 +118,6 @@ export default function QuoteEstimator({
 
   return (
     <section className="relative py-16 md:py-24 lg:py-32 overflow-hidden">
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] glow-blue opacity-30 blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] glow-cyan opacity-20 blur-3xl pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
         <motion.div

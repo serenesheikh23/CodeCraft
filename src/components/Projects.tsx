@@ -48,8 +48,6 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
 
   return (
     <section id="projects" className="relative py-16 md:py-24 lg:py-32 overflow-hidden">
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] glow-cyan opacity-30 blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] glow-blue opacity-30 blur-3xl pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
         <motion.div
@@ -88,7 +86,7 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
                     priority={index === 0}
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="object-cover "
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-text-muted">

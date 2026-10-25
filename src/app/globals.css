@@ -249,11 +249,9 @@
 }
 
 .glow-cyan {
-  background: radial-gradient(circle, rgba(34, 211, 238, 0.18) 0%, rgba(34, 211, 238, 0) 70%);
 }
 
 .glow-blue {
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0) 70%);
 }
 
 .tint-blue {

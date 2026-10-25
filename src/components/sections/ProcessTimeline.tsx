@@ -15,8 +15,6 @@ const LIGHT_BLUE_GLOW = "0 0 12px rgba(96, 165, 250, 0.6)";
 export default function ProcessTimeline() {
   return (
     <section className="relative py-16 md:py-24 lg:py-32 bg-card border-y border-border overflow-hidden">
-      <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] glow-cyan opacity-40 blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] glow-blue opacity-40 blur-3xl pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
         <motion.div
@@ -58,14 +56,12 @@ export default function ProcessTimeline() {
                   className="absolute left-0 lg:left-4 top-1 w-8 h-8 rounded-full bg-background flex items-center justify-center -translate-x-[15px]"
                   style={{
                     border: `2px solid ${LIGHT_BLUE}`,
-                    boxShadow: `0 0 15px rgba(96, 165, 250, 0.5)`,
                   }}
                 >
                   <span
                     className="w-2 h-2 rounded-full"
                     style={{
                       backgroundColor: LIGHT_BLUE,
-                      boxShadow: `0 0 8px ${LIGHT_BLUE}`,
                     }}
                   />
                 </div>

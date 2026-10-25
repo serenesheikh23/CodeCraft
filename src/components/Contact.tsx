@@ -36,7 +36,6 @@ export default function ContactSection() {
 
   return (
     <section id="contact" className="relative py-16 md:py-24 lg:py-32 overflow-hidden">
-      <div className="absolute top-1/2 -right-32 w-[600px] h-[600px] glow-blue opacity-50 blur-3xl pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">

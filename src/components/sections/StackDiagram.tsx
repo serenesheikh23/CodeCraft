@@ -49,7 +49,6 @@ export default function StackDiagram() {
                 </div>
                 <div className="relative w-4 h-4 flex-shrink-0 z-10">
                   <span className="absolute inset-0 rounded-full bg-lime" />
-                  <span className="absolute inset-0 rounded-full bg-lime animate-ping opacity-50" />
                 </div>
                 <div className="flex-1" />
               </motion.div>

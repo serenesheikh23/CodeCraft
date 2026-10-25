@@ -42,8 +42,6 @@ export default async function ProjectDetailPage({
 
       {/* ADDED overflow-hidden HERE to fix the horizontal scrolling issue */}
       <main className="relative bg-background overflow-hidden">
-        <div className="absolute top-0 left-0 w-[600px] h-[600px] glow-cyan opacity-30 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] glow-blue opacity-30 blur-3xl pointer-events-none" />
 
         <div className="relative max-w-4xl mx-auto px-6 lg:px-8 py-16 lg:py-24">
           {/* Back link — larger bottom margin */}
@@ -129,7 +127,6 @@ export default async function ProjectDetailPage({
             className="relative border border-border rounded-xl p-8 lg:p-12 overflow-hidden"
           >
             <div
-              className="absolute -top-40 -right-40 w-[400px] h-[400px] rounded-full pointer-events-none opacity-40 blur-3xl"
               style={{ background: "radial-gradient(circle, rgba(59,130,246,0.4) 0%, transparent 70%)" }}
             />
 
