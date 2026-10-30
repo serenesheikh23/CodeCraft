@@ -106,9 +106,9 @@ export default function ServicesSection({
                   </div>
                   <span
                     aria-hidden="true"
-                    className="font-outfit text-3xl text-text-muted pt-1 group-hover:text-accent transition-colors"
+                    className={`inline-block text-accent transition-transform duration-300 motion-reduce:transition-none ${isOpen ? "rotate-90" : ""}`}
                   >
-                    {isOpen ? "−" : "+"}
+                    →
                   </span>
                 </button>
 
