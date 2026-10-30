@@ -1,18 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { ChevronDown, ChevronUp } from "lucide-react";
+
+interface FaqItem {
+  question: string;
+  answer: string;
+}
 
 interface FaqSectionProps {
   title: string;
   subtitle: string;
   content: Record<string, unknown>;
-}
-
-interface FaqItem {
-  question: string;
-  answer: string;
 }
 
 export default function FaqSection({ title, subtitle, content }: FaqSectionProps) {
@@ -24,35 +22,23 @@ export default function FaqSection({ title, subtitle, content }: FaqSectionProps
   return (
     <section
       id="faq"
-      className="relative py-16 md:py-24 lg:py-32 overflow-hidden"
+      className="relative py-12 md:py-16 lg:py-20 bg-background text-text"
       aria-labelledby="faq-heading"
     >
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         {(title || subtitle) && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6 }}
-            className="mb-16 lg:mb-24"
+          <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-4 font-medium">
+            {subtitle}
+          </div>
+          <h2
+            id="faq-heading"
+            className="font-outfit text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight text-text mb-6"
           >
-            {subtitle && (
-              <div className="text-text-muted text-xs uppercase tracking-[0.2em] font-medium mb-4">
-                {subtitle}
-              </div>
-            )}
-            {title && (
-              <h2
-                id="faq-heading"
-                className="font-display text-5xl sm:text-6xl lg:text-6xl leading-[0.95] tracking-tight text-text"
-              >
-                {title}
-              </h2>
-            )}
-          </motion.div>
+            {title}
+          </h2>
         )}
 
-        <div className="max-w-3xl mx-auto border-t border-border">
+        <div className="max-w-3xl mx-auto">
           {items.map((item, index) => (
             <div
               key={item.question + index}
@@ -62,27 +48,35 @@ export default function FaqSection({ title, subtitle, content }: FaqSectionProps
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
                 className="w-full px-6 py-8 flex items-center justify-between gap-4 text-left focus:outline-none"
                 aria-expanded={openIndex === index}
+                aria-controls={openIndex === index ? `faq-answer-${index}` : `faq-answer-${openIndex}`}
+                role="button"
               >
                 <span className="text-lg font-medium text-text pr-10">{item.question}</span>
-                <motion.div
-                  animate={{ rotate: openIndex === index ? 180 : 0 }}
-                  transition={{ duration: 0.3, ease: "easeInOut" }}
-                  className="flex-shrink-0 text-text-muted"
+
+                <svg
+                  className="w-4 h-4 flex-shrink-0 transition-transform"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                  data-state={openIndex === index ? "open" : "closed"}
                 >
-                  {openIndex === index ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-                </motion.div>
+                  <path d="M6 9l6 6l6-6" />
+                </svg>
               </button>
 
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: openIndex === index ? "auto" : 0, opacity: openIndex === index ? 1 : 0 }}
-                transition={{ duration: 0.4, ease: "easeInOut" }}
-                className="overflow-hidden"
+              <div
+                id={openIndex === index ? `faq-answer-${index}` : `faq-answer-${openIndex}`}
+                className="pt-6 border-t border-border transition-slide-down duration-300"
+                style={{ maxHeight: openIndex === index ? "none" : 0, transition: "max-height 0.4s ease-out" }}
               >
                 <div className="px-6 pb-8 pt-2">
                   <p className="text-text-muted leading-relaxed text-base">{item.answer}</p>
                 </div>
-              </motion.div>
+              </div>
             </div>
           ))}
         </div>

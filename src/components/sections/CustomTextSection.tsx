@@ -1,7 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
-
 interface CustomTextSectionProps {
   title: string;
   subtitle: string;
@@ -16,35 +14,23 @@ export default function CustomTextSection({ title, subtitle, content }: CustomTe
   return (
     <section
       id="custom-text"
-      className="relative py-16 md:py-24 lg:py-32 overflow-hidden"
+      className="relative py-12 md:py-16 lg:py-20 bg-background text-text"
       aria-labelledby="custom-text-heading"
     >
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         {(title || subtitle) && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6 }}
-            className="mb-16 lg:mb-24"
+          <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-4 font-medium">
+            {subtitle}
+          </div>
+          <h2
+            id="custom-text-heading"
+            className="font-outfit text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight text-text mb-6"
           >
-            {subtitle && (
-              <div className="text-text-muted text-xs uppercase tracking-[0.2em] font-medium mb-4">
-                {subtitle}
-              </div>
-            )}
-            {title && (
-              <h2
-                id="custom-text-heading"
-                className="font-display text-5xl sm:text-6xl lg:text-6xl leading-[0.95] tracking-tight text-text"
-              >
-                {title}
-              </h2>
-            )}
-          </motion.div>
+            {title}
+          </h2>
         )}
 
-        <div className="max-w-3xl mx-auto whitespace-pre-wrap text-text-muted leading-relaxed text-base lg:text-lg">
+        <div className="prose prose-in text-text leading-relaxed text-lg lg:text-lg">
           {body}
         </div>
       </div>

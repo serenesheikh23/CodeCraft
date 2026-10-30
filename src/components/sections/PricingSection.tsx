@@ -1,15 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
-import { cn } from "@/lib/utils";
-
-interface PricingSectionProps {
-  title: string;
-  subtitle: string;
-  content: Record<string, unknown>;
-}
 
 interface PricingPlan {
   name: string;
@@ -21,6 +12,12 @@ interface PricingPlan {
   featured: boolean;
 }
 
+interface PricingSectionProps {
+  title: string;
+  subtitle: string;
+  content: Record<string, unknown>;
+}
+
 export default function PricingSection({ title, subtitle, content }: PricingSectionProps) {
   const plans = (content.plans as PricingPlan[]) || [];
 
@@ -29,78 +26,83 @@ export default function PricingSection({ title, subtitle, content }: PricingSect
   return (
     <section
       id="pricing"
-      className="relative py-16 md:py-24 lg:py-32 overflow-hidden bg-card border-y border-border"
+      className="relative py-12 md:py-16 lg:py-20 bg-background text-text"
       aria-labelledby="pricing-heading"
     >
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         {(title || subtitle) && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6 }}
-            className="mb-16 lg:mb-24"
+          <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-4 font-medium">
+            {subtitle}
+          </div>
+          <h2
+            id="pricing-heading"
+            className="font-outfit text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight text-text mb-6"
           >
-            {subtitle && (
-              <div className="text-text-muted text-xs uppercase tracking-[0.2em] font-medium mb-4">
-                {subtitle}
-              </div>
-            )}
-            {title && (
-              <h2
-                id="pricing-heading"
-                className="font-display text-5xl sm:text-6xl lg:text-6xl leading-[0.95] tracking-tight text-text"
-              >
-                {title}
-              </h2>
-            )}
-          </motion.div>
+            {title}
+          </h2>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto" role="list" aria-label="Pricing plans">
-          {plans.map((plan, index) => (
-            <article
-              key={plan.name + index}
-              className={cn(
-                "relative bg-background border p-8 transition-colors duration-300",
-                plan.featured
-                  ? "border-lime/40"
-                  : "border-border hover:border-lime/40"
-              )}
-              role="listitem"
-            >
-              <h3 className="text-base font-semibold text-text mb-4">{plan.name}</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {plans.map((plan, index) => {
+            const isFeatured = plan.featured;
 
-              <div className="flex items-baseline gap-2 mb-8">
-                <span className="font-display text-4xl sm:text-5xl font-bold text-text">
-                  ${plan.price}
-                </span>
-                <span className="text-text-muted">/{plan.period}</span>
-              </div>
-
-              <ul className="space-y-4 mb-10" role="list">
-                {plan.features.map((feature, featureIndex) => (
-                  <li key={feature + featureIndex} className="flex items-start gap-3 text-text-muted">
-                    <span className="w-1 h-1 rounded-full bg-lime flex-shrink-0 mt-2" />
-                    <span className="text-base leading-relaxed">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <Link
-                href={plan.ctaHref}
+            return (
+              <article
+                key={plan.name}
                 className={cn(
-                  "w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md font-medium uppercase tracking-wider transition-all text-xs",
-                  plan.featured
-                    ? "bg-text text-background hover:bg-lime hover:text-background hover:scale-[1.02] transition-all duration-200 ease-out"
-                    : "bg-transparent border border-border text-text-muted hover:border-lime/50 hover:text-text hover:bg-card-hover hover:border-coral hover:text-coral transition-all duration-200 ease-out"
+                  "border border-border rounded-lg p-6 transition-all duration-200",
+                  isFeatured
+                    ? "border-accent bg-accent/5"
+                    : "hover:border-accent hover:bg-accent/5"
                 )}
+                role="listitem"
               >
-                {plan.ctaLabel}
-                <ChevronRight className="w-4 h-4" />
-              </Link>
-            </article>
-          ))}
+                <h3 className="font-outfit text-base font-semibold text-text mb-4">{plan.name}</h3>
+
+                <div className="flex items-baseline gap-2 mb-8">
+                  <span className="font-outfit text-4xl sm:text-5xl font-bold text-text">
+                    ${plan.price}
+                  </span>
+                  <span className="text-text-muted">/{plan.period}</span>
+                </div>
+
+                <ul className="space-y-3 mb-6" role="list">
+                  {plan.features.map((feature, featureIndex) => (
+                    <li
+                      key={feature + featureIndex}
+                      className="flex items-start gap-3 text-text-muted"
+                    >
+                      <span className="w-1 h-1 rounded-full bg-accent flex-shrink-0 mt-1" />
+                      <span className="text-base leading-relaxed">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <Link
+                  href={plan.ctaHref}
+                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md font-medium uppercase tracking-wider text-xs transition-colors"
+                  style={{
+                    backgroundColor: isFeatured ? "transparent" : "var(--accent)",
+                    color: isFeatured ? "var(--text)" : "var(--accent-foreground)",
+                    borderColor: isFeatured ? "var(--accent)" : "var(--accent)",
+                  }}
+                >
+                  {plan.ctaLabel}
+                  <svg
+                    className="w-4 h-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>

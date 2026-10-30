@@ -11,6 +11,8 @@ interface HeroContent {
 }
 
 export default function HeroSection({
+  title,
+  subtitle,
   content,
 }: {
   title: string;
@@ -24,56 +26,42 @@ export default function HeroSection({
 
   const primaryLabel = content.cta1Label?.trim();
   const secondaryLabel = content.cta2Label?.trim();
-  const hasCtas = Boolean(primaryLabel || secondaryLabel);
+  const hasPrimary = Boolean(primaryLabel);
+  const hasSecondary = Boolean(secondaryLabel);
 
   return (
-    <section className="relative min-h-[85vh] flex items-center bg-background py-16 md:py-24 lg:py-32">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="max-w-4xl">
-          {content.badge ? (
-            <p className="text-xs uppercase tracking-[0.2em] font-mono text-accent-400 mb-4">
-              {content.badge}
-            </p>
+    <section
+      className="relative min-h-[85vh] md:min-h-[60vh] flex flex-col items-center justify-center py-12 md:py-20 lg:py-28 bg-background text-text"
+    >
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center">
+        <h1 className="font-outfit text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl tracking-tight leading-[0.95] whitespace-pre-line text-text mb-6">
+          {headline}
+        </h1>
+
+        <p className="font-body text-base sm:text-lg lg:text-xl md:text-xl max-w-2xl leading-relaxed text-text-muted mb-8">
+          {subheadline}
+        </p>
+
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 w-full max-w-md mx-auto">
+          {primaryLabel ? (
+            <Link
+              href={content.cta1Href || "/#contact"}
+              className="flex-1 rounded-token-md bg-accent px-6 py-3 text-sm font-medium text-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background hover:bg-accent/90"
+              aria-label={primaryLabel}
+            >
+              {primaryLabel}
+            </Link>
           ) : null}
 
-          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl tracking-tight leading-[0.95] whitespace-pre-line text-text">
-            {headline}
-          </h1>
-
-          <p className="font-body mt-4 sm:mt-6 text-base sm:text-lg lg:text-xl text-text-muted max-w-2xl leading-relaxed">
-            {subheadline}
-          </p>
-
-          {hasCtas ? (
-            <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
-              {primaryLabel ? (
-                <Link
-                  href={content.cta1Href || "/#contact"}
-                  className="inline-flex h-12 items-center justify-center rounded-token-md bg-accent-500 px-6 text-sm font-medium text-background transition-colors hover:bg-accent-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background w-full sm:w-auto"
-                >
-                  {primaryLabel}
-                </Link>
-              ) : null}
-
-              {secondaryLabel ? (
-                <Link
-                  href={content.cta2Href || "/#services"}
-                  className="inline-flex h-12 items-center justify-center rounded-token-md px-6 text-sm font-medium text-text transition-colors hover:text-accent-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background w-full sm:w-auto"
-                >
-                  {secondaryLabel}
-                </Link>
-              ) : null}
-            </div>
-          ) : (
-            <div className="mt-8">
-              <Link
-                href="/#contact"
-                className="inline-flex h-12 items-center justify-center rounded-token-md bg-accent-500 px-6 text-sm font-medium text-background transition-colors hover:bg-accent-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background w-full sm:w-auto"
-              >
-                Start a project
-              </Link>
-            </div>
-          )}
+          {secondaryLabel ? (
+            <Link
+              href={content.cta2Href || "/#services"}
+              className="flex-1 rounded-token-md border border-accent text-accent-foreground text-sm font-medium text-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background hover:bg-accent/90"
+              aria-label={secondaryLabel}
+            >
+              {secondaryLabel}
+            </Link>
+          ) : null}
         </div>
       </div>
     </section>
