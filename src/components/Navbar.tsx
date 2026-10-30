@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 
@@ -89,8 +88,8 @@ export default function Navbar() {
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Main">
           <div className="flex items-center justify-between h-14">
             <Link href="/" className="flex items-center gap-2 min-h-[44px]" onClick={close}>
-              <Image src="/logo.svg" alt="" width={32} height={32} className="w-8 h-8 object-contain" />
-              <span className="text-sm font-bold tracking-wide text-text">Code Craft</span>
+              <span aria-hidden="true" className="w-2.5 h-2.5 bg-accent" />
+              <span className="font-outfit text-base font-semibold tracking-tight text-text">Code Craft</span>
             </Link>
 
             <div className="hidden lg:flex lg:items-center lg:gap-6">
@@ -134,8 +133,8 @@ export default function Navbar() {
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14 border-b border-border">
             <Link href="/" className="flex items-center gap-2 min-h-[44px]" onClick={close}>
-              <Image src="/logo.svg" alt="" width={32} height={32} className="w-8 h-8 object-contain" />
-              <span className="text-sm font-bold tracking-wide text-text">Code Craft</span>
+              <span aria-hidden="true" className="w-2.5 h-2.5 bg-accent" />
+              <span className="font-outfit text-base font-semibold tracking-tight text-text">Code Craft</span>
             </Link>
             <button type="button" onClick={close} aria-label="Close menu" className="inline-flex items-center justify-center w-11 h-11 text-text">
               <X size={22} aria-hidden="true" />

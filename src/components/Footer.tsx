@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import {
   Code2,
@@ -104,19 +103,9 @@ export default async function Footer() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           {/* Brand + contact icons */}
           <div>
-            <Link href="/" className="inline-flex items-center gap-3 text-text font-bold text-xl mb-6 group">
-              <div
-                className="relative w-8 h-8 transition-transform duration-300 group-hover:scale-105"
-              >
-                <Image
-                  src="/logo.svg"
-                  alt="Code Craft"
-                  fill
-                  sizes="32px"
-                  className="object-contain"
-                />
-              </div>
-              Code Craft
+            <Link href="/" className="inline-flex items-center gap-2.5 text-text mb-6 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
+              <span aria-hidden="true" className="w-3 h-3 bg-accent transition-transform duration-300 group-hover:scale-110 motion-reduce:transition-none motion-reduce:group-hover:scale-100" />
+              <span className="font-outfit text-xl font-semibold tracking-tight">Code Craft</span>
             </Link>
             <p className="text-text-muted text-sm leading-relaxed max-w-xs mb-8">
               Building ideas into digital products.
