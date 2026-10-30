@@ -15,7 +15,7 @@ interface NavLink {
 }
 
 const FALLBACK: NavLink[] = [
-  { id: "1", label: "Work", href: "/#projects", order: 1, isActive: true, isExternal: false },
+  { id: "1", label: "Work", href: "/projects", order: 1, isActive: true, isExternal: false },
   { id: "2", label: "Services", href: "/#services", order: 2, isActive: true, isExternal: false },
   { id: "3", label: "About", href: "/p/about", order: 3, isActive: true, isExternal: false },
   { id: "4", label: "Contact", href: "/#contact", order: 4, isActive: true, isExternal: false },

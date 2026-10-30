@@ -19,7 +19,7 @@ export default function FeaturesSection({ title, subtitle, content }: FeaturesSe
   return (
     <section
       id="features"
-      className="relative py-12 md:py-16 lg:py-20 text-text text-background"
+      className="relative py-20 md:py-28 lg:py-36 text-text text-background"
       aria-labelledby="features-heading"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">

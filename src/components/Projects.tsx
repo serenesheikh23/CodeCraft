@@ -63,7 +63,7 @@ export default function ProjectsSection({
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
                   <Link
                     href={`/projects/${project.slug}`}
-                    className="lg:col-span-7 block relative aspect-[4/3] overflow-hidden bg-card group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    className="lg:col-span-7 block relative aspect-[16/10] overflow-hidden bg-card group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                     aria-label={`${project.title} — case study`}
                   >
                     {hasImage ? (

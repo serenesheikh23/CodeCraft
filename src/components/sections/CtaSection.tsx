@@ -13,7 +13,7 @@ export default function CtaSection({
 }) {
   return (
     <section
-      className="relative py-12 md:py-16 lg:py-20 bg-background text-text"
+      className="relative py-20 md:py-28 lg:py-36 bg-background text-text"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         <div className="text-center">
