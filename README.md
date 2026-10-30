@@ -28,11 +28,11 @@ Mobile LCP **2.4s** · TBT **30ms** · CLS **0**. Reduced mobile LCP from 5.3s t
 |---|---|
 | API route handlers | **56** (20 GET · 15 POST · 11 PUT · 10 DELETE) |
 | Database models | **12** Prisma models mapped to **12** Turso tables |
-| Pages | **36** |
-| React components | **30** |
+| Pages | **37** |
+| React components | **31** |
 | TypeScript files | **103** |
 | Direct dependencies | **16** |
-| Static pages per build | **39** |
+| Static pages per build | **41** |
 | Shared First Load JS | **103 kB** |
 | Vitest tests | **8** |
 | Production build | **~25s** |
