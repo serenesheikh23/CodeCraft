@@ -166,6 +166,7 @@ export default function Navbar() {
 
       <div
         aria-hidden={!showBar}
+        inert={!showBar}
         className={`fixed bottom-0 left-0 right-0 z-30 lg:hidden bg-card border-t border-border px-4 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] transition-transform duration-200 ${
           showBar ? "translate-y-0" : "translate-y-full"
         }`}
