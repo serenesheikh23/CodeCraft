@@ -1,8 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { signOut } from "next-auth/react";
@@ -66,16 +66,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               className="relative w-8 h-8 transition-transform duration-300 group-hover:scale-105"
               
             >
-              <Image
-                src="/logo.svg"
-                alt="Code Craft"
-                fill
-                sizes="32px"
-                className="object-contain"
-                priority
-              />
+              <Image src="/logo-mark.svg" alt="" width={32} height={32} className="w-8 h-8 object-contain" />
             </div>
-            <span className="font-serif text-xl text-text">Code Craft</span>
+            <span className="font-outfit text-base font-semibold tracking-tight text-text">Code Craft</span>
           </Link>
           <button
             onClick={() => setSidebarOpen(false)}

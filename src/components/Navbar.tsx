@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
@@ -88,7 +89,7 @@ export default function Navbar() {
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Main">
           <div className="flex items-center justify-between h-14">
             <Link href="/" className="flex items-center gap-2 min-h-[44px]" onClick={close}>
-              <span aria-hidden="true" className="w-2.5 h-2.5 bg-accent" />
+              <Image src="/logo-mark.svg" alt="" width={32} height={32} className="w-7 h-7 object-contain" />
               <span className="font-outfit text-base font-semibold tracking-tight text-text">Code Craft</span>
             </Link>
 
@@ -133,7 +134,7 @@ export default function Navbar() {
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14 border-b border-border">
             <Link href="/" className="flex items-center gap-2 min-h-[44px]" onClick={close}>
-              <span aria-hidden="true" className="w-2.5 h-2.5 bg-accent" />
+              <Image src="/logo-mark.svg" alt="" width={32} height={32} className="w-7 h-7 object-contain" />
               <span className="font-outfit text-base font-semibold tracking-tight text-text">Code Craft</span>
             </Link>
             <button type="button" onClick={close} aria-label="Close menu" className="inline-flex items-center justify-center w-11 h-11 text-text">

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import {
@@ -104,7 +105,7 @@ export default async function Footer() {
           {/* Brand + contact icons */}
           <div>
             <Link href="/" className="inline-flex items-center gap-2.5 text-text mb-6 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
-              <span aria-hidden="true" className="w-3 h-3 bg-accent transition-transform duration-300 group-hover:scale-110 motion-reduce:transition-none motion-reduce:group-hover:scale-100" />
+              <Image src="/logo-mark.svg" alt="" width={32} height={32} className="w-7 h-7 object-contain" />
               <span className="font-outfit text-xl font-semibold tracking-tight">Code Craft</span>
             </Link>
             <p className="text-text-muted text-sm leading-relaxed max-w-xs mb-8">

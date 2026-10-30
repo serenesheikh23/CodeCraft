@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
+import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
@@ -55,14 +55,7 @@ export default function LoginPage() {
             className="relative w-12 h-12"
             style={{ filter: "drop-shadow(0 0 10px rgba(34, 211, 238, 0.5))" }}
           >
-            <Image
-              src="/logo.svg"
-              alt="Code Craft"
-              fill
-              sizes="48px"
-              className="object-contain"
-              priority
-            />
+            <Image src="/logo-mark.svg" alt="" width={32} height={32} className="w-8 h-8 object-contain" />
           </div>
         </div>
 
