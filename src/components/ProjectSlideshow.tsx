@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useRef, useState, useEffect } from "react";
+import Image from "next/image";
 
 interface Props {
   images: string[];
@@ -10,74 +9,74 @@ interface Props {
 }
 
 export default function ProjectSlideshow({ images, title }: Props) {
+  const railRef = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
-    if (images.length <= 1 || isPaused) return;
-    const timer = setInterval(() => {
-      setIndex((i) => (i + 1) % images.length);
-    }, 4500);
-    return () => clearInterval(timer);
-  }, [images.length, isPaused]);
+    const rail = railRef.current;
+    if (!rail) return;
+    const onScroll = () => {
+      const slideWidth = rail.scrollWidth / images.length;
+      setIndex(Math.max(0, Math.min(images.length - 1, Math.round(rail.scrollLeft / slideWidth))));
+    };
+    rail.addEventListener("scroll", onScroll, { passive: true });
+    return () => rail.removeEventListener("scroll", onScroll);
+  }, [images.length]);
 
   if (!images || images.length === 0) return null;
 
-  const goNext = () => setIndex((i) => (i + 1) % images.length);
-  const goPrev = () => setIndex((i) => (i - 1 + images.length) % images.length);
+  const go = (i: number) => {
+    const rail = railRef.current;
+    if (!rail) return;
+    rail.scrollTo({ left: (rail.scrollWidth / images.length) * i, behavior: "smooth" });
+  };
+
+  const onKey = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowRight") { e.preventDefault(); go(Math.min(images.length - 1, index + 1)); }
+    if (e.key === "ArrowLeft") { e.preventDefault(); go(Math.max(0, index - 1)); }
+  };
 
   return (
-    <div
-      className="relative aspect-video overflow-hidden border border-border bg-card group"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-    >
-      <AnimatePresence mode="wait">
-        <motion.img
-          key={index}
-          src={images[index]}
-          alt={`${title} — image ${index + 1}`}
-          initial={{ opacity: 0, scale: 1.03 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-      </AnimatePresence>
+    <figure className="relative" aria-roledescription="carousel" aria-label={`${title} screenshots`}>
+      <div
+        ref={railRef}
+        onKeyDown={onKey}
+        tabIndex={0}
+        className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        style={{ scrollbarWidth: "none" }}
+      >
+        {images.map((src, i) => (
+          <div
+            key={`${src}-${i}`}
+            className="relative flex-shrink-0 w-full snap-start aspect-video bg-card border border-border"
+            aria-hidden={i !== index}
+          >
+            <Image
+              src={src}
+              alt={`${title} — screenshot ${i + 1} of ${images.length}`}
+              fill
+              sizes="(max-width: 896px) 100vw, 896px"
+              className="object-cover"
+              priority={i === 0}
+            />
+          </div>
+        ))}
+      </div>
 
       {images.length > 1 && (
         <>
-          <button
-            onClick={goPrev}
-            aria-label="Previous image"
-            className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/70 backdrop-blur-md border border-border flex items-center justify-center text-text opacity-0 group-hover:opacity-100 transition-opacity hover:bg-background/90 z-10"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <button
-            onClick={goNext}
-            aria-label="Next image"
-            className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/70 backdrop-blur-md border border-border flex items-center justify-center text-text opacity-0 group-hover:opacity-100 transition-opacity hover:bg-background/90 z-10"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
-
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 z-10">
-            {images.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setIndex(i)}
-                aria-label={`Go to image ${i + 1}`}
-                className="h-1.5 rounded-full transition-all duration-300"
-                style={{
-                  width: i === index ? "24px" : "6px",
-                  backgroundColor: i === index ? "#22D3EE" : "rgba(248, 250, 252, 0.4)",
-                }}
-              />
-            ))}
-          </div>
+          <button type="button" onClick={() => go(Math.max(0, index - 1))} disabled={index === 0} aria-label="Previous image" className="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-background/80 border border-border flex items-center justify-center text-text disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">←</button>
+          <button type="button" onClick={() => go(Math.min(images.length - 1, index + 1))} disabled={index === images.length - 1} aria-label="Next image" className="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-background/80 border border-border flex items-center justify-center text-text disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">→</button>
+          <figcaption className="flex items-center justify-between gap-4 px-4 py-3 border-t border-border bg-card text-xs uppercase tracking-[0.2em] text-text-muted">
+            <span>{index + 1} / {images.length}</span>
+            <span className="flex gap-1.5">
+              {images.map((_, i) => (
+                <button key={i} type="button" onClick={() => go(i)} aria-label={`Go to image ${i + 1}`} aria-current={i === index} className={`w-2 h-2 rounded-full transition-colors ${i === index ? "bg-accent" : "bg-border"}`} />
+              ))}
+            </span>
+          </figcaption>
         </>
       )}
-    </div>
+    </figure>
   );
 }

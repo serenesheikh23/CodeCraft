@@ -21,59 +21,51 @@ export default function HeroSection({
   const subheadline =
     content.subheadline ||
     "Building ideas into digital products. Websites, apps and full systems.";
-
-  const primaryLabel = content.cta1Label?.trim();
-  const secondaryLabel = content.cta2Label?.trim();
-  const hasCtas = Boolean(primaryLabel || secondaryLabel);
+  const lines = headline.split("\n");
 
   return (
-    <section className="relative min-h-[85vh] flex items-center bg-background py-16 md:py-24 lg:py-32">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="max-w-4xl">
-          {content.badge ? (
-            <p className="text-xs uppercase tracking-[0.2em] font-mono text-accent-400 mb-4">
-              {content.badge}
-            </p>
-          ) : null}
+    <section className="relative bg-background text-text border-b border-border overflow-hidden">
+      <div className="max-w-[90rem] mx-auto px-6 lg:px-12 pt-20 md:pt-28 lg:pt-36 pb-16 lg:pb-24">
+        <div className="flex items-center gap-3 mb-12 lg:mb-16">
+          <span aria-hidden="true" className="w-2 h-2 bg-accent" />
+          <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-text-muted">
+            Digital studio
+          </span>
+        </div>
 
-          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl tracking-tight leading-[0.95] whitespace-pre-line text-text">
-            {headline}
-          </h1>
+        <h1 className="font-outfit font-medium leading-[0.85] tracking-[-0.045em] text-[clamp(3rem,14vw,11rem)]">
+          {lines.map((line, i) => (
+            <span key={i} className="block">
+              {i === lines.length - 1 ? (
+                <span className="text-accent">{line}</span>
+              ) : (
+                line
+              )}
+            </span>
+          ))}
+        </h1>
 
-          <p className="font-body mt-4 sm:mt-6 text-base sm:text-lg lg:text-xl text-text-muted max-w-2xl leading-relaxed">
+        <div className="mt-16 lg:mt-24 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end">
+          <p className="lg:col-span-5 text-lg lg:text-xl text-text-muted leading-relaxed max-w-[42ch]">
             {subheadline}
           </p>
 
-          {hasCtas ? (
-            <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
-              {primaryLabel ? (
-                <Link
-                  href={content.cta1Href || "/#contact"}
-                  className="inline-flex h-12 items-center justify-center rounded-token-md bg-accent-500 px-6 text-sm font-medium text-background transition-colors hover:bg-accent-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background w-full sm:w-auto"
-                >
-                  {primaryLabel}
-                </Link>
-              ) : null}
-
-              {secondaryLabel ? (
-                <Link
-                  href={content.cta2Href || "/#services"}
-                  className="inline-flex h-12 items-center justify-center rounded-token-md px-6 text-sm font-medium text-text transition-colors hover:text-accent-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background w-full sm:w-auto"
-                >
-                  {secondaryLabel}
-                </Link>
-              ) : null}
-            </div>
-          ) : (
-            <div className="mt-8">
-              <Link
-                href="/#contact"
-                className="inline-flex h-12 items-center justify-center rounded-token-md bg-accent-500 px-6 text-sm font-medium text-background transition-colors hover:bg-accent-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background w-full sm:w-auto"
-              >
-                Start a project
-              </Link>
-            </div>
-          )}
+          <div className="lg:col-span-4 lg:col-start-9 flex flex-col gap-3">
+            <Link
+              href={content.cta1Href || "/#contact"}
+              className="inline-flex items-center justify-between gap-6 min-h-[56px] px-6 bg-accent text-accent-foreground text-sm font-semibold uppercase tracking-[0.15em] hover:bg-accent/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              {content.cta1Label || "Start a project"}
+              <span aria-hidden="true">→</span>
+            </Link>
+            <Link
+              href={content.cta2Href || "/#services"}
+              className="inline-flex items-center justify-between gap-6 min-h-[56px] px-6 border border-border text-text text-sm font-semibold uppercase tracking-[0.15em] hover:border-accent hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              {content.cta2Label || "View services"}
+              <span aria-hidden="true">↗</span>
+            </Link>
+          </div>
         </div>
       </div>
     </section>

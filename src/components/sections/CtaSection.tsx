@@ -1,9 +1,4 @@
-"use client";
-
-import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-
 interface CtaContent {
   headline?: string;
   subheadline?: string;
@@ -14,52 +9,42 @@ interface CtaContent {
 export default function CtaSection({
   content,
 }: {
-  title: string;
-  subtitle: string;
   content: CtaContent;
 }) {
   return (
-    <section className="relative py-16 md:py-24 lg:py-32 bg-background overflow-hidden">
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <motion.h2
-            initial={{ opacity: 0, clipPath: "inset(100% 0 0 0)" }}
-            animate={{ opacity: 1, clipPath: "inset(0 0 0 0)" }}
-            transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-            className="font-display text-6xl lg:text-6xl leading-[0.9] tracking-tight text-text"
-          >
+    <section
+      className="relative py-12 md:py-16 lg:py-20 bg-background text-text"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+        <div className="text-center">
+          <h2 className="font-outfit text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight text-text mb-4">
             {content.headline || "Have a project in mind?"}
-          </motion.h2>
+          </h2>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-6 text-lg text-text-muted max-w-xl leading-relaxed"
-          >
+          <p className="text-text-muted text-lg max-w-xl mx-auto leading-relaxed mb-8">
             {content.subheadline || "Let's talk about what you're building."}
-          </motion.p>
+          </p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="mt-10"
-          >
+          <div className="mt-8">
             <Link
               href={content.buttonHref || "/#contact"}
-              className="inline-flex items-center gap-2 px-7 py-3.5 bg-text text-background rounded-md text-xs font-semibold uppercase tracking-wider hover:bg-lime hover:text-background transition-colors"
+              className="inline-flex items-center gap-2 px-8 py-3 rounded-md font-medium uppercase tracking-wider text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background bg-accent text-accent-foreground hover:bg-accent/90"
             >
               {content.buttonLabel || "Start a project"}
-              <ArrowRight className="w-4 h-4" />
+              <svg
+                className="w-4 h-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
             </Link>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </div>
     </section>
   );

@@ -1,10 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Link from "next/link";
-import { ChevronRight, Layout, Building, Code, ShoppingCart, Smartphone, Layers, GitBranch, Package } from "lucide-react";
-import { formatPrice } from "@/lib/utils";
-import ServicesTerminal from "@/components/sections/ServicesTerminal";
+import { useState } from "react";
 
 interface Service {
   id: string;
@@ -12,311 +9,157 @@ interface Service {
   description: string;
   minPrice: number;
   maxPrice: number;
-  features: string;
+  features: string | string[];
   icon: string;
   order: number;
   isActive: boolean;
 }
 
-const iconMap: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
-  layout: Layout,
-  building: Building,
-  code: Code,
-  "shopping-cart": ShoppingCart,
-  smartphone: Smartphone,
-  layers: Layers,
-  "git-branch": GitBranch,
-  package: Package,
-  server: Code,
-  database: Layout,
-  cloud: Building,
-  globe: Code,
-  zap: Layers,
-  shield: GitBranch,
-  heart: Smartphone,
-  star: Package,
-};
+const HOME_LIMIT = 3;
 
-const BRAND_BLUE = "#3B82F6";
-const BRAND_BLUE_DARK = "#2563EB";
-const BRAND_BLUE_GLOW = "0 0 12px rgba(59, 130, 246, 0.5)";
+function parseFeatures(raw: string | string[]): string[] {
+  if (Array.isArray(raw)) return raw;
+  try {
+    const parsed = JSON.parse(raw || "[]");
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
 
-export default function ServicesSection({ services }: { services: Service[] }) {
-  const activeServices = services.filter(s => s.isActive);
+export default function ServicesSection({
+  services,
+  showAll = false,
+}: {
+  services: Service[];
+  showAll?: boolean;
+}) {
+  const active = services.filter((s) => s.isActive);
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
 
-  if (activeServices.length === 0) return null;
+  if (active.length === 0) return null;
 
-  const row1 = activeServices.slice(0, 2);
-  const row2 = activeServices.slice(2, 5);
-  const row3 = activeServices.slice(5);
+  const visible = showAll ? active : active.slice(0, HOME_LIMIT);
+  const hasMore = !showAll && active.length > HOME_LIMIT;
+
+  const toggle = (id: string) =>
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
 
   return (
     <section
       id="services"
-      className="relative py-16 md:py-24 lg:py-32 overflow-hidden"
+      className="relative py-20 md:py-28 lg:py-36 bg-background text-text border-t border-border"
       aria-labelledby="services-heading"
     >
+      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16 lg:mb-20">
+          <div className="lg:col-span-5">
+            <div className="text-accent text-xs uppercase tracking-[0.2em] font-medium mb-4">
+              What we do
+            </div>
+            <h2
+              id="services-heading"
+              className="font-outfit text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight text-text"
+            >
+              We build things
+              <br />
+              that actually ship.
+            </h2>
+          </div>
+          <div className="lg:col-span-6 lg:col-start-7 lg:pt-8">
+            <p className="text-lg text-text-muted leading-relaxed">
+              From landing pages to full-stack applications — production-ready code, delivered on time.
+            </p>
+          </div>
+        </div>
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
-          className="mb-16 lg:mb-24"
-        >
-          <div className="section-label text-lime mb-4">WHAT WE DO</div>
-          <h2 id="services-heading" className="font-display text-5xl sm:text-6xl lg:text-6xl leading-[0.95] tracking-tight text-text">
-            We build things
-            <br />
-            that actually ship.
-          </h2>
-          <p className="mt-6 text-lg text-text-muted max-w-2xl leading-relaxed">
-            From landing pages to full-stack applications — production-ready code, delivered on time.
-          </p>
-        </motion.div>
+        <div className="border-t border-border">
+          {visible.map((service, i) => {
+            const isOpen = expanded.has(service.id);
+            const features = parseFeatures(service.features);
+            const number = String(i + 1).padStart(2, "0");
 
-        {row1.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6 }}
-            className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16"
-            aria-label="Services"
-          >
-            {row1.map((service) => {
-              const Icon = iconMap[service.icon] || Layout;
-              const features = JSON.parse(service.features || "[]") as string[];
-
-              return (
-                <article
-                  key={service.id}
-                  className="group relative border border-border p-8 lg:p-10 transition-colors duration-300 hover:border-coral/40"
+            return (
+              <article key={service.id} className="border-b border-border">
+                <button
+                  type="button"
+                  onClick={() => toggle(service.id)}
+                  aria-expanded={isOpen}
+                  aria-controls={`service-${service.id}`}
+                  className="group w-full text-left min-h-[44px] py-8 lg:py-10 grid grid-cols-[auto_1fr_auto] gap-4 lg:gap-8 items-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                 >
-                  <div className="flex items-start gap-4 mb-6">
-                    <Icon
-                      className="w-9 h-9 flex-shrink-0 mt-1"
-                      style={{ color: BRAND_BLUE, filter: `drop-shadow(${BRAND_BLUE_GLOW})` }}
-                      aria-hidden="true"
-                    />
-                    <h3 className="font-display text-2xl lg:text-3xl font-bold text-text leading-snug">{service.name}</h3>
+                  <span className="font-mono text-xs text-text-muted pt-2 lg:pt-3">
+                    {number}
+                  </span>
+                  <div>
+                    <h3 className="font-outfit text-2xl sm:text-3xl lg:text-4xl text-text leading-tight group-hover:text-accent transition-colors">
+                      {service.name}
+                    </h3>
+                    <p className="mt-3 text-text-muted text-base leading-relaxed max-w-2xl">
+                      {service.description}
+                    </p>
                   </div>
-
-                  <p className="text-text-muted mb-6 leading-relaxed text-base lg:text-lg">{service.description}</p>
-
-                  <div className="flex items-baseline gap-2 mb-6">
-                    <span className="font-display text-3xl lg:text-4xl font-bold" style={{ color: BRAND_BLUE }}>
-                      {formatPrice(service.minPrice, service.maxPrice)}
-                    </span>
-                    <span className="text-text text-sm">USD</span>
-                  </div>
-
-                  <ul className="space-y-3 mb-8" role="list">
-                    {features.slice(0, 6).map((feature, featureIndex) => (
-                      <li key={feature + featureIndex} className="flex items-start gap-3 text-text-muted">
-                        <span
-                          className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-2"
-                          style={{ backgroundColor: "#F8FAFC" }}
-                        />
-                        <span className="text-base leading-relaxed">{feature}</span>
-                      </li>
-                    ))}
-                    {features.length > 6 && (
-                      <li className="flex items-center gap-2 text-sm font-medium" style={{ color: BRAND_BLUE }}>
-                        <ChevronRight className="w-4 h-4 flex-shrink-0" />
-                        <span>+{features.length - 6} more features</span>
-                      </li>
-                    )}
-                  </ul>
-
-                  <Link
-                    href="#contact"
-                    className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md font-semibold uppercase tracking-wider text-xs transition-all duration-200"
-                    style={{
-                      backgroundColor: BRAND_BLUE,
-                      color: "#F8FAFC",
-                      border: `1px solid ${BRAND_BLUE}`,
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = BRAND_BLUE_DARK;
-                      e.currentTarget.style.borderColor = BRAND_BLUE_DARK;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = BRAND_BLUE;
-                      e.currentTarget.style.borderColor = BRAND_BLUE;
-                    }}
+                  <span
+                    aria-hidden="true"
+                    className="font-outfit text-3xl text-text-muted pt-1 group-hover:text-accent transition-colors"
                   >
-                    Discuss a project
-                    <ChevronRight className="w-4 h-4" />
-                  </Link>
-                </article>
-              );
-            })}
-          </motion.div>
-        )}
+                    {isOpen ? "−" : "+"}
+                  </span>
+                </button>
 
-        {row2.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16"
-            aria-label="Services"
-          >
-            {row2.map((service) => {
-              const Icon = iconMap[service.icon] || Layout;
-              const features = JSON.parse(service.features || "[]") as string[];
-
-              return (
-                <article
-                  key={service.id}
-                  className="group relative border border-border p-6 transition-colors duration-300 hover:border-coral/40"
+                <div
+                  id={`service-${service.id}`}
+                  hidden={!isOpen}
+                  className="pb-8 lg:pb-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8"
                 >
-                  <div className="flex items-start gap-3 mb-4">
-                    <Icon
-                      className="w-7 h-7 flex-shrink-0 mt-1"
-                      style={{ color: BRAND_BLUE, filter: `drop-shadow(${BRAND_BLUE_GLOW})` }}
-                      aria-hidden="true"
-                    />
-                    <h3 className="font-display text-xl font-bold text-text leading-snug">{service.name}</h3>
-                  </div>
-
-                  <p className="text-text-muted mb-4 leading-relaxed text-sm">{service.description}</p>
-
-                  <div className="flex items-baseline gap-2 mb-4">
-                    <span className="font-display text-2xl font-bold" style={{ color: BRAND_BLUE }}>
-                      {formatPrice(service.minPrice, service.maxPrice)}
-                    </span>
-                    <span className="text-text text-xs">USD</span>
-                  </div>
-
-                  <ul className="space-y-2 mb-6" role="list">
-                    {features.slice(0, 4).map((feature, featureIndex) => (
-                      <li key={feature + featureIndex} className="flex items-start gap-2 text-sm text-text-muted">
-                        <span
-                          className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-1.5"
-                          style={{ backgroundColor: "#F8FAFC" }}
-                        />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                    {features.length > 4 && (
-                      <li className="flex items-center gap-2 text-xs font-medium" style={{ color: BRAND_BLUE }}>
-                        <ChevronRight className="w-3 h-3 flex-shrink-0" />
-                        <span>+{features.length - 4} more</span>
-                      </li>
+                  <div className="lg:col-span-4 lg:col-start-2">
+                    {features.length > 0 && (
+                      <ul className="space-y-2 text-sm text-text-muted">
+                        {features.map((f) => (
+                          <li key={f} className="flex items-start gap-3">
+                            <span aria-hidden="true" className="w-1 h-1 rounded-full bg-accent flex-shrink-0 mt-2" />
+                            <span>{f}</span>
+                          </li>
+                        ))}
+                      </ul>
                     )}
-                  </ul>
-
-                  <Link
-                    href="#contact"
-                    className="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-md font-semibold uppercase tracking-wider text-xs transition-all duration-200"
-                    style={{
-                      backgroundColor: BRAND_BLUE,
-                      color: "#F8FAFC",
-                      border: `1px solid ${BRAND_BLUE}`,
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = BRAND_BLUE_DARK;
-                      e.currentTarget.style.borderColor = BRAND_BLUE_DARK;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = BRAND_BLUE;
-                      e.currentTarget.style.borderColor = BRAND_BLUE;
-                    }}
-                  >
-                    Discuss a project
-                    <ChevronRight className="w-3 h-3" />
-                  </Link>
-                </article>
-              );
-            })}
-          </motion.div>
-        )}
-
-        {row3.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16"
-            aria-label="Services"
-          >
-            {row3.map((service) => {
-              const Icon = iconMap[service.icon] || Layout;
-              const features = JSON.parse(service.features || "[]") as string[];
-
-              return (
-                <article
-                  key={service.id}
-                  className="group relative border border-border p-6 transition-colors duration-300 hover:border-coral/40"
-                >
-                  <div className="flex items-start gap-3 mb-4">
-                    <Icon
-                      className="w-7 h-7 flex-shrink-0 mt-1"
-                      style={{ color: BRAND_BLUE, filter: `drop-shadow(${BRAND_BLUE_GLOW})` }}
-                      aria-hidden="true"
-                    />
-                    <h3 className="font-display text-xl font-bold text-text leading-snug">{service.name}</h3>
                   </div>
-
-                  <p className="text-text-muted mb-4 leading-relaxed text-sm">{service.description}</p>
-
-                  <div className="flex items-baseline gap-2 mb-4">
-                    <span className="font-display text-2xl font-bold" style={{ color: BRAND_BLUE }}>
-                      {formatPrice(service.minPrice, service.maxPrice)}
-                    </span>
-                    <span className="text-text text-xs">USD</span>
+                  <div className="lg:col-span-6 lg:col-start-7 flex flex-col gap-4">
+                    <div className="flex items-baseline gap-3">
+                      <span className="font-outfit text-2xl text-accent">
+                        ${service.minPrice.toLocaleString()}–${service.maxPrice.toLocaleString()}
+                      </span>
+                      <span className="text-xs uppercase tracking-[0.2em] text-text-muted">USD</span>
+                    </div>
+                    <Link
+                      href="/#contact"
+                      className="inline-flex items-center gap-2 text-sm text-text hover:text-accent transition-colors underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    >
+                      Discuss a project →
+                    </Link>
                   </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
 
-                  <ul className="space-y-2 mb-6" role="list">
-                    {features.slice(0, 4).map((feature, featureIndex) => (
-                      <li key={feature + featureIndex} className="flex items-start gap-2 text-sm text-text-muted">
-                        <span
-                          className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-1.5"
-                          style={{ backgroundColor: "#F8FAFC" }}
-                        />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                    {features.length > 4 && (
-                      <li className="flex items-center gap-2 text-xs font-medium" style={{ color: BRAND_BLUE }}>
-                        <ChevronRight className="w-3 h-3 flex-shrink-0" />
-                        <span>+{features.length - 4} more</span>
-                      </li>
-                    )}
-                  </ul>
-
-                  <Link
-                    href="#contact"
-                    className="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-md font-semibold uppercase tracking-wider text-xs transition-all duration-200"
-                    style={{
-                      backgroundColor: BRAND_BLUE,
-                      color: "#F8FAFC",
-                      border: `1px solid ${BRAND_BLUE}`,
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = BRAND_BLUE_DARK;
-                      e.currentTarget.style.borderColor = BRAND_BLUE_DARK;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = BRAND_BLUE;
-                      e.currentTarget.style.borderColor = BRAND_BLUE;
-                    }}
-                  >
-                    Discuss a project
-                    <ChevronRight className="w-3 h-3" />
-                  </Link>
-                </article>
-              );
-            })}
-          </motion.div>
+        {hasMore && (
+          <div className="mt-12 flex justify-start">
+            <Link
+              href="/services"
+              className="inline-flex items-center gap-3 min-h-[48px] px-6 border border-border text-text text-xs font-semibold uppercase tracking-[0.2em] hover:border-accent hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              See all {active.length} services
+              <span aria-hidden="true">→</span>
+            </Link>
+          </div>
         )}
-
-        <ServicesTerminal />
       </div>
     </section>
   );

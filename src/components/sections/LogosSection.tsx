@@ -1,8 +1,4 @@
-"use client";
-
-import { motion } from "framer-motion";
 import Image from "next/image";
-import { toWebp } from "@/lib/imageUrl";
 
 interface LogosSectionProps {
   title: string;
@@ -17,60 +13,53 @@ interface LogoItem {
 
 export default function LogosSection({ title, subtitle, content }: LogosSectionProps) {
   const logos = (content.logos as LogoItem[]) || [];
-
   if (logos.length === 0) return null;
 
   return (
     <section
       id="logos"
-      className="relative py-16 md:py-24 lg:py-32 overflow-hidden"
+      className="relative py-12 md:py-16 lg:py-20 bg-background text-text"
       aria-labelledby="logos-heading"
     >
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         {(title || subtitle) && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6 }}
-            className="grid grid-cols-[30%,70%] gap-8 items-start mb-16 lg:mb-20"
-          >
+          <>
             {subtitle && (
-              <div className="text-text-muted text-sm uppercase tracking-[0.2em] font-medium pt-2">
+              <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-2 font-medium">
                 {subtitle}
               </div>
             )}
             {title && (
               <h2
                 id="logos-heading"
-                className="font-display text-3xl sm:text-5xl leading-tight text-text"
+                className="font-outfit text-3xl sm:text-4xl lg:text-5xl leading-tight text-text mb-6"
               >
                 {title}
               </h2>
             )}
-          </motion.div>
+          </>
         )}
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-12 items-center" role="list" aria-label="Client logos">
-          {logos.map((logo, index) => {
-            const isSvg = /\.svg($|\?)/i.test(logo.url);
-            return (
-              <div
-                key={logo.alt + index}
-                className="filter grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
-                role="listitem"
-              >
-                <Image
-                  src={isSvg ? logo.url : toWebp(logo.url)}
-                  alt={logo.alt}
-                  width={200}
-                  height={48}
-                  unoptimized={isSvg}
-                  className="mx-auto max-h-12 w-auto object-contain"
-                />
-              </div>
-            );
-          })}
+        <div
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 lg:gap-12 items-center"
+          role="list"
+          aria-label="Client logos"
+        >
+          {logos.map((logo, index) => (
+            <div
+              key={logo.alt + index}
+              className="flex items-center justify-center h-14"
+              role="listitem"
+            >
+              <Image
+                src={logo.url}
+                alt={logo.alt}
+                width={160}
+                height={48}
+                className="max-h-12 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
+              />
+            </div>
+          ))}
         </div>
       </div>
     </section>

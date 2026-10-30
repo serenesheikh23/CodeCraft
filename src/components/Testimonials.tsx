@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
 
 interface Testimonial {
   id: string;
@@ -9,68 +9,80 @@ interface Testimonial {
   clientCompany: string;
   content: string;
   rating: number;
-  avatarUrl: string;
-  projectId: string | null;
   order: number;
   isActive: boolean;
 }
 
-interface TestimonialsProps {
-  testimonials: Testimonial[];
-}
+export default function TestimonialsSection({ testimonials }: { testimonials: Testimonial[] }) {
+  const items = testimonials.filter((t) => t.isActive);
+  const railRef = useRef<HTMLDivElement>(null);
+  const [index, setIndex] = useState(0);
 
-export default function TestimonialsSection({ testimonials }: TestimonialsProps) {
-  const activeTestimonials = testimonials.filter(t => t.isActive);
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+    const onScroll = () => {
+      const w = rail.scrollWidth / items.length;
+      setIndex(Math.max(0, Math.min(items.length - 1, Math.round(rail.scrollLeft / w))));
+    };
+    rail.addEventListener("scroll", onScroll, { passive: true });
+    return () => rail.removeEventListener("scroll", onScroll);
+  }, [items.length]);
 
-  if (activeTestimonials.length === 0) return null;
+  if (items.length === 0) return null;
+
+  const go = (i: number) => {
+    const rail = railRef.current;
+    if (!rail) return;
+    rail.scrollTo({ left: (rail.scrollWidth / items.length) * i, behavior: "smooth" });
+  };
+
+  const onKey = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowRight") { e.preventDefault(); go(Math.min(items.length - 1, index + 1)); }
+    if (e.key === "ArrowLeft") { e.preventDefault(); go(Math.max(0, index - 1)); }
+  };
 
   return (
-    <section
-      id="testimonials"
-      className="relative py-16 md:py-24 lg:py-32 overflow-hidden bg-card border-y border-border"
-      aria-labelledby="testimonials-heading"
-    >
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
-          className="mb-16 lg:mb-24"
+    <section id="testimonials" className="relative py-12 md:py-16 lg:py-20 bg-background text-text" aria-labelledby="testimonials-heading">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+        <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-4 font-medium">Client words</div>
+        <h2 id="testimonials-heading" className="font-outfit text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight text-text mb-8">
+          People we&apos;ve shipped with.
+        </h2>
+
+        <div
+          ref={railRef}
+          onKeyDown={onKey}
+          tabIndex={0}
+          className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          style={{ scrollbarWidth: "none" }}
+          aria-roledescription="carousel"
+          aria-label="Testimonials"
         >
-          <div className="text-text-muted text-xs uppercase tracking-[0.2em] font-medium mb-4">
-            CLIENT WORDS
-          </div>
-          <h2 id="testimonials-heading" className="font-display text-5xl sm:text-6xl lg:text-6xl leading-[0.95] tracking-tight text-text">
-            People we've shipped with.
-          </h2>
-          <p className="mt-6 text-lg text-text-muted max-w-2xl leading-relaxed">
-            Honest feedback from teams we've worked with.
-          </p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16" role="list" aria-label="Testimonials">
-          {activeTestimonials.map((testimonial, index) => (
-            <motion.article
-              key={testimonial.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1, duration: 0.5 }}
-              className="py-8 lg:py-12 border-t border-border first:border-0 lg:border-t-0 lg:border-l"
-              role="listitem"
-            >
-              <blockquote className="font-display text-2xl lg:text-3xl leading-[1.1] tracking-tight text-text mb-8">
-                {testimonial.content}
+          {items.map((t, i) => (
+            <figure key={t.id} className="flex-shrink-0 w-full sm:w-[85%] snap-start pr-4" aria-hidden={i !== index}>
+              <blockquote className="border border-border bg-card p-8 lg:p-10">
+                <p className="font-outfit text-2xl lg:text-3xl leading-tight tracking-tight text-text mb-8">
+                  &ldquo;{t.content}&rdquo;
+                </p>
+                <figcaption className="pt-6 border-t border-border">
+                  <p className="font-semibold text-text">{t.clientName}</p>
+                  <p className="text-text-muted text-sm">{t.clientRole} at {t.clientCompany}</p>
+                </figcaption>
               </blockquote>
-
-              <div className="pt-6 border-t border-border">
-                <p className="font-semibold text-text">{testimonial.clientName}</p>
-                <p className="text-text-muted text-sm">{testimonial.clientRole} at {testimonial.clientCompany}</p>
-              </div>
-            </motion.article>
+            </figure>
           ))}
         </div>
+
+        {items.length > 1 && (
+          <div className="flex items-center justify-between gap-4 mt-6">
+            <span className="text-xs uppercase tracking-[0.2em] text-text-muted">{index + 1} / {items.length}</span>
+            <div className="flex gap-2">
+              <button type="button" onClick={() => go(Math.max(0, index - 1))} disabled={index === 0} aria-label="Previous testimonial" className="w-11 h-11 border border-border flex items-center justify-center text-text disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">←</button>
+              <button type="button" onClick={() => go(Math.min(items.length - 1, index + 1))} disabled={index === items.length - 1} aria-label="Next testimonial" className="w-11 h-11 border border-border flex items-center justify-center text-text disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">→</button>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

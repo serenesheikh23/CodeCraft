@@ -15,12 +15,12 @@ import ContactSection from "@/components/Contact";
 interface Section {
   id: string;
   type: string;
-  name: string;
   title: string;
   subtitle: string;
   content: string;
   order: number;
-  isVisible: boolean;
+  name?: string;
+  isVisible?: boolean;
 }
 
 export default async function SectionRenderer({ section }: { section: Section }) {
@@ -66,7 +66,7 @@ export default async function SectionRenderer({ section }: { section: Section })
         where: { isActive: true, featured: true },
         orderBy: { order: "asc" },
       });
-      return <ProjectsList projects={projects as any} />;
+      return <ProjectsList projects={projects as any} title={section.title} subtitle={section.subtitle} />;
     }
     case "testimonials": {
       const testimonials = await prisma.testimonial.findMany({

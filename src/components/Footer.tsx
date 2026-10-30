@@ -23,8 +23,6 @@ export default async function Footer() {
     grouped[link.section].push(link);
   }
 
-  const HIDDEN_SECTIONS = ["Services", "Contact"];
-
   const year = new Date().getFullYear();
 
   const contactLinks: { href: string; label: string; icon: React.ReactNode; external?: boolean }[] = [];
@@ -91,9 +89,9 @@ export default async function Footer() {
     });
   }
 
-  // Also filter out "Contact" label from any visible section
+  // Filter out "Contact" label from visible sections
   const visibleSections = Object.entries(grouped)
-    .filter(([section]) => !HIDDEN_SECTIONS.includes(section))
+    .filter(([section]) => section !== "Services" && section !== "Contact")
     .map(([section, sectionLinks]) => [
       section,
       sectionLinks.filter((link) => link.label !== "Contact"),
@@ -109,7 +107,6 @@ export default async function Footer() {
             <Link href="/" className="inline-flex items-center gap-3 text-text font-bold text-xl mb-6 group">
               <div
                 className="relative w-8 h-8 transition-transform duration-300 group-hover:scale-105"
-                
               >
                 <Image
                   src="/logo.svg"
@@ -168,7 +165,7 @@ export default async function Footer() {
                     <li key={link.id}>
                       <Link
                         href={link.href}
-                        className="text-sm text-text hover:text-lime transition-colors"
+                        className="text-sm text-text hover:text-accent transition-colors"
                       >
                         {link.label}
                       </Link>
