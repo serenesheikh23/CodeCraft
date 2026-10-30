@@ -8,13 +8,13 @@
 
 @layer base {
   :root {
-    --background: 0 0 0;
+    --background: 11 15 20;
     --foreground: 240 244 248;
-    --card: 12 16 27;
+    --card: 20 26 38;
     --border: 30 36 47;
     --accent: 163 230 53;       /* chartreuse — sharp, unexpected accent */
     --accent-foreground: 0 0 0;
-    --muted: 86 94 102;
+    --muted: 139 149 168;
     --subtle: 30 36 47;
     --info: 34 211 238;         /* cyan — secondary */
   }

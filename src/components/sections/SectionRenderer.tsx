@@ -15,12 +15,12 @@ import ContactSection from "@/components/Contact";
 interface Section {
   id: string;
   type: string;
-  name: string;
   title: string;
   subtitle: string;
   content: string;
   order: number;
-  isVisible: boolean;
+  name?: string;
+  isVisible?: boolean;
 }
 
 export default async function SectionRenderer({ section }: { section: Section }) {

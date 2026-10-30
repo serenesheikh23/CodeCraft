@@ -1,5 +1,3 @@
-"use client";
-
 interface StatsSectionProps {
   title: string;
   subtitle: string;
