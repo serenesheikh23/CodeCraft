@@ -1,10 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { ExternalLink, ArrowUpRight } from "lucide-react";
-import { toWebp } from "@/lib/imageUrl";
 
 interface Project {
   id: string;
@@ -17,15 +14,15 @@ interface Project {
   featured: boolean;
 }
 
-const BRAND_BLUE = "#3B82F6";
-
 export default function ProjectsSection({ projects }: { projects: Project[] }) {
   if (!projects || projects.length === 0) {
     return (
-      <section id="projects" className="relative py-16 md:py-24 lg:py-32">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="section-label text-lime mb-4">SELECTED WORK</div>
-          <h2 className="font-display text-5xl sm:text-6xl lg:text-6xl leading-[0.95] tracking-tight text-text mb-6">
+      <section id="projects" className="relative py-12 md:py-16 lg:py-20 bg-background text-text">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-4 font-medium">
+            SELECTED WORK
+          </div>
+          <h2 className="font-outfit text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight text-text mb-6">
             Recent builds.
             <br />
             Live in production.
@@ -36,10 +33,8 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
           <Link
             href="/admin/dashboard/projects/new"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-md font-semibold uppercase tracking-wider text-xs"
-            style={{ backgroundColor: BRAND_BLUE, color: "#F8FAFC" }}
           >
             Add first project
-            <ArrowUpRight className="w-4 h-4" />
           </Link>
         </div>
       </section>
@@ -47,93 +42,91 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
   }
 
   return (
-    <section id="projects" className="relative py-16 md:py-24 lg:py-32 overflow-hidden">
+    <section id="projects" className="relative py-12 md:py-16 lg:py-20 bg-background text-text">
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
-          className="mb-16 lg:mb-24"
-        >
-          <div className="section-label text-lime mb-4">SELECTED WORK</div>
-          <h2 className="font-display text-5xl sm:text-6xl lg:text-6xl leading-[0.95] tracking-tight text-text">
-            Recent builds.
-            <br />
-            Live in production.
-          </h2>
-          <p className="mt-6 text-lg text-text-muted max-w-2xl leading-relaxed">
-            Real projects, real users, real results.
-          </p>
-        </motion.div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-4 font-medium">
+          SELECTED WORK
+        </div>
+
+        <h2 className="font-outfit text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight text-text mb-6">
+          Recent builds.
+          <br />
+          Live in production.
+        </h2>
+
+        <p className="text-lg text-text-muted max-w-2xl mb-8">
+          Real projects, real users, real results.
+        </p>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {projects.map((project, index) => (
-            <motion.article
+            <article
               key={project.id}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="group border border-border overflow-hidden transition-colors duration-300 hover:border-coral/40"
+              className="border border-border rounded-lg overflow-hidden transition-all duration-200 hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-background"
+              tabindex="0"
             >
-              <Link href={`/projects/${project.slug}`} className="block relative aspect-video overflow-hidden bg-card">
+              <Link href={`/projects/${project.slug}`} className="block relative aspect-[4/3] overflow-hidden bg-card">
                 {project.imageUrl ? (
                   <Image
-                    src={toWebp(project.imageUrl)}
+                    src={project.imageUrl.replace(/\.(png|jpe?g)$/i, ".webp")}
                     alt={project.title}
-                    fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
-                    priority={index === 0}
-                    className="object-cover "
+                    className="object-cover w-full h-48 sm:h-56 lg:h-64 transition-opacity duration-300 hover:opacity-90"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-text-muted">
+                  <div className="w-full h-48 sm:h-56 lg:h-64 bg-card-flex items-center justify-center text-text-muted">
                     No image
                   </div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               </Link>
 
-              <div className="p-8">
+              <div className="p-6">
                 <div className="flex items-start justify-between gap-4 mb-4">
                   <Link href={`/projects/${project.slug}`} className="flex-1">
-                    <h3 className="font-display text-2xl lg:text-3xl font-bold text-text group-hover:text-coral transition-colors leading-tight">
+                    <h3 className="font-outfit text-2xl lg:text-3xl font-bold text-text line-clamp-2">
                       {project.title}
                     </h3>
                   </Link>
-                  <Link href={`/projects/${project.slug}`} className="flex-shrink-0 mt-2" aria-label={`View ${project.title}`}>
-                    <ArrowUpRight className="w-6 h-6 text-text-muted group-hover:text-coral transition-colors" />
-                  </Link>
+
+                  <div className="text-right">
+                    <span className="text-xs uppercase tracking-[0.1em] text-text-muted">
+                      {project.feat ? "Featured" : ""}
+                    </span>
+                  </div>
                 </div>
 
-                <p className="text-text-muted text-sm leading-relaxed mb-6 line-clamp-3">
+                <p className="text-text-muted text-sm leading-relaxed line-clamp-3">
                   {project.description}
                 </p>
 
-                <div className="flex items-center gap-5 pt-4 border-t border-border">
+                <div className="flex items-center gap-3 pt-4 border-t border-border">
                   {project.liveUrl && (
                     <a
                       href={project.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-coral transition-colors"
+                      className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-accent transition-colors"
                     >
-                      <ExternalLink className="w-4 h-4" />
                       View live
+                      <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                      </svg>
                     </a>
                   )}
                   <Link
                     href={`/projects/${project.slug}`}
-                    className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-coral transition-colors"
+                    className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-accent transition-colors"
                   >
-                    <ArrowUpRight className="w-4 h-4" />
                     Read case study
+                    <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
                   </Link>
                 </div>
               </div>
-            </motion.article>
+            </article>
           ))}
         </div>
       </div>
