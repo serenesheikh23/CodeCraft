@@ -7,124 +7,118 @@ interface Project {
   slug: string;
   description: string;
   imageUrl: string;
-  techStack: string;
+  techStack: string | null;
   liveUrl: string;
   featured: boolean;
 }
 
-export default function ProjectsSection({ projects }: { projects: Project[] }) {
-  if (!projects || projects.length === 0) {
-    return (
-      <section id="projects" className="relative py-12 md:py-16 lg:py-20 bg-background text-text">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-4 font-medium">
-            SELECTED WORK
-          </div>
-          <h2 className="font-outfit text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight text-text mb-6">
-            Recent builds.
-            <br />
-            Live in production.
-          </h2>
-          <p className="text-lg text-text-muted max-w-2xl mb-12">
-            No projects yet. Add one from the admin panel.
-          </p>
-          <Link
-            href="/admin/dashboard/projects/new"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-md font-semibold uppercase tracking-wider text-xs"
-          >
-            Add first project
-          </Link>
-        </div>
-      </section>
-    );
-  }
+export default function ProjectsSection({
+  projects,
+  title,
+  subtitle,
+}: {
+  projects: Project[];
+  title?: string;
+  subtitle?: string;
+}) {
+  if (!projects || projects.length === 0) return null;
 
   return (
-    <section id="projects" className="relative py-12 md:py-16 lg:py-20 bg-background text-text">
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
-
-        <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-4 font-medium">
-          SELECTED WORK
+    <section
+      id="projects"
+      className="relative py-20 md:py-28 lg:py-36 bg-background text-text"
+      aria-labelledby="projects-heading"
+    >
+      <div className="max-w-[90rem] mx-auto px-6 lg:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16 lg:mb-20">
+          <div className="lg:col-span-6">
+            <div className="text-accent text-xs uppercase tracking-[0.2em] font-medium mb-4">
+              {subtitle || "Selected work"}
+            </div>
+            <h2
+              id="projects-heading"
+              className="font-outfit text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight text-text"
+            >
+              {title || "Recent builds. Live in production."}
+            </h2>
+          </div>
+          <div className="lg:col-span-4 lg:col-start-9 lg:pt-8">
+            <p className="text-lg text-text-muted leading-relaxed">
+              Real projects, real users, real results.
+            </p>
+          </div>
         </div>
 
-        <h2 className="font-outfit text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight text-text mb-6">
-          Recent builds.
-          <br />
-          Live in production.
-        </h2>
+        <div className="border-t border-border">
+          {projects.map((project, i) => {
+            const number = String(i + 1).padStart(2, "0");
+            const hasImage = Boolean(project.imageUrl && project.imageUrl.trim());
+            const isExternal = hasImage && project.imageUrl.startsWith("http");
 
-        <p className="text-lg text-text-muted max-w-2xl mb-8">
-          Real projects, real users, real results.
-        </p>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {projects.map((project, index) => (
-            <article
-              key={project.id}
-              className="border border-border rounded-lg overflow-hidden transition-all duration-200 hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-background"
-            >
-              <Link href={`/projects/${project.slug}`} className="block relative aspect-[4/3] overflow-hidden bg-card">
-                {project.imageUrl ? (
-                  <Image
-                    src={project.imageUrl.replace(/\.(png|jpe?g)$/i, ".webp")}
-                    alt={project.title}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
-                    className="object-cover w-full h-48 sm:h-56 lg:h-64 transition-opacity duration-300 hover:opacity-90"
-                  />
-                ) : (
-                  <div className="w-full h-48 sm:h-56 lg:h-64 bg-card-flex items-center justify-center text-text-muted">
-                    No image
-                  </div>
-                )}
-              </Link>
-
-              <div className="p-6">
-                <div className="flex items-start justify-between gap-4 mb-4">
-                  <Link href={`/projects/${project.slug}`} className="flex-1">
-                    <h3 className="font-outfit text-2xl lg:text-3xl font-bold text-text line-clamp-2">
-                      {project.title}
-                    </h3>
-                  </Link>
-
-                  <div className="text-right">
-                    <span className="text-xs uppercase tracking-[0.1em] text-text-muted">
-                      {project.featured ? "Featured" : ""}
-                    </span>
-                  </div>
-                </div>
-
-                <p className="text-text-muted text-sm leading-relaxed line-clamp-3">
-                  {project.description}
-                </p>
-
-                <div className="flex items-center gap-3 pt-4 border-t border-border">
-                  {project.liveUrl && (
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-accent transition-colors"
-                    >
-                      View live
-                      <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M5 12h14M12 5l7 7-7 7" />
-                      </svg>
-                    </a>
-                  )}
+            return (
+              <article
+                key={project.id}
+                className="border-b border-border py-12 lg:py-16"
+              >
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
                   <Link
                     href={`/projects/${project.slug}`}
-                    className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-accent transition-colors"
+                    className="lg:col-span-7 block relative aspect-[4/3] overflow-hidden bg-card group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    aria-label={`${project.title} — case study`}
                   >
-                    Read case study
-                    <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M5 12h14M12 5l7 7-7 7" />
-                    </svg>
+                    {hasImage ? (
+                      <Image
+                        src={project.imageUrl}
+                        alt={`${project.title} screenshot`}
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 58vw"
+                        unoptimized={isExternal}
+                        className="object-cover transition-transform duration-500 group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 grid place-items-center">
+                        <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-text-muted">
+                          {number} / {project.title}
+                        </span>
+                      </div>
+                    )}
                   </Link>
+
+                  <div className="lg:col-span-5">
+                    <div className="font-mono text-xs text-text-muted mb-3">
+                      {number}
+                    </div>
+                    <h3 className="font-outfit text-3xl sm:text-4xl lg:text-5xl leading-[1.05] tracking-tight text-text mb-4">
+                      {project.title}
+                    </h3>
+                    <p className="text-base text-text-muted leading-relaxed mb-6">
+                      {project.description}
+                    </p>
+                    <div className="flex flex-wrap items-center gap-6">
+                      {project.liveUrl && (
+                        <a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 min-h-[44px] text-sm text-text hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                        >
+                          View live
+                          <span aria-hidden="true">↗</span>
+                        </a>
+                      )}
+                      <Link
+                        href={`/projects/${project.slug}`}
+                        className="inline-flex items-center gap-2 min-h-[44px] text-sm text-text-muted hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                      >
+                        Read case study
+                        <span aria-hidden="true">→</span>
+                      </Link>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>
