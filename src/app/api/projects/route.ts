@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    const techStackArray = techStack.split(",").map((f: string) => f.trim()).filter(Boolean);
+    const techStackArray = (techStack ?? "").split(",").map((f: string) => f.trim()).filter(Boolean);
 
     const project = await prisma.project.create({
       data: {
