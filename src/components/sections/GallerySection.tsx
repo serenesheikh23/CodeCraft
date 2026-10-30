@@ -15,7 +15,6 @@ interface GalleryImage {
 
 export default function GallerySection({ title, subtitle, content }: GallerySectionProps) {
   const images = (content.images as GalleryImage[]) || [];
-
   if (images.length === 0) return null;
 
   return (
@@ -43,7 +42,11 @@ export default function GallerySection({ title, subtitle, content }: GallerySect
           </div>
         )}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" role="list" aria-label="Gallery">
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+          role="list"
+          aria-label="Gallery"
+        >
           {images.map((image, index) => (
             <figure
               key={image.url + index}
@@ -51,13 +54,15 @@ export default function GallerySection({ title, subtitle, content }: GallerySect
               role="listitem"
             >
               <Image
-                src={image.url.replace(/\.(png|jpe?g)$/i, ".webp")}
+                src={image.url}
                 alt={image.caption || `Gallery image ${index + 1}`}
+                width={800}
+                height={600}
                 className="object-cover w-full h-64 sm:h-80 lg:h-96"
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               />
               {image.caption && (
-                <figcaption className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background/90 to-transparent">
+                <figcaption className="absolute bottom-0 left-0 right-0 p-4 bg-background/90">
                   <p className="text-sm text-text-muted">{image.caption}</p>
                 </figcaption>
               )}

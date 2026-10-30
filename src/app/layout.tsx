@@ -6,7 +6,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 
 const outfit = Outfit({
   subsets: ["latin"],
-  weight: "400 500 600 700",
+  weight: "variable",
   display: "swap",
   variable: "--font-outfit",
   fallback: ["system-ui", "sans-serif"],

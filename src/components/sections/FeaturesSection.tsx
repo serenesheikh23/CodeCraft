@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 interface FeaturesSectionProps {
   title: string;
   subtitle: string;
@@ -25,6 +26,7 @@ export default function FeaturesSection({ title, subtitle, content }: FeaturesSe
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         {(title || subtitle) && (
+<>
           <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-4 font-medium">
             {subtitle}
           </div>
@@ -34,7 +36,8 @@ export default function FeaturesSection({ title, subtitle, content }: FeaturesSe
           >
             {title}
           </h2>
-        )}
+</>
+)}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" role="list" aria-label="Features">
           {items.map((item, index) => {

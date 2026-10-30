@@ -65,7 +65,6 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
             <article
               key={project.id}
               className="border border-border rounded-lg overflow-hidden transition-all duration-200 hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-background"
-              tabindex="0"
             >
               <Link href={`/projects/${project.slug}`} className="block relative aspect-[4/3] overflow-hidden bg-card">
                 {project.imageUrl ? (
@@ -92,7 +91,7 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
 
                   <div className="text-right">
                     <span className="text-xs uppercase tracking-[0.1em] text-text-muted">
-                      {project.feat ? "Featured" : ""}
+                      {project.featured ? "Featured" : ""}
                     </span>
                   </div>
                 </div>

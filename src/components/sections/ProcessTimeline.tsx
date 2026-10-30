@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 const steps = [
   { num: "01", title: "Discovery", desc: "We learn how you work, what your users need, and what success looks like." },
   { num: "02", title: "Design", desc: "Wireframes, then high-fidelity mockups. No surprise redesigns mid-build." },

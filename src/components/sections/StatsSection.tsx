@@ -24,6 +24,7 @@ export default function StatsSection({ title, subtitle, content }: StatsSectionP
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         {(title || subtitle) && (
+<>
           <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-4 font-medium">
             {subtitle}
           </div>
@@ -33,7 +34,8 @@ export default function StatsSection({ title, subtitle, content }: StatsSectionP
           >
             {title}
           </h2>
-        )}
+</>
+)}
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-12" role="list" aria-label="Statistics">
           {items.map((item, index) => (

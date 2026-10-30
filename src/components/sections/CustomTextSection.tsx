@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 interface CustomTextSectionProps {
   title: string;
   subtitle: string;
@@ -19,6 +20,7 @@ export default function CustomTextSection({ title, subtitle, content }: CustomTe
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         {(title || subtitle) && (
+<>
           <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-4 font-medium">
             {subtitle}
           </div>
@@ -28,7 +30,8 @@ export default function CustomTextSection({ title, subtitle, content }: CustomTe
           >
             {title}
           </h2>
-        )}
+</>
+)}
 
         <div className="prose prose-in text-text leading-relaxed text-lg lg:text-lg">
           {body}

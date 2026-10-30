@@ -3,225 +3,178 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+
+interface NavLink {
+  id: string;
+  label: string;
+  href: string;
+  order: number;
+  isActive: boolean;
+  isExternal: boolean;
+}
+
+const FALLBACK: NavLink[] = [
+  { id: "1", label: "Work", href: "/#projects", order: 1, isActive: true, isExternal: false },
+  { id: "2", label: "Services", href: "/#services", order: 2, isActive: true, isExternal: false },
+  { id: "3", label: "About", href: "/p/about", order: 3, isActive: true, isExternal: false },
+  { id: "4", label: "Contact", href: "/#contact", order: 4, isActive: true, isExternal: false },
+];
 
 export default function Navbar() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [navLinks, setNavLinks] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [scrollDir, setScrollDir] = useState("up");
+  const lastY = useRef(0);
+  const [links, setLinks] = useState<NavLink[]>(FALLBACK);
 
   useEffect(() => {
-    const fetchNavLinks = async () => {
-      try {
-        const res = await fetch("/api/nav-links");
-        const data = await res.json();
-        if (Array.isArray(data)) {
-          setNavLinks(data.filter((l) => l.isActive).map((l) => ({
-            id: l.id,
-            label: l.label,
-            href: l.href,
-            order: l.order,
-            isActive: l.isActive,
-            isExternal: l.isExternal || l.href.startsWith("http"),
-          })));
-        }
-      } catch (e) {
-        // fallback nav links
-        setNavLinks([
-          { id: "1", label: "Work", href: "/#projects", order: 1, isActive: true, isExternal: false },
-          { id: "2", label: "Services", href: "/#services", order: 2, isActive: true, isExternal: false },
-          { id: "3", label: "About", href: "/p/about", order: 3, isActive: true, isExternal: false },
-          { id: "4", label: "Contact", href: "/#contact", order: 4, isActive: true, isExternal: false },
-        ]);
-      }
-    };
-
-    fetchNavLinks();
-
-    // Sticky bottom CTA logic
-    let timeoutId: NodeJS.Timeout;
-    const handleScroll = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        const y = window.scrollY;
-        setIsScrolled(y > 20);
-      }, 15);
-    };
-    handleScroll();
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    fetch("/api/nav-links")
+      .then((r) => r.json())
+      .then((data) => {
+        if (!Array.isArray(data) || data.length === 0) return;
+        setLinks(
+          data
+            .filter((l: { isActive?: boolean }) => l.isActive !== false)
+            .map((l: { id: string; label: string; href: string; order?: number; isExternal?: boolean }) => ({
+              id: l.id,
+              label: l.label,
+              href: l.href,
+              order: l.order ?? 0,
+              isActive: true,
+              isExternal: Boolean(l.isExternal || l.href?.startsWith("http")),
+            }))
+        );
+      })
+      .catch(() => {});
   }, []);
 
-  const isExternal = (link) => link.isExternal || link.href.startsWith("http");
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (Math.abs(y - lastY.current) < 6) return;
+      setScrollDir(y > lastY.current ? "down" : "up");
+      setScrolled(y > 120);
+      lastY.current = y;
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
-  const renderLink = (link) => {
-    const href = link.href.startsWith("#") ? `/${link.href}` : link.href;
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
 
-    if (isExternal(link)) {
-      return (
-        <a
-          key={link.id}
-          href={link.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-text-muted hover:text-accent transition-colors text-sm font-medium"
-        >
-          {link.label}
-        </a>
-      );
-    }
-
-    return (
-      <Link
-        key={link.id}
-        href={href}
-        className="group text-text-muted hover:text-text transition-colors text-sm font-medium"
-      >
-        {link.label}
-      </Link>
-    );
-  };
+  const close = () => setOpen(false);
+  const showBar = scrolled && scrollDir === "up" && !open;
 
   return (
     <>
-      {/* Compact fixed top bar — never blurs, no gradient */}
       <header
-        className={cn(
-          "fixed top-0 left-0 right-0 z-50 border-b border-border bg-card/70 backdrop-none transition-none",
-          isScrolled && "bg-card/80"
-        )}
+        className={`fixed top-0 left-0 right-0 z-50 border-b transition-colors duration-200 ${
+          scrolled ? "bg-card border-border" : "bg-background border-transparent"
+        }`}
       >
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Main navigation">
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Main">
           <div className="flex items-center justify-between h-14">
-
-            {/* Logo — simple, no gradient, no animation */}
-            <Link href="/" className="flex items-center gap-2">
-              <div className="relative w-8 h-8">
-                <Image
-                  src="/logo.svg"
-                  alt="Code Craft"
-                  className="object-contain w-full h-full"
-                  sizes="32px"
-                />
-              </div>
-              <span className="text-sm font-bold text-tracking-wider">Code Craft</span>
+            <Link href="/" className="flex items-center gap-2 min-h-[44px]" onClick={close}>
+              <Image src="/logo.svg" alt="" width={32} height={32} className="w-8 h-8 object-contain" />
+              <span className="text-sm font-bold tracking-wide text-text">Code Craft</span>
             </Link>
 
-            {/* Desktop links */}
-            <div className="hidden lg:flex lg:items-center lg:gap-4">
-              {navLinks.map((link) => renderLink(link))}
+            <div className="hidden lg:flex lg:items-center lg:gap-6">
+              {links.map((l) =>
+                l.isExternal ? (
+                  <a key={l.id} href={l.href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center min-h-[44px] text-sm text-text-muted hover:text-text transition-colors">
+                    {l.label}
+                  </a>
+                ) : (
+                  <Link key={l.id} href={l.href} className="inline-flex items-center min-h-[44px] text-sm text-text-muted hover:text-text transition-colors">
+                    {l.label}
+                  </Link>
+                )
+              )}
+              <Link href="/#contact" className="inline-flex items-center justify-center min-h-[44px] px-4 bg-accent text-accent-foreground text-xs font-semibold uppercase tracking-wider hover:bg-accent/90 transition-colors">
+                Start a project
+              </Link>
             </div>
 
-            {/* Mobile menu button */}
             <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 rounded-lg text-text hover:text-text hover:bg-card-hover transition-colors"
-              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+              type="button"
+              onClick={() => setOpen((v) => !v)}
+              className="lg:hidden inline-flex items-center justify-center w-11 h-11 text-text"
+              aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
+              aria-controls="mobile-menu"
             >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {open ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
             </button>
           </div>
         </nav>
       </header>
 
-      {/* Mobile menu sheet — slide in from right, no motion library }} */
+      {open && (
+        <div
+          id="mobile-menu"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Mobile navigation"
+          className="lg:hidden fixed inset-0 z-[60] bg-background overflow-y-auto"
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14 border-b border-border">
+            <Link href="/" className="flex items-center gap-2 min-h-[44px]" onClick={close}>
+              <Image src="/logo.svg" alt="" width={32} height={32} className="w-8 h-8 object-contain" />
+              <span className="text-sm font-bold tracking-wide text-text">Code Craft</span>
+            </Link>
+            <button type="button" onClick={close} aria-label="Close menu" className="inline-flex items-center justify-center w-11 h-11 text-text">
+              <X size={22} aria-hidden="true" />
+            </button>
+          </div>
+          <nav className="px-4 py-6" aria-label="Mobile">
+            <ul className="flex flex-col">
+              {links.map((l) => (
+                <li key={l.id}>
+                  {l.isExternal ? (
+                    <a href={l.href} target="_blank" rel="noopener noreferrer" onClick={close} className="flex items-center min-h-[52px] px-2 text-base text-text border-b border-border">
+                      {l.label}
+                    </a>
+                  ) : (
+                    <Link href={l.href} onClick={close} className="flex items-center min-h-[52px] px-2 text-base text-text border-b border-border">
+                      {l.label}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+            <Link href="/#contact" onClick={close} className="mt-6 flex items-center justify-center min-h-[48px] px-4 bg-accent text-accent-foreground text-xs font-semibold uppercase tracking-wider">
+              Start a project
+            </Link>
+          </nav>
+        </div>
+      )}
+
       <div
-        className={cn(
-          "lg:hidden fixed right-0 top-0 bottom-0 z-40 overflow-y-auto padding-8 pt-16 transition-transform",
-          isMobileMenuOpen ? "transform translateX(0)" : "transform translateX(100%)",
-          "duration-300"
-        )}
-        aria-label="Mobile navigation"
+        aria-hidden={!showBar}
+        className={`fixed bottom-0 left-0 right-0 z-30 lg:hidden bg-card border-t border-border px-4 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] transition-transform duration-200 ${
+          showBar ? "translate-y-0" : "translate-y-full"
+        }`}
       >
-        <div className="flex items-center justify-between pb-8 border-b border-border mb-6">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="relative w-8 h-8">
-              <Image
-                src="/logo.svg"
-                alt="Code Craft"
-                className="object-contain w-full h-full"
-                sizes="32px"
-              />
-            </div>
-            <span className="text-sm font-bold">Code Craft</span>
+        <div className="flex items-center gap-2">
+          <Link href="/#contact" className="flex-1 inline-flex items-center justify-center min-h-[44px] bg-accent text-accent-foreground text-xs font-semibold uppercase tracking-wider">
+            Start a project
           </Link>
-          <button
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="p-2 rounded-lg text-text-muted hover:text-text hover:bg-card-hover transition-colors"
-            aria-label="Close menu"
-          >
-            <X size={24} />
-          </button>
-        </div>
-
-        <div className="space-y-4">
-          {navLinks.map((link) => {
-            const href = link.href.startsWith("#") ? `/${link.href}` : link.href;
-
-            if (isExternal(link)) {
-              return (
-                <a
-                  key={link.id}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full px-4 py-3.5 text-text-muted hover:text-text hover:bg-card-border transition-colors text-base font-medium"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {link.label}
-                </a>
-              );
-            }
-
-            return (
-              <Link
-                key={link.id}
-                href={href}
-                className="block w-full px-4 py-3.5 text-text-muted hover:text-text hover:bg-card-border transition-all text-base font-medium"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
-        </div>
-
-        {/* Bottom CTA in mobile menu */}
-        <div className="pt-8 border-t border-border flex flex-col sm:flex-row gap-3 sm:gap-6">
-          <a
-            href="/#contact"
-            className="flex-1 bg-accent text-accent-foreground py-3 rounded-md font-medium uppercase tracking-wider text-xs text-center"
-          >
-            Start a project
-          </a>
-          <a
-            href="mailto:serenesheikh23@gmail.com"
-            className="flex-1 bg-background py-3 rounded-md font-medium uppercase tracking-wider text-xs text-center border border-border"
-          >
-            Contact
-          </a>
-        </div>
-      </div>
-
-      {/* Sticky bottom CTA bar — desktop only, hides on scroll down }} */
-      <div
-        className={cn(
-          "sticky bottom-0 left-0 right-0 z-40 py-3 px-4 sm:px-6 lg:hidden hidden bg-card border-t border-border transition-all duration-300",
-          isScrolled ? "transform translateY(0) opacity-100" : "transform translateY(40px) opacity-0",
-          isScrolled ? "" : "transition-height"
-        )}
-      >
-        <div className="flex items-center justify-between gap-4">
-          <a
-            href="/#contact"
-            className="flex items-center gap-2 bg-accent text-accent-foreground py-2 px-4 rounded-md font-medium uppercase tracking-wider text-xs"
-          >
-            Start a project
-          </a>
-          <a
-            href="mailto:serenesheikh23@gmail.com"
-            className="text-text-muted hover:text-accent transition-colors text-sm font-medium"
-          >
+          <a href="mailto:serenesheikh23@gmail.com" className="inline-flex items-center justify-center min-h-[44px] px-4 border border-border text-text-muted text-xs font-medium">
             Contact
           </a>
         </div>

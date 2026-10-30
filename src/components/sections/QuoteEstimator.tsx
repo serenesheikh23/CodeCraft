@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Check, ArrowRight } from "lucide-react";
-import Image from "next/image";
 import { formatPrice } from "@/lib/utils";
 
 interface Service {
@@ -29,30 +28,32 @@ interface BaseType {
   id: string;
   label: string;
   description: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
   matchNames: string[];
 }
+
+const BaseIcon: React.ComponentType<{ className?: string; style?: React.CSSProperties }> = () => null;
 
 const BASE_TYPES: BaseType[] = [
   {
     id: "web",
     label: "Website",
     description: "A web app, landing page, or full website",
-    icon: Image,
+    icon: BaseIcon,
     matchNames: ["landing page", "business website", "custom web app", "e-commerce platform"],
   },
   {
     id: "app",
     label: "Mobile App",
     description: "iOS, Android, or cross-platform app",
-    icon: Image,
+    icon: BaseIcon,
     matchNames: ["starter app", "full app"],
   },
   {
     id: "both",
     label: "Both",
     description: "Web + mobile app + shared backend",
-    icon: Image,
+    icon: BaseIcon,
     matchNames: ["app + backend combo", "full solution bundle"],
   },
 ];
@@ -121,11 +122,6 @@ export default function QuoteEstimator({
     setSelectedAddons([]);
   };
 
-  const baseIconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-    web: Image,
-    app: Image,
-    both: Image,
-  };
 
   return (
     <section className="relative py-12 md:py-16 lg:py-20 bg-background text-text">

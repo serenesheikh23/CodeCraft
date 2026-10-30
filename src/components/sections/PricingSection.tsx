@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 interface PricingPlan {
@@ -31,6 +32,7 @@ export default function PricingSection({ title, subtitle, content }: PricingSect
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         {(title || subtitle) && (
+<>
           <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-4 font-medium">
             {subtitle}
           </div>
@@ -40,7 +42,8 @@ export default function PricingSection({ title, subtitle, content }: PricingSect
           >
             {title}
           </h2>
-        )}
+</>
+)}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {plans.map((plan, index) => {
