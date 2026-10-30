@@ -1,5 +1,6 @@
 "use client";
 
+import { parseCrop } from "@/lib/crop";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -161,7 +162,7 @@ export default function ProjectsPage() {
                         {project.imageUrl ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
-                            src={project.imageUrl}
+                            src={parseCrop(project.imageUrl).url}
                             alt={project.title}
                             className="w-10 h-10 rounded object-cover border border-border flex-shrink-0"
                           />
