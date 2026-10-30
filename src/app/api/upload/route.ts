@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import { existsSync } from "fs";
-import path from "path";
+import { put } from "@vercel/blob";
 import sharp from "sharp";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
-const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_SIZE = 5 * 1024 * 1024;
 
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT_MAX = 10;
@@ -33,6 +31,15 @@ function isRateLimited(ip: string): boolean {
 
 export async function POST(request: Request) {
   try {
+    const token = process.env.BLOB_READ_WRITE_TOKEN;
+    if (!token) {
+      console.error("BLOB_READ_WRITE_TOKEN is not set");
+      return NextResponse.json(
+        { error: "Upload storage is not configured. Set BLOB_READ_WRITE_TOKEN." },
+        { status: 500 }
+      );
+    }
+
     const ip = getClientIp(request);
     if (isRateLimited(ip)) {
       return NextResponse.json(
@@ -49,38 +56,47 @@ export async function POST(request: Request) {
     }
 
     if (!ALLOWED_TYPES.includes(file.type)) {
-      return NextResponse.json({ error: "Invalid file type. Allowed: JPEG, PNG, WebP, GIF" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid file type. Allowed: JPEG, PNG, WebP, GIF" },
+        { status: 400 }
+      );
     }
 
     if (file.size > MAX_SIZE) {
-      return NextResponse.json({ error: "File too large. Maximum size: 5MB" }, { status: 400 });
-    }
-
-    const uploadDir = path.join(process.cwd(), "public", "uploads");
-    if (!existsSync(uploadDir)) {
-      await mkdir(uploadDir, { recursive: true });
+      return NextResponse.json(
+        { error: "File too large. Maximum size: 5MB" },
+        { status: 400 }
+      );
     }
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // GIFs (animated) skip conversion — sharp only keeps first frame
+    // GIFs skip sharp — sharp only keeps the first frame of an animation.
     if (file.type === "image/gif") {
-      const filename = `${crypto.randomUUID()}.gif`;
-      await writeFile(path.join(uploadDir, filename), buffer);
-      return NextResponse.json({ url: `/uploads/${filename}` });
+      const filename = `uploads/${crypto.randomUUID()}.gif`;
+      const blob = await put(filename, buffer, {
+        access: "public",
+        contentType: "image/gif",
+        token,
+      });
+      return NextResponse.json({ url: blob.url });
     }
 
-    // Convert to WebP, cap width at 1600px
+    // Convert to WebP, cap width at 1600px.
     const webpBuffer = await sharp(buffer)
       .resize(1600, null, { withoutEnlargement: true })
       .webp({ quality: 80 })
       .toBuffer();
 
-    const filename = `${crypto.randomUUID()}.webp`;
-    await writeFile(path.join(uploadDir, filename), webpBuffer);
+    const filename = `uploads/${crypto.randomUUID()}.webp`;
+    const blob = await put(filename, webpBuffer, {
+      access: "public",
+      contentType: "image/webp",
+      token,
+    });
 
-    return NextResponse.json({ url: `/uploads/${filename}` });
+    return NextResponse.json({ url: blob.url });
   } catch (error) {
     console.error("Error uploading file:", error);
     return NextResponse.json({ error: "Failed to upload file" }, { status: 500 });

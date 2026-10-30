@@ -19,6 +19,7 @@
     "@libsql/client": "^0.8.1",
     "@prisma/adapter-libsql": "^6.15.0",
     "@prisma/client": "^6.15.0",
+    "@vercel/blob": "^2.8.2",
     "bcryptjs": "^2.4.3",
     "clsx": "^2.1.1",
     "framer-motion": "^11.3.28",
