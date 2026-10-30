@@ -48,7 +48,7 @@ export default function FeaturesSection({ title, subtitle, content }: FeaturesSe
             return (
               <article
                 key={item.title + index}
-                className="border border-border p-5 rounded-lg transition-all duration-200 hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-background hover:bg-accent/5"
+                className="border border-border p-5 rounded-none transition-all duration-200 hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-background hover:bg-accent/5"
                 role="listitem"
               >
                 {svgIcon ? (
@@ -61,7 +61,7 @@ export default function FeaturesSection({ title, subtitle, content }: FeaturesSe
                     <path d={iconMap[item.icon] || ""} />
                   </svg>
                 ) : (
-                  <div className="w-6 h-6 rounded-md bg-accent/10 flex items-center justify-center mb-4">
+                  <div className="w-6 h-6 rounded-none bg-accent/10 flex items-center justify-center mb-4">
                     <svg className="w-3 h-3 text-accent" aria-hidden="true" />
                   </div>
                 )}

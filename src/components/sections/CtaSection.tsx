@@ -28,7 +28,7 @@ export default function CtaSection({
           <div className="mt-8">
             <Link
               href={content.buttonHref || "/#contact"}
-              className="inline-flex items-center gap-2 px-8 py-3 rounded-md font-medium uppercase tracking-wider text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background bg-accent text-accent-foreground hover:bg-accent/90"
+              className="inline-flex items-center gap-2 px-8 py-3 rounded-none font-medium uppercase tracking-wider text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background bg-accent text-accent-foreground hover:bg-accent/90"
             >
               {content.buttonLabel || "Start a project"}
               <svg

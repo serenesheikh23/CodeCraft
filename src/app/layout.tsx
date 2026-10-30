@@ -1,4 +1,4 @@
-import { Geist, Outfit, Instrument_Serif } from "next/font/google";
+import { Geist, Outfit } from "next/font/google";
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { Providers } from "@/components/Providers";
@@ -6,11 +6,10 @@ import ScrollToTop from "@/components/ScrollToTop";
 
 const outfit = Outfit({ subsets: ["latin"], weight: "variable", display: "swap", variable: "--font-outfit", fallback: ["system-ui", "sans-serif"] });
 const geistSans = Geist({ subsets: ["latin"], display: "swap", variable: "--font-geist-sans", fallback: ["system-ui", "sans-serif"] });
-const instrumentSerif = Instrument_Serif({ subsets: ["latin"], weight: "400", display: "swap", variable: "--font-serif", fallback: ["Georgia", "Times New Roman", "serif"] });
-
 const baseUrl = process.env.NEXTAUTH_URL ?? "https://codecraft.pxxlspace.cv";
 
 export const metadata: Metadata = {
+  icons: { icon: "/logo-mark.svg" },
   metadataBase: new URL(baseUrl),
   title: { default: "Code Craft | Ideas in. Products out.", template: "%s" },
   description: "Building ideas into digital products. Websites, apps and full systems.",
@@ -40,8 +39,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${outfit.variable} ${geistSans.variable} ${instrumentSerif.variable} scroll-smooth`}>
+    <html lang="en" className={`${outfit.variable} ${geistSans.variable} scroll-smooth`}>
       <body className="bg-background text-text antialiased font-body">
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-accent focus:text-accent-foreground focus:text-xs focus:font-semibold focus:uppercase focus:tracking-[0.15em]">
+          Skip to content
+        </a>
         <ScrollToTop />
         <Providers>{children}</Providers>
       </body>

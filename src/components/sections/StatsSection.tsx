@@ -39,7 +39,7 @@ export default function StatsSection({ title, subtitle, content }: StatsSectionP
           {items.map((item, index) => (
             <div
               key={item.label + index}
-              className="text-center rounded-lg p-6 border border-border hover:border-accent transition-all duration-200"
+              className="text-center rounded-none p-6 border border-border hover:border-accent transition-all duration-200"
             >
               <div className="font-outfit text-6xl lg:text-7xl font-bold text-text mb-3">{item.value}</div>
               <div className="text-text-muted text-xs uppercase tracking-[0.2em] font-medium">{item.label}</div>

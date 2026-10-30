@@ -48,7 +48,7 @@ export default function GallerySection({ title, subtitle, content }: GallerySect
           {images.map((image, index) => (
             <figure
               key={image.url + index}
-              className="relative rounded-lg overflow-hidden bg-card"
+              className="relative rounded-none overflow-hidden bg-card"
               role="listitem"
             >
               <Image

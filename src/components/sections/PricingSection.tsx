@@ -51,7 +51,7 @@ export default function PricingSection({ title, subtitle, content }: PricingSect
               <article
                 key={plan.name}
                 className={cn(
-                  "border border-border rounded-lg p-6 transition-all duration-200",
+                  "border border-border rounded-none p-6 transition-all duration-200",
                   isFeatured
                     ? "border-accent bg-accent/5"
                     : "hover:border-accent hover:bg-accent/5"
@@ -81,7 +81,7 @@ export default function PricingSection({ title, subtitle, content }: PricingSect
 
                 <Link
                   href={plan.ctaHref}
-                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md font-medium uppercase tracking-wider text-xs transition-colors"
+                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-none font-medium uppercase tracking-wider text-xs transition-colors"
                   style={{
                     backgroundColor: isFeatured ? "transparent" : "var(--accent)",
                     color: isFeatured ? "var(--text)" : "var(--accent-foreground)",
