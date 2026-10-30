@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { parseCrop } from "@/lib/crop";
 
 interface Project {
   id: string;
@@ -51,15 +52,13 @@ export default function ProjectsSection({
 
         <div className="border-t border-border">
           {projects.map((project, i) => {
+            const crop = parseCrop(project.imageUrl);
+            const hasImage = Boolean(crop.url);
+            const isExternal = crop.url.startsWith("http");
             const number = String(i + 1).padStart(2, "0");
-            const hasImage = Boolean(project.imageUrl && project.imageUrl.trim());
-            const isExternal = hasImage && project.imageUrl.startsWith("http");
 
             return (
-              <article
-                key={project.id}
-                className="border-b border-border py-12 lg:py-16"
-              >
+              <article key={project.id} className="border-b border-border py-12 lg:py-16">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
                   <Link
                     href={`/projects/${project.slug}`}
@@ -68,12 +67,16 @@ export default function ProjectsSection({
                   >
                     {hasImage ? (
                       <Image
-                        src={project.imageUrl}
+                        src={crop.url}
                         alt={`${project.title} screenshot`}
                         fill
                         sizes="(max-width: 1024px) 100vw, 58vw"
                         unoptimized={isExternal}
-                        className="object-cover transition-transform duration-500 group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                        className="object-cover transition-opacity duration-300 group-hover:opacity-95 motion-reduce:transition-none"
+                        style={{
+                          objectPosition: `${crop.x}% ${crop.y}%`,
+                          transform: crop.zoom !== 1 ? `scale(${crop.zoom})` : undefined,
+                        }}
                       />
                     ) : (
                       <div className="absolute inset-0 grid place-items-center">
@@ -85,9 +88,7 @@ export default function ProjectsSection({
                   </Link>
 
                   <div className="lg:col-span-5">
-                    <div className="font-mono text-xs text-text-muted mb-3">
-                      {number}
-                    </div>
+                    <div className="font-mono text-xs text-text-muted mb-3">{number}</div>
                     <h3 className="font-outfit text-3xl sm:text-4xl lg:text-5xl leading-[1.05] tracking-tight text-text mb-4">
                       {project.title}
                     </h3>
