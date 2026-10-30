@@ -15,10 +15,7 @@ interface Service {
   isActive: boolean;
 }
 
-const formatPrice = (min: number, max: number) =>
-  min === max
-    ? `$${min.toLocaleString()}`
-    : `$${min.toLocaleString()}–$${max.toLocaleString()}`;
+const HOME_LIMIT = 3;
 
 function parseFeatures(raw: string | string[]): string[] {
   if (Array.isArray(raw)) return raw;
@@ -30,11 +27,20 @@ function parseFeatures(raw: string | string[]): string[] {
   }
 }
 
-export default function ServicesSection({ services }: { services: Service[] }) {
+export default function ServicesSection({
+  services,
+  showAll = false,
+}: {
+  services: Service[];
+  showAll?: boolean;
+}) {
   const active = services.filter((s) => s.isActive);
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
 
   if (active.length === 0) return null;
+
+  const visible = showAll ? active : active.slice(0, HOME_LIMIT);
+  const hasMore = !showAll && active.length > HOME_LIMIT;
 
   const toggle = (id: string) =>
     setExpanded((prev) => {
@@ -47,78 +53,94 @@ export default function ServicesSection({ services }: { services: Service[] }) {
   return (
     <section
       id="services"
-      className="relative py-12 md:py-16 lg:py-20 bg-background text-text"
+      className="relative py-20 md:py-28 lg:py-36 bg-background text-text border-t border-border"
       aria-labelledby="services-heading"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
-        <div className="text-xs uppercase tracking-[0.2em] text-text-muted mb-4 font-medium">
-          What we do
+      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16 lg:mb-20">
+          <div className="lg:col-span-5">
+            <div className="text-accent text-xs uppercase tracking-[0.2em] font-medium mb-4">
+              What we do
+            </div>
+            <h2
+              id="services-heading"
+              className="font-outfit text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight text-text"
+            >
+              We build things
+              <br />
+              that actually ship.
+            </h2>
+          </div>
+          <div className="lg:col-span-6 lg:col-start-7 lg:pt-8">
+            <p className="text-lg text-text-muted leading-relaxed">
+              From landing pages to full-stack applications — production-ready code, delivered on time.
+            </p>
+          </div>
         </div>
-        <h2
-          id="services-heading"
-          className="font-outfit text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight text-text mb-8"
-        >
-          We build things
-          <br />
-          that actually ship.
-        </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {active.map((service) => {
+        <div className="border-t border-border">
+          {visible.map((service, i) => {
             const isOpen = expanded.has(service.id);
             const features = parseFeatures(service.features);
+            const number = String(i + 1).padStart(2, "0");
 
             return (
-              <article
-                key={service.id}
-                className="border border-border p-6 transition-colors"
-                style={{ borderColor: isOpen ? "var(--accent)" : undefined }}
-              >
-                <h3 className="font-outfit text-xl font-semibold text-text leading-snug mb-3">
-                  {service.name}
-                </h3>
-                <p className="text-text-muted text-sm leading-relaxed mb-4">
-                  {service.description}
-                </p>
-
+              <article key={service.id} className="border-b border-border">
                 <button
                   type="button"
                   onClick={() => toggle(service.id)}
                   aria-expanded={isOpen}
-                  aria-controls={`service-panel-${service.id}`}
-                  className="inline-flex items-center gap-2 min-h-[44px] text-xs uppercase tracking-[0.15em] text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  aria-controls={`service-${service.id}`}
+                  className="group w-full text-left min-h-[44px] py-8 lg:py-10 grid grid-cols-[auto_1fr_auto] gap-4 lg:gap-8 items-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                 >
-                  {isOpen ? "Hide details" : "View features & pricing"}
-                  <span aria-hidden="true">{isOpen ? "−" : "+"}</span>
+                  <span className="font-mono text-xs text-text-muted pt-2 lg:pt-3">
+                    {number}
+                  </span>
+                  <div>
+                    <h3 className="font-outfit text-2xl sm:text-3xl lg:text-4xl text-text leading-tight group-hover:text-accent transition-colors">
+                      {service.name}
+                    </h3>
+                    <p className="mt-3 text-text-muted text-base leading-relaxed max-w-2xl">
+                      {service.description}
+                    </p>
+                  </div>
+                  <span
+                    aria-hidden="true"
+                    className="font-outfit text-3xl text-text-muted pt-1 group-hover:text-accent transition-colors"
+                  >
+                    {isOpen ? "−" : "+"}
+                  </span>
                 </button>
 
                 <div
-                  id={`service-panel-${service.id}`}
+                  id={`service-${service.id}`}
                   hidden={!isOpen}
-                  className="mt-4 pt-4 border-t border-border"
+                  className="pb-8 lg:pb-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8"
                 >
-                  {features.length > 0 && (
-                    <ul className="space-y-2 mb-4 text-sm text-text-muted">
-                      {features.map((feature) => (
-                        <li key={feature} className="flex items-start gap-2">
-                          <span
-                            aria-hidden="true"
-                            className="w-1 h-1 rounded-full bg-accent flex-shrink-0 mt-2"
-                          />
-                          <span>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="font-outfit text-lg text-accent">
-                      {formatPrice(service.minPrice, service.maxPrice)}
-                    </span>
+                  <div className="lg:col-span-4 lg:col-start-2">
+                    {features.length > 0 && (
+                      <ul className="space-y-2 text-sm text-text-muted">
+                        {features.map((f) => (
+                          <li key={f} className="flex items-start gap-3">
+                            <span aria-hidden="true" className="w-1 h-1 rounded-full bg-accent flex-shrink-0 mt-2" />
+                            <span>{f}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                  <div className="lg:col-span-6 lg:col-start-7 flex flex-col gap-4">
+                    <div className="flex items-baseline gap-3">
+                      <span className="font-outfit text-2xl text-accent">
+                        ${service.minPrice.toLocaleString()}–${service.maxPrice.toLocaleString()}
+                      </span>
+                      <span className="text-xs uppercase tracking-[0.2em] text-text-muted">USD</span>
+                    </div>
                     <Link
                       href="/#contact"
-                      className="inline-flex items-center justify-center min-h-[44px] px-4 bg-accent text-accent-foreground text-xs font-semibold uppercase tracking-wider hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                      className="inline-flex items-center gap-2 text-sm text-text hover:text-accent transition-colors underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                     >
-                      Discuss a project
+                      Discuss a project →
                     </Link>
                   </div>
                 </div>
@@ -126,6 +148,18 @@ export default function ServicesSection({ services }: { services: Service[] }) {
             );
           })}
         </div>
+
+        {hasMore && (
+          <div className="mt-12 flex justify-start">
+            <Link
+              href="/services"
+              className="inline-flex items-center gap-3 min-h-[48px] px-6 border border-border text-text text-xs font-semibold uppercase tracking-[0.2em] hover:border-accent hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              See all {active.length} services
+              <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );
