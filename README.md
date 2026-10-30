@@ -10,20 +10,24 @@ Next.js 15 · React 19 · TypeScript · Prisma · Turso · NextAuth.js · Tailwi
 
 ## Lighthouse
 
-**Measured before the current redesign. Not re-measured against the current `main`.** Treat these as the pre-redesign baseline until a fresh run is done.
+Measured on PageSpeed Insights (Lighthouse 13.6.0) against the current `main` deployment, mobile, Moto G Power emulation, Slow 4G throttling.
 
-| | Mobile | Desktop |
-|---|---|---|
-| **Performance** | **98** | **99** |
-| **Accessibility** | **97** | 93 |
-| **Best Practices** | **100** | **100** |
-| **SEO** | **100** | **100** |
+| | Mobile |
+|---|---|
+| **Performance** | **100** |
+| **Accessibility** | **100** |
+| **Best Practices** | **100** |
+| **SEO** | **100** |
+| Agentic Browsing | 2/2 |
 
-Pre-redesign: mobile LCP **2.4s** · TBT **30ms** · CLS **0**. That LCP was achieved by converting 20+ PNGs to WebP (avg 78% smaller) and adding `priority` to the first above-the-fold image.
+Mobile FCP **0.8s** · LCP **0.8s** · TBT **0ms** · CLS **0**.
 
-The redesign changed the public surface substantially (new palette, new section renderers, new fonts, `/services` and `/projects` routes, drag-to-crop uploader). Re-run Lighthouse before quoting these numbers anywhere.
+Mobile LCP history: **5.3s → 2.4s** (pre-redesign, via WebP conversion and `priority` on the hero image) → **0.8s** (current, after removing the quote estimator and stack diagram from the homepage and server-izing ten section renderers).
+
+Desktop scores were not re-measured after the redesign.
 
 ---
+
 ## By the numbers
 
 | | |
@@ -54,6 +58,7 @@ Agency marketing site with a fully self-service admin CMS. Editors log in at `/a
 The public site renders sections dynamically from the database — adding a "Pricing" section in the admin panel makes it appear on the homepage without a redeploy.
 
 ---
+
 ## Technical highlights
 
 - **Full-stack TypeScript** — type-safe contracts between Prisma schema, API handlers, and React components
@@ -91,6 +96,7 @@ prisma/
 **Deployment:** Vercel (edge functions + static pages) · Turso (libSQL) · Vercel Blob (image storage) · Resend (transactional email).
 
 ---
+
 ## Tech stack
 
 | Layer | Tools |
@@ -98,7 +104,7 @@ prisma/
 | **Language** | TypeScript |
 | **Framework** | Next.js 15 (App Router), React 19 |
 | **Styling** | Tailwind CSS, Lucide React |
-| **Animation** | Framer Motion — **admin forms only**; no public page imports it |
+| **Animation** | Framer Motion — admin forms only; no public page imports it |
 | **Database** | SQLite via Prisma 6, hosted on Turso (libSQL) |
 | **Auth** | NextAuth.js (Credentials + bcrypt) |
 | **Email** | Resend |
@@ -145,6 +151,7 @@ npm run build
 Generates **40 static pages**. Shared First Load JS: **103 kB**. `/` First Load JS: **118 kB**.
 
 ---
+
 ## Notes
 
 - **Upload endpoint writes to Vercel Blob** (not `public/uploads`). `public/uploads` is read-only on Vercel; the previous `fs.writeFile` pipeline failed in production.
@@ -154,6 +161,7 @@ Generates **40 static pages**. Shared First Load JS: **103 kB**. `/` First Load 
 - **`report-*.json` and `lighthouse-report*.json` are gitignored** — Lighthouse artifacts do not belong in the repo.
 
 ---
+
 ## Design system
 
 The public site uses a charcoal ground with a single chartreuse signal. Tokens live in `:root` in `src/app/globals.css`; `tailwind.config.ts` maps them via `rgb(var(--token) / <alpha-value>)`.
