@@ -221,7 +221,7 @@ export default function NewProjectPage() {
               value={formData.imageUrl}
               onChange={(url) => setFormData({ ...formData, imageUrl: url })}
               label="Hero Image"
-              aspectRatio="video"
+              aspectRatio="photo"
             />
           </div>
 

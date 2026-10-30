@@ -164,7 +164,7 @@ export default function EditProjectPage() {
 
         <div>
           <label className={labelCls}>Hero Image (homepage card)</label>
-          <ImageUpload value={imageUrl} onChange={setImageUrl} label="" aspectRatio="video" />
+          <ImageUpload value={imageUrl} onChange={setImageUrl} label="" aspectRatio="photo" />
         </div>
 
         <div>

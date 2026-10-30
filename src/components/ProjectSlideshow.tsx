@@ -48,7 +48,7 @@ export default function ProjectSlideshow({ images, title }: Props) {
         {images.map((src, i) => (
           <div
             key={`${src}-${i}`}
-            className="relative flex-shrink-0 w-full snap-start aspect-video bg-card border border-border"
+            className="relative flex-shrink-0 w-full snap-start aspect-[16/10] bg-card border border-border"
             aria-hidden={i !== index}
           >
             <Image
