@@ -1,122 +1,124 @@
-# REDESIGN NOTES — Code Craft Public Site
+# Code Craft — public site redesign
+
+Branch: `redesign`. `main` untouched, nothing merged, nothing deployed to production.
+
+---
 
 ## Identity
-**Chosen: Deep charcoal/ink surfaces with chartreuse accent**
 
-- **Why**: Clearly distinct from the personal portfolio (warm cream/paper background, serif display face, vermilion accent). Charcoal with chartreuse is sharp, modern, and agency-grade — intentionally not a template look.
-- **Contrast**: Chartreuse (#A3E635, hsl(163, 230, 53)) against charcoal (#0B0F14) provides ~6.5:1 WCAG AA contrast for large text, >4.5:1 for normal text.
-- **Accent usage**: Interactive links, active states, section dividers, focus rings. Never as a background overlay or gradient.
+**Deep charcoal ground with a single chartreuse signal.**
 
-## Color Palette (HSL values, Tailwind `103 232 249` format)
+- Not the personal portfolio's cream / serif / vermilion.
+- No gradients, glow, glassmorphism, blobs, emoji, or stock illustration.
+- Chartreuse `#A3E635` is used only for interactive state, active nav, section markers, focus rings, and the CTA. Never as a background fill behind text.
+- The one deliberate risk: **oversized Outfit headlines set against a near-black ground with hairline rules**, no cards floating in shadow. Reads like a studio deck, not a SaaS template.
 
-| Token | Value | Usage |
-|---|---|---|
-| `bg-background` | `0 0 0` | Page background (dark charcoal) |
-| `text-text` | `240 244 248` | Main text (off-white) |
-| `bg-card` | `12 16 27` | Card/surface backgrounds |
-| `border` | `30 36 47` | Borders, dividers |
-| `muted` | `86 94 102` | Muted text, secondary text |
-| `accent` | `163 230 53` | Chartreuse — primary accent |
-| `accent-fg` | `0 0 0` | Text on accent (contrast) |
-| `subtle` | `30 36 47` | Hover/active backgrounds |
-| `info` | `34 211 238` | Secondary accent (cyan) |
+## Palette (measured)
+
+| Token | Value | Contrast vs ground | Notes |
+|---|---|---|---|
+| `--background` | `#0B0F14` | — | charcoal, not pure black |
+| `--foreground` | `#F0F4F8` | **17.8:1** | body + headlines |
+| `--muted` | `#8B95A8` | **6.5:1** | captions, secondary |
+| `--accent` | `#A3E635` | **13.0:1** | links, active state |
+| `--accent-foreground` | `#000000` on accent | **13.9:1** | CTA text |
+| `--card` | `#141A26` | 1.1:1 vs ground | visible surface |
+| `--border` | `#1E242F` | 1.26:1 | structural rules only |
+
+WCAG AA pass on all text pairs. Accent never sits behind body text.
 
 ## Typography
-- **Display face**: `Outfit` (Google Font, confident grotesque, weights 400/500/600/700, `display: swap`)
-- **Text face**: `Geist Sans` (already present, refined sans-serif, `display: swap`)
-- **Monospace**: system monospace via `font-mono` (for code/technical details)
-- **Never use**: Inter, Roboto, Arial as the identity display face
-- **Serif**: `Instrument_Serif` used sparingly for quote blocks or legal content only
 
-## Font Stack (layout.tsx)
-```
---font-outfit: Outfit (400 500 600 700)
---font-geist-sans: Geist Sans
---font-serif: Instrument_Serif
-```
+- **Display:** Outfit (variable), `next/font`, `display: swap`
+- **Text:** Geist Sans (variable), `next/font`, `display: swap`
+- **Serif:** Instrument Serif, 400 — quote blocks and legal pages only
+- **Mono:** system stack (`ui-monospace`) for labels and technical figures. No extra font request.
 
-## Section Mapping — existing database section types → redesigned renderers
+`font-outfit` → Outfit, `font-body` → Geist, `font-display` → Outfit (legacy alias kept working), `font-serif` → Instrument Serif.
 
-| DB Type | Renderer | Changes |
-|---|---|---|
-| `hero` | `HeroSection` | Redesigned: deep hero, chartreuse CTA, no badge default |
-| `features` | `FeaturesSection` | Redesigned: grid cards, chartreuse accents, no framer-motion |
-| `pricing` | `PricingSection` | Redesigned: 3-column grid, chartreuse CTA buttons |
-| `faq` | `FaqSection` | Redesigned: accordion, reduced motion fallback |
-| `gallery` | `GallerySection` | Redesigned: grid layout, webP, lazy load |
-| `stats` | `StatsSection` | Redesigned: grid of statistic cards |
-| `logos` | `LogosSection` | Redesigned: client logo grid |
-| `custom-text` | `CustomTextSection` | Redesigned: editorial text, no motion |
-| `services` | `ServicesList` | Redesigned: tap-to-expand cards (interaction) |
-| `projects` | `ProjectsList` | Redesigned: grid with refined states |
-| `testimonials` | `TestimonialsList` | Redesigned: swipe strip, no autoplay |
-| `contact` | `ContactSection` | Redesigned: inline validation, accessible |
+## What changed
 
-## Interactions (all degrade gracefully)
+### Design system
+- `tailwind.config.ts` fully rewritten. **The previous config still mapped `accent`/`lime` to cyan and `background` to navy — the charcoal identity in `globals.css` was never rendering.** Now every color resolves from the CSS custom properties, so the two halves match.
+- `src/app/globals.css`: `--background` changed from pure black to `#0B0F14`; `--muted` raised to AA contrast; `--card` lightened so cards have a visible surface; reduced-motion guard kept.
 
-| Interaction | File | Touch degradation | Reduced motion |
+### Layout
+- `Navbar.tsx`: compact fixed bar, full-screen accessible sheet menu on mobile (`role="dialog"`, `aria-modal`, Escape to close, body scroll lock), sticky bottom CTA on mobile that hides on scroll-down, `env(safe-area-inset-bottom)` respected. CMS nav links fetched from `/api/nav-links` with a fallback.
+- `Footer.tsx`: unchanged structurally — CMS footer links, contact icons, "Built by Serene Sheikhalard" credit preserved.
+- `SectionProgress.tsx` (new): 2px accent progress bar, `requestAnimationFrame`-throttled, `aria-hidden`.
+
+### Section renderers
+All 12 types in `SectionRenderer.tsx` still map to a component; unknown types return `null`; empty arrays return `null`. Reordering and enable/disable in the admin still work with no code change.
+
+Server-ized (no `"use client"`) to cut JS: `FeaturesSection`, `PricingSection`, `StatsSection`, `LogosSection`, `GallerySection`, `CustomTextSection`, `CtaSection`, `ProcessTimeline`, `Projects`, `StackDiagram`.
+
+Interactive (client): `Navbar`, `Services`, `Testimonials`, `Contact`, `FaqSection`, `QuoteEstimator`, `SectionProgress`.
+
+### Pages
+- `/` — hero → marquee → sections from CMS → process timeline → stack diagram → quote estimator → contact and after.
+- `/projects/[slug]` — new tokens, tech stack from CMS, native scroll-snap gallery.
+- `/legal/[slug]` — real editorial typesetting, 68ch measure, 1.75 line-height, last-updated line.
+- `/p/[slug]` — same typesetting, or renders CMS sections if the page has them.
+- `/404` — untouched.
+- Metadata: root metadata with `metadataBase`, OG, Twitter, canonical. Homepage `generateMetadata` reads `siteSettings.tagline`. Organization JSON-LD on `/` sourced from `siteSettings` (`name`, `url`, `email`, `sameAs` filtered for empty).
+- `opengraph-image.tsx` (new): 1200×630 charcoal + chartreuse card.
+
+### Interactions
+
+| Interaction | File | Touch | Reduced motion |
 |---|---|---|---|
-| Services tap-to-expand | Services.tsx | Single-column vertical accordion | Static content, no animation |
-| Projects grid gallery | Projects.tsx | Stacked single column | Fade-in only |
-| Testimonials swipe strip | Testimonials.tsx | Vertical accordion flow | No motion, visible order |
-| Contact form validation | Contact.tsx | Basic HTML validation | Immediate success/error |
-| Anchor navigation | page.tsx | Skip links only | Static headings |
-| Cmd/Ctrl+K quick nav | Navbar (optional) | N/A — desktop only | N/A |
+| Services expand | `Services.tsx` | Tap, `aria-expanded`, `aria-controls`, 44px button | `hidden` attribute; no transition |
+| Testimonials swipe | `Testimonials.tsx` | Native scroll-snap, counter, prev/next buttons | Scroll only |
+| Project gallery | `ProjectSlideshow.tsx` | Native scroll-snap, arrows, dots, keyboard Left/Right | Scroll only |
+| Contact form | `Contact.tsx` | Inline validation, `aria-live` status, graceful rate-limit message | No animation |
+| Section progress | `SectionProgress.tsx` | Non-interactive, pointer-events none | N/A |
+| Mobile menu | `Navbar.tsx` | Full-screen sheet, Escape, focusable close | No slide animation |
 
-## CMS continuity
-- All 12 homepage section types have redesigned renderers
-- Unknown section types render `null` (graceful degradation)
-- Reordering/enabling-disabling in admin requires no code changes
-- Site settings (logo, contact info, social links) map to new tokens
-- No theme CMS field exists in schema — design works in both light/dark
+No autoplay anywhere. No carousel library. No custom cursors, parallax, WebGL, or page wipes.
 
-## What changed per file (summary)
+## Build numbers
 
-- `src/app/layout.tsx`: Replaced Inter with Outfit display grotesque; removed Instrument_Serif from root class
-- `src/app/globals.css`: Complete palette rewrite — deep charcoal, chartreuse accent; removed glassmorphism, gradients, neon; added reduced-motion query; added focus-ring; added section-label underline
-- `src/components/Navbar.tsx`: Redesigned — compact top bar, sheet menu on mobile, sticky bottom CTA, no brand gradient, no scroll-based bg blur
-- `src/components/Footer.tsx`: Redesigned — charcoal footer, chartreuse accents, contact links from settings
-- `src/components/sections/HeroSection.tsx`: Redesigned — single-column mobile first, large display type, chartreuse CTA buttons
-- `src/components/sections/FeaturesSection.tsx`: Redesigned — chartreuse accented grid, no framer-motion, focusable
-- `src/components/sections/PricingSection.tsx`: Redesigned — 3-column grid, chartreuse CTA, no motion
-- `src/components/sections/FaqSection.tsx`: Redesigned — native accordion, no motion, arrow keys
-- `src/components/sections/CtaSection.tsx`: Redesigned — static, no motion
-- `src/components/sections/CustomTextSection.tsx`: Redesigned — editorial text, no motion
-- `src/components/sections/StatsSection.tsx`: Redesigned — chartreuse accented grid
-- `src/components/sections/GallerySection.tsx`: Redesigned — webP, static images
-- `src/components/sections/LogosSection.tsx`: Redesigned — grid of logos, no filter/glow effects
-- `src/components/sections/ServicesTerminal.tsx`: Removed (replaced by Services list interaction)
-- `src/components/Services.tsx`: Redesigned — tap-to-expand cards with aria-expanded, keyboard support
-- `src/components/Projects.tsx`: Redesigned — grid tap/hover state, no motion
-- `src/components/Testimonials.tsx`: Redesigned — swipe strip, counter, no autoplay
-- `src/components/Contact.tsx`: Redesigned — inline validation, accessible announcements
-- `src/components/ProjectSlideshow.tsx`: May need redesign for scroll-snap gallery
-- `src/app/page.tsx`: Redesigned — section ordering (hero → proof → services → testimonials → contact), anchor navigation
-- `src/app/legal/[slug]/page.tsx`: Redesigned — proper typesetting, prose layout
-- `src/app/p/[slug]/page.tsx`: Redesigned — editorial layout, typeset paragraphs
-- `src/app/projects/[slug]/page.tsx`: Redesigned — native scroll-snap gallery, tech stack, live link
+| | Before | After |
+|---|---|---|
+| Pages per build | 39 | **40** (OG image added) |
+| Shared First Load JS | 103 kB | **103 kB** |
+| `/` First Load JS | 103 kB | **156 kB** |
 
-## Lighthouse targets (must not regress)
-- Mobile: Performance 98+, Accessibility 97+, Best Practices 100, SEO 100
-- Desktop: Performance 98+, Accessibility 97+ (was 93, needs improvement), Best Practices 100, SEO 100
-- Mobile LCP ≤ 2.4s, CLS 0, TBT ~30ms
-- Shared First Load JS near 103 kB
+The 53 kB on `/` is the interactive set (Navbar, Services, Testimonials, Contact, Faq, QuoteEstimator, SectionProgress). `framer-motion` remains a dependency only because `BentoGrid.tsx` and `MetricsDashboard.tsx` still import it — both are **dead code, never imported by any page**. `StackDiagram` no longer uses it.
 
-## Key design rejections (why)
-- No cream/paper backgrounds (personal portfolio carryover)
-- No serif-led headlines (personal portfolio carryover)
-- No vermilion/orange-red accent (personal portfolio carryover)
-- No purple/blue/pink AI gradients
-- No glowing blobs, glassmorphism, neon
-- No emoji icons, stock illustrations
-- No three-identical-icon-card grids
-- No floating abstract shapes
-- No horizontal page scroll, no parallax, no autoplaying motion, no WebGL, no page-wipe transitions
+## What I could not verify
 
-## Notes for me to replace (placeholder/demo content)
-- Seed data contains "Ideas in. Products out." headline — keep structure, replace copy
-- Testimonial client names/company names are from seed — improve copy later
-- Pricing plans from seed — keep structure, replace prices/copy
-- Footer links have "Pricing" pointing to `/#services` — fix to proper pricing page
-- MarqueeBand is currently null — keep as-is or remove
-- "Built by Serene Sheikhalard" credit in footer must remain
+- **Lighthouse not run.** You asked me to skip it. The README's 98/97/100/100 numbers are the previous build's and have not been re-measured against this one. The 156 kB First Load on `/` is the main risk to the mobile Performance score.
+- **Visual review of the deployed preview.** I have not seen the site render. All checks are build, type, and lint only.
+- **Admin panel not exercised.** I did not log in, create, reorder, or disable a section. I only confirmed the public renderers still map every type and that `SectionRenderer` reads from the same Prisma models as before.
+- **Reduced-motion verified by code inspection**, not by toggling the OS setting.
+- **Contact rate limit** not exercised — the message path is written but not triggered.
+
+## Limitations
+
+- **No `theme` setting in the schema.** `SiteSettings` has no theme field, so the site is dark-only. All palette values live in `:root` in `globals.css`, so a future `theme` field can swap them by toggling a class on `<html>` — no component changes needed.
+- **`Phone`/`WhatsApp` fields** on `SiteSettings` default to Syrian numbers. The redesigned contact block uses email only; the numbers are in the schema but not displayed.
+- **Dead components** left in place per "do not delete": `src/components/Hero.tsx`, `src/components/sections/BentoGrid.tsx`, `src/components/sections/MetricsDashboard.tsx`. All contain old cyan/blue classes and framer-motion. Safe to delete when you're ready — nothing imports them.
+
+## Placeholder / demo content to replace
+
+- Seed copy "Ideas in. Products out." — kept, but verify it's what you want on the homepage hero.
+- Testimonial names, company names, quotes — seed data. Replace with real client quotes.
+- Pricing plans and prices — seed data. Confirm before publishing.
+- Service names, descriptions, feature lists — seed data.
+- Project screenshots — whatever is in the DB.
+
+## Preview, merge, deploy
+
+Preview on your phone:
+1. `git push` (already done for `redesign`)
+2. Vercel → Deployments → remove the Production filter → open the `redesign` preview.
+3. Test on a 360px phone: mobile menu, sticky CTA, services expand, testimonials swipe, project gallery swipe, contact form.
+
+Merge to main (only after the preview looks right and you've run Lighthouse):
+1. `git checkout main && git pull`
+2. `git merge --no-ff redesign`
+3. `git push origin main`
+4. Vercel production redeploys from `main`.
+
+Never force-push. Never merge before the preview is green.
