@@ -1,24 +1,20 @@
 import type { Metadata } from "next";
-import nextDynamic from "next/dynamic";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SectionRenderer from "@/components/sections/SectionRenderer";
 import SectionProgress from "@/components/SectionProgress";
 import MarqueeBand from "@/components/sections/MarqueeBand";
 import ProcessTimeline from "@/components/sections/ProcessTimeline";
-import StackDiagram from "@/components/sections/StackDiagram";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-const QuoteEstimator = nextDynamic(() => import("@/components/sections/QuoteEstimator"), {
-  loading: () => <div className="py-20" aria-hidden="true" />,
-});
-
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await prisma.siteSettings.findUnique({ where: { id: "singleton" } });
   const title = "Code Craft | Ideas in. Products out.";
-  const description = settings?.tagline ?? "Building ideas into digital products. Websites, apps and full systems.";
+  const description =
+    settings?.tagline ??
+    "Building ideas into digital products. Websites, apps and full systems.";
   return {
     title,
     description,
@@ -28,20 +24,17 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 async function getHomepageSections() {
-  return prisma.homepageSection.findMany({ where: { isVisible: true }, orderBy: { order: "asc" } });
+  return prisma.homepageSection.findMany({
+    where: { isVisible: true },
+    orderBy: { order: "asc" },
+  });
 }
 
 export default async function HomePage() {
-  const [sections, services, addons, settings] = await Promise.all([
+  const [sections, settings] = await Promise.all([
     getHomepageSections(),
-    prisma.service.findMany({ where: { isActive: true }, orderBy: { order: "asc" } }),
-    prisma.addOn.findMany({ where: { isActive: true }, orderBy: { order: "asc" } }),
     prisma.siteSettings.findUnique({ where: { id: "singleton" } }),
   ]);
-
-  const contactIndex = sections.findIndex((s) => s.type === "contact");
-  const beforeContact = contactIndex >= 0 ? sections.slice(0, contactIndex) : sections;
-  const contactAndAfter = contactIndex >= 0 ? sections.slice(contactIndex) : [];
 
   const baseUrl = process.env.NEXTAUTH_URL ?? "https://codecraft.pxxlspace.cv";
   const jsonLd = {
@@ -63,18 +56,11 @@ export default async function HomePage() {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        {beforeContact.map((section, i) => (
+        {sections.map((section, i) => (
           <div key={section.id}>
             <SectionRenderer section={section} />
             {i === 0 && <MarqueeBand />}
             {section.type === "services" && <ProcessTimeline />}
-            {section.type === "projects" && <StackDiagram />}
-          </div>
-        ))}
-        <QuoteEstimator services={services} addons={addons} />
-        {contactAndAfter.map((section) => (
-          <div key={section.id}>
-            <SectionRenderer section={section} />
           </div>
         ))}
       </main>
