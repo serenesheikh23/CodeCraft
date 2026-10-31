@@ -2,7 +2,7 @@
 
 **A production-grade digital agency website with a full admin CMS.**
 
-**Live:** [codeeecrafttt.vercel.app](https://codeeecrafttt.vercel.app)
+**Live:** [codecraftdigitalstudio.vercel.app](https://codecraftdigitalstudio.vercel.app) *(formerly codeeecrafttt.vercel.app)*
 
 Next.js 15 · React 19 · TypeScript · Prisma · Turso · NextAuth.js · Tailwind · Vitest · Vercel · Vercel Blob
 
