@@ -117,7 +117,7 @@ export default function ServicesSection({
                   hidden={!isOpen}
                   className="pb-8 lg:pb-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8"
                 >
-                  <div className="lg:col-span-4 lg:col-start-2">
+                  <div className="lg:col-span-8 lg:col-start-2">
                     {features.length > 0 && (
                       <ul className="space-y-2 text-sm text-text-muted">
                         {features.map((f) => (
@@ -128,15 +128,6 @@ export default function ServicesSection({
                         ))}
                       </ul>
                     )}
-                  </div>
-                  <div className="lg:col-span-6 lg:col-start-7 flex flex-col gap-4">
-                    {/* The price block has been deleted from here */}
-                    <Link
-                      href="/#contact"
-                      className="inline-flex items-center gap-2 text-sm text-text hover:text-accent transition-colors underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                    >
-                      Discuss a project →
-                    </Link>
                   </div>
                 </div>
               </article>
