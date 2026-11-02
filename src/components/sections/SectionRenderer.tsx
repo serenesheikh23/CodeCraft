@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { NeedsPicker } from "../interactive/NeedsPicker";
+import NeedsPicker from "../interactive/NeedsPicker";
 import HeroSection from "./HeroSection";
 import FeaturesSection from "./FeaturesSection";
 import PricingSection from "./PricingSection";
