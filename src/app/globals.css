@@ -1,5 +1,5 @@
 /* ============================================
-   DEEP CHARCOAL IDENTITY — Code Craft Agency
+   COBALT ON COOL WHITE — Code Craft Agency (v2 Direction A)
    ============================================ */
 
 @tailwind base;
@@ -8,19 +8,33 @@
 
 @layer base {
   :root {
-    --background: 11 15 20;
-    --foreground: 240 244 248;
-    --card: 20 26 38;
-    --border: 30 36 47;
-    --accent: 163 230 53;       /* chartreuse — sharp, unexpected accent */
-    --accent-foreground: 0 0 0;
-    --muted: 139 149 168;
-    --subtle: 30 36 47;
-    --info: 34 211 238;         /* cyan — secondary */
+    --background: 238 240 244;         /* #EEF0F4  page ground */
+    --surface: 255 255 255;            /* #FFFFFF  cards, panels, inputs, admin sidebar */
+    --foreground: 15 23 32;            /* #0F1720  text */
+    --muted: 85 96 111;                /* #55606F  secondary text */
+    --border: 213 217 224;             /* #D5D9E0  decorative 1px rules only */
+    --border-strong: 120 130 143;      /* #78828F  inputs, checkboxes, secondary buttons, control outlines (3:1+ on white & ground) */
+    --primary: 43 69 255;              /* #2B45FF  buttons, links, focus, wordmark dot */
+    --primary-hover: 30 52 224;        /* #1E34E0 */
+    --primary-active: 24 43 192;       /* #182BC0 */
+    --primary-tint: 227 231 255;       /* #E3E7FF  selected backgrounds, active admin nav */
+    --primary-foreground: 255 255 255; /* white text on primary */
+    --success: 26 127 75;              /* #1A7F4B */
+    --warning: 180 83 9;               /* #B45309 */
+    --danger: 198 40 40;               /* #C62828 */
+
+    /* Legacy aliases — keep working until all usages are migrated */
+    --card: 255 255 255;               /* -> surface */
+    --accent: 43 69 255;               /* -> primary */
+    --accent-foreground: 255 255 255;  /* -> primary-foreground */
+    --subtle: 213 217 224;             /* -> border */
+    --info: 43 69 255;                 /* -> primary */
+    --lime: 43 69 255;                 /* -> primary */
   }
 
   html {
     scroll-behavior: smooth;
+    color-scheme: light;
   }
 
   body {
@@ -29,7 +43,7 @@
   }
 
   ::selection {
-    @apply bg-accent/20 text-text;
+    @apply bg-primary/20 text-text;
   }
 
   ::-webkit-scrollbar {
@@ -46,7 +60,7 @@
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-accent/50;
+    @apply bg-primary/50;
   }
 
   ::-webkit-scrollbar-corner {
@@ -71,13 +85,13 @@
     content: "";
     width: 1.5rem;
     height: 1px;
-    background: var(--accent);
+    background: var(--primary);
     display: block;
   }
 
-  /* Focus ring — accent color for focus */
+  /* Focus ring — cobalt for focus on all interactive elements */
   .focus-ring:focus-visible {
-    @apply outline-none ring-2 ring-accent ring-offset-background;
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
   }
 
   /* Badge style */
@@ -89,13 +103,13 @@
     text-transform: uppercase;
     padding: 2px 8px;
     border-radius: 4px;
-    color: var(--accent-foreground);
-    background: var(--accent);
+    color: var(--primary-foreground);
+    background: var(--primary);
   }
 
-  /* Card */
+  /* Card / panel */
   .card {
-    @apply bg-card border border-border;
+    @apply bg-surface border border-border rounded-[4px];
   }
 
   /* Link */
@@ -105,7 +119,7 @@
   }
 
   .link-inherit:hover {
-    color: var(--accent);
+    color: var(--primary);
   }
 
   /* Prose — for legal/custom page editorial content */
@@ -128,7 +142,7 @@
   }
 
   .prose a {
-    @apply text-accent underline-offset-4 transition-colors;
+    @apply text-primary underline-offset-4 transition-colors;
   }
 
   .prose strong {
@@ -141,11 +155,11 @@
   }
 
   .prose blockquote {
-    @apply border-l-4 border-accent pl-6 italic text-text/90;
+    @apply border-l-4 border-primary pl-6 italic text-text/90;
   }
 
   .prose img {
-    @apply max-w-full h-auto rounded-lg border-border;
+    @apply max-w-full h-auto rounded-[4px] border-border;
   }
 }
 
@@ -161,7 +175,7 @@
 }
 
 /* ============================================
-   AMBIENT MARKER — subtle indicator for interactive elements
+   TOUCH/POINTER MEDIA QUERIES
    ============================================ */
 
 @media (pointer: coarse) and (hover: none) {
