@@ -124,7 +124,7 @@ export default function ImageUpload({ value, onChange, label, aspectRatio }: Ima
             <button
               type="button"
               onClick={() => onChange("")}
-              className="absolute top-2 right-2 w-8 h-8 rounded-full bg-red-500/90 text-white flex items-center justify-center hover:bg-red-500 transition-colors"
+              className="absolute top-2 right-2 w-8 h-8 rounded-full bg-red-500/90 text-text flex items-center justify-center hover:bg-red-500 transition-colors"
               aria-label="Remove image"
             >
               <X className="w-4 h-4" />
