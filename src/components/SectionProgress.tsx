@@ -26,7 +26,7 @@ export default function SectionProgress() {
 
   return (
     <div aria-hidden="true" className="fixed top-0 left-0 right-0 z-[55] h-[2px] bg-transparent pointer-events-none">
-      <div className="h-full bg-accent origin-left" style={{ transform: `scaleX(${progress})` }} />
+      <div className="h-full bg-primary origin-left" style={{ transform: `scaleX(${progress})` }} />
     </div>
   );
 }

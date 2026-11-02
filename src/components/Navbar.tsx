@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
@@ -83,30 +82,31 @@ export default function Navbar() {
     <>
       <header
         className={`fixed top-0 left-0 right-0 z-50 border-b transition-colors duration-200 ${
-          scrolled ? "bg-card border-border" : "bg-background border-transparent"
+          scrolled ? "bg-surface border-border" : "bg-background border-transparent"
         }`}
       >
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Main">
           <div className="flex items-center justify-between h-14">
-            <Link href="/" className="flex items-center gap-2 min-h-[44px]" onClick={close}>
-              <Image src="/logo-mark.svg" alt="" width={32} height={32} className="w-7 h-7 object-contain" />
-              <span className="font-outfit text-base font-semibold tracking-tight text-text">Code Craft</span>
+            <Link href="/" className="flex items-center gap-1 min-h-[44px] focus-ring" onClick={close}>
+              <span className="font-display text-xl font-extrabold tracking-[-0.04em] text-text">
+                codecraft<span className="text-primary">.</span>
+              </span>
             </Link>
 
             <div className="hidden lg:flex lg:items-center lg:gap-6">
               {links.map((l) =>
                 l.isExternal ? (
-                  <a key={l.id} href={l.href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center min-h-[44px] text-sm text-text-muted hover:text-text transition-colors">
+                  <a key={l.id} href={l.href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center min-h-[44px] text-sm text-text-muted hover:text-primary transition-colors">
                     {l.label}
                   </a>
                 ) : (
-                  <Link key={l.id} href={l.href} className="inline-flex items-center min-h-[44px] text-sm text-text-muted hover:text-text transition-colors">
+                  <Link key={l.id} href={l.href} className="inline-flex items-center min-h-[44px] text-sm text-text-muted hover:text-primary transition-colors">
                     {l.label}
                   </Link>
                 )
               )}
-              <Link href="/#contact" className="inline-flex items-center justify-center min-h-[44px] px-4 bg-accent text-accent-foreground text-xs font-semibold uppercase tracking-wider hover:bg-accent/90 transition-colors">
-                Start a project
+              <Link href="/#contact" className="inline-flex items-center justify-center min-h-[44px] px-4 bg-primary text-primary-foreground text-xs font-semibold uppercase tracking-wider hover:bg-primary-hover transition-colors focus-ring">
+                Book a call
               </Link>
             </div>
 
@@ -133,9 +133,10 @@ export default function Navbar() {
           className="lg:hidden fixed inset-0 z-[60] bg-background overflow-y-auto"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14 border-b border-border">
-            <Link href="/" className="flex items-center gap-2 min-h-[44px]" onClick={close}>
-              <Image src="/logo-mark.svg" alt="" width={32} height={32} className="w-7 h-7 object-contain" />
-              <span className="font-outfit text-base font-semibold tracking-tight text-text">Code Craft</span>
+            <Link href="/" className="flex items-center gap-1 min-h-[44px] focus-ring" onClick={close}>
+              <span className="font-display text-xl font-extrabold tracking-[-0.04em] text-text">
+                codecraft<span className="text-primary">.</span>
+              </span>
             </Link>
             <button type="button" onClick={close} aria-label="Close menu" className="inline-flex items-center justify-center w-11 h-11 text-text">
               <X size={22} aria-hidden="true" />
@@ -157,8 +158,8 @@ export default function Navbar() {
                 </li>
               ))}
             </ul>
-            <Link href="/#contact" onClick={close} className="mt-6 flex items-center justify-center min-h-[48px] px-4 bg-accent text-accent-foreground text-xs font-semibold uppercase tracking-wider">
-              Start a project
+            <Link href="/#contact" onClick={close} className="mt-6 flex items-center justify-center min-h-[48px] px-4 bg-primary text-primary-foreground text-xs font-semibold uppercase tracking-wider focus-ring">
+              Book a call
             </Link>
           </nav>
         </div>
@@ -167,13 +168,13 @@ export default function Navbar() {
       <div
         aria-hidden={!showBar}
         inert={!showBar}
-        className={`fixed bottom-0 left-0 right-0 z-30 lg:hidden bg-card border-t border-border px-4 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] transition-transform duration-200 ${
+        className={`fixed bottom-0 left-0 right-0 z-30 lg:hidden bg-surface border-t border-border px-4 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] transition-transform duration-200 ${
           showBar ? "translate-y-0" : "translate-y-full"
         }`}
       >
         <div className="flex items-center gap-2">
-          <Link href="/#contact" className="flex-1 inline-flex items-center justify-center min-h-[44px] bg-accent text-accent-foreground text-xs font-semibold uppercase tracking-wider">
-            Start a project
+          <Link href="/#contact" className="flex-1 inline-flex items-center justify-center min-h-[44px] bg-primary text-primary-foreground text-xs font-semibold uppercase tracking-wider hover:bg-primary-hover focus-ring">
+            Book a call
           </Link>
           <a href="mailto:serenesheikh23@gmail.com" className="inline-flex items-center justify-center min-h-[44px] px-4 border border-border text-text-muted text-xs font-medium">
             Contact

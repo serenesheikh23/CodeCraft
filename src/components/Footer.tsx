@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import {
@@ -99,14 +98,15 @@ export default async function Footer() {
     .filter(([, sectionLinks]) => sectionLinks.length > 0);
 
   return (
-    <footer className="relative bg-card border-t border-border">
+    <footer className="relative bg-surface border-t border-border">
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-16 lg:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           {/* Brand + contact icons */}
           <div>
-            <Link href="/" className="inline-flex items-center gap-2.5 text-text mb-6 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
-              <Image src="/logo-mark.svg" alt="" width={32} height={32} className="w-7 h-7 object-contain" />
-              <span className="font-outfit text-xl font-semibold tracking-tight">Code Craft</span>
+            <Link href="/" className="inline-flex items-center gap-1.5 text-text mb-6 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-ring">
+              <span className="font-display text-xl font-extrabold tracking-[-0.04em] text-text">
+                codecraft<span className="text-primary">.</span>
+              </span>
             </Link>
             <p className="text-text-muted text-sm leading-relaxed max-w-xs mb-8">
               Building ideas into digital products.
@@ -155,7 +155,7 @@ export default async function Footer() {
                     <li key={link.id}>
                       <Link
                         href={link.href}
-                        className="text-sm text-text hover:text-accent transition-colors"
+                        className="text-sm text-primary hover:text-primary transition-colors"
                       >
                         {link.label}
                       </Link>
