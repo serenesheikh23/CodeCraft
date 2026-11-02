@@ -68,7 +68,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             >
               <Image src="/logo-mark.svg" alt="" width={32} height={32} className="w-8 h-8 object-contain" />
             </div>
-            <span className="font-outfit text-base font-semibold tracking-tight text-text">Code Craft</span>
+            <span className="font-outfit text-base font-semibold tracking-tight text-text"><span className="font-display font-extrabold tracking-[-0.04em] text-text">codecraft<span className="text-primary">.</span></span></span>
           </Link>
           <button
             onClick={() => setSidebarOpen(false)}

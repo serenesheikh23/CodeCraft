@@ -40,8 +40,12 @@ export default async function SectionRenderer({ section }: { section: Section })
 
   switch (section.type) {
     case "hero":
-      return <HeroSection {...sharedProps} />
-        <NeedsPicker />;
+      return (
+      <>
+        <HeroSection {...sharedProps} />
+        <NeedsPicker />
+      </>
+    );
     case "features":
       return <FeaturesSection {...sharedProps} />;
     case "pricing":
