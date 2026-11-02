@@ -1,40 +1,35 @@
-import { ImageResponse } from "next/og";
+import { ImageResponse } from 'next/og';
 
-export const alt = "Code Craft — Ideas in. Products out.";
+export const runtime = 'edge';
+export const alt = 'Code Craft | Websites for small businesses';
 export const size = { width: 1200, height: 630 };
-export const contentType = "image/png";
+export const contentType = 'image/png';
 
 export default async function Image() {
   return new ImageResponse(
     (
       <div
         style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          width: "100%",
-          height: "100%",
-          padding: "64px",
-          background: "#0B0F14",
-          color: "#F0F4F8",
-          fontFamily: "sans-serif",
+          background: '#EEF0F4',
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          justifyContent: 'center',
+          padding: '80px',
         }}
       >
-        <div style={{ display: "flex", justifyContent: "space-between", fontFamily: "monospace", fontSize: 18, letterSpacing: 2, textTransform: "uppercase", color: "#A3E635" }}>
-          <span>Code Craft</span>
-          <span>Digital studio</span>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '40px' }}>
+          <span style={{ fontSize: '64px', fontWeight: 800, fontFamily: 'sans-serif', color: '#0F1720', letterSpacing: '-0.04em' }}>
+            codecraft<span style={{ color: '#2B45FF' }}>.</span>
+          </span>
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-          <div style={{ display: "flex", fontSize: 96, lineHeight: 0.95, letterSpacing: -4 }}>
-            Ideas in.
-          </div>
-          <div style={{ display: "flex", fontSize: 96, lineHeight: 0.95, letterSpacing: -4, color: "#A3E635" }}>
-            Products out.
-          </div>
+        <div style={{ fontSize: '72px', fontWeight: 800, fontFamily: 'sans-serif', color: '#0F1720', lineHeight: 1.1, letterSpacing: '-0.03em', maxWidth: '900px' }}>
+          Websites for small businesses that need customers.
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between", paddingTop: 20, borderTop: "1px solid #1E242F", fontFamily: "monospace", fontSize: 18, color: "#5A6266" }}>
-          <span>Websites · Apps · Systems</span>
-          <span>codecraft</span>
+        <div style={{ marginTop: '60px', background: '#2B45FF', color: '#fff', padding: '16px 32px', borderRadius: '4px', fontSize: '24px', fontWeight: 500, fontFamily: 'sans-serif' }}>
+          Book a free call
         </div>
       </div>
     ),

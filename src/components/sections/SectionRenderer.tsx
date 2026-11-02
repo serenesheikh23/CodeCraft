@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { NeedsPicker } from "../interactive/NeedsPicker";
 import HeroSection from "./HeroSection";
 import FeaturesSection from "./FeaturesSection";
 import PricingSection from "./PricingSection";
@@ -39,7 +40,8 @@ export default async function SectionRenderer({ section }: { section: Section })
 
   switch (section.type) {
     case "hero":
-      return <HeroSection {...sharedProps} />;
+      return <HeroSection {...sharedProps} />
+        <NeedsPicker />;
     case "features":
       return <FeaturesSection {...sharedProps} />;
     case "pricing":
