@@ -130,12 +130,7 @@ export default function ServicesSection({
                     )}
                   </div>
                   <div className="lg:col-span-6 lg:col-start-7 flex flex-col gap-4">
-                    <div className="flex items-baseline gap-3">
-                      <span className="font-outfit text-2xl text-accent">
-                        ${service.minPrice.toLocaleString()}–${service.maxPrice.toLocaleString()}
-                      </span>
-                      <span className="text-xs uppercase tracking-[0.2em] text-text-muted">USD</span>
-                    </div>
+                    {/* The price block has been deleted from here */}
                     <Link
                       href="/#contact"
                       className="inline-flex items-center gap-2 text-sm text-text hover:text-accent transition-colors underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
