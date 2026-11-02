@@ -112,24 +112,30 @@ export default function ServicesSection({
                   </span>
                 </button>
 
-                <div
-                  id={`service-${service.id}`}
-                  hidden={!isOpen}
-                  className="pb-8 lg:pb-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8"
-                >
-                  <div className="lg:col-span-8 lg:col-start-2">
-                    {features.length > 0 && (
-                      <ul className="space-y-2 text-sm text-text-muted">
-                        {features.map((f) => (
-                          <li key={f} className="flex items-start gap-3">
-                            <span aria-hidden="true" className="w-1 h-1 rounded-full bg-accent flex-shrink-0 mt-2" />
-                            <span>{f}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
+                {/* FIXED: Using conditional rendering instead of the hidden attribute */}
+                {isOpen && (
+                  <div
+                    id={`service-${service.id}`}
+                    className="pb-8 lg:pb-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8"
+                  >
+                    <div className="lg:col-span-8 lg:col-start-2">
+                      {features.length > 0 ? (
+                        <ul className="space-y-2 text-sm text-text-muted">
+                          {features.map((f) => (
+                            <li key={f} className="flex items-start gap-3">
+                              <span aria-hidden="true" className="w-1 h-1 rounded-full bg-accent flex-shrink-0 mt-2" />
+                              <span>{f}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-sm text-text-muted italic">
+                          Contact us to learn more about what is included in this service.
+                        </p>
+                      )}
+                    </div>
                   </div>
-                </div>
+                )}
               </article>
             );
           })}
