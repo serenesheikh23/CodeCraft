@@ -2,7 +2,7 @@
 
 > We build fast, reliable websites and web apps for small businesses, with an admin you can actually run yourself.
 
-A production-grade digital agency website with a full admin CMS.
+A production-grade digital studio website with a full admin CMS.
 
 **Live:** [codecraftdigitalstudio.vercel.app](https://codecraftdigitalstudio.vercel.app) *(formerly codeeecrafttt.vercel.app)*
 
@@ -12,12 +12,12 @@ Next.js 15 · React 19 · TypeScript · Prisma · Turso · NextAuth.js · Tailwi
 
 ## Lighthouse
 
-Measured on PageSpeed Insights (Lighthouse 13.6.0) against the main deployment, mobile, Moto G Power emulation, Slow 4G throttling.
+Measured on PageSpeed Insights against the main deployment, mobile, Moto G Power emulation, Slow 4G throttling.
 
 | Metric | Mobile |
 | --- | --- |
-| Performance | 100 |
-| Accessibility | 100 |
+| Performance | 98 |
+| Accessibility | 97 |
 | Best Practices | 100 |
 | SEO | 100 |
 | Agentic Browsing | 2/2 |
@@ -26,7 +26,7 @@ Measured on PageSpeed Insights (Lighthouse 13.6.0) against the main deployment, 
 
 Mobile LCP history: 5.3s → 2.4s (WebP conversion and priority on the hero image) → 0.8s (after removing the quote estimator and stack diagram from the homepage and server-izing ten section renderers).
 
-> These scores were measured before the v2 identity below. Re-run PageSpeed Insights after the rebrand ships and update this table. Desktop has not been re-measured since the redesign.
+> Desktop has not been re-measured since the redesign.
 
 ---
 
@@ -39,7 +39,7 @@ Mobile LCP history: 5.3s → 2.4s (WebP conversion and priority on the hero imag
 | Public routes | 9 (`/`, `/projects`, `/projects/[slug]`, `/services`, `/legal/[slug]`, `/p/[slug]`, `/opengraph-image`, `/robots.txt`, `/sitemap.xml`) |
 | Static pages per build | 40 |
 | Shared First Load JS | 103 kB |
-| `/` First Load JS | 118 kB |
+| `/` First Load JS | 120 kB |
 | Vitest tests | 8 |
 | Production build | ~14s |
 
@@ -154,7 +154,7 @@ npm test
 npm run build
 ```
 
-Generates 40 static pages. Shared First Load JS: 103 kB. `/` First Load JS: 118 kB.
+Generates 40 static pages. Shared First Load JS: 103 kB. `/` First Load JS: 120 kB.
 
 ---
 
@@ -168,14 +168,14 @@ Generates 40 static pages. Shared First Load JS: 103 kB. `/` First Load JS: 118 
 
 ---
 
-## Brand identity (v2)
+## Brand identity (v2, Direction A)
 
-The v2 identity moves Code Craft from "dark and flashy" to calm, credible and conversion-focused. It is built on three ideas from the WomensNet marketing guide: **color sets the first impression**, **the call to action must be the highest-contrast element on the page**, and **real work builds more trust than decoration**.
+The v2 identity moves Code Craft from "dark and flashy" to calm, credible and conversion-focused: cobalt on cool white.
 
 ### Positioning
 
 - **Who it's for:** small and local businesses that need a website or web app that works and that they can manage themselves.
-- **What makes it different:** production-grade engineering (Lighthouse 100s, tested, secure) with a self-service CMS, no lock-in to a proprietary agency system.
+- **What makes it different:** production-grade engineering (Lighthouse 98+ performance, tested, secure) with a self-service CMS, no lock-in to a proprietary agency system.
 - **Personality:** precise, friendly, direct. An engineer who explains things in plain English.
 
 ### Voice rules
@@ -187,105 +187,65 @@ The v2 identity moves Code Craft from "dark and flashy" to calm, credible and co
 
 ### Logo
 
-A wordmark (**Code Craft**, Space Grotesk SemiBold, tight tracking) paired with a monogram: a rounded "C" with a single amber dot, which reads as a code cursor and as an open "C".
+A wordmark (`codecraft.` in Archivo 800, tight tracking, with a cobalt period) paired with a small `</>` icon (used *only* for favicons and avatars, never beside the wordmark).
 
 ```html
-<!-- monogram, 64×64. Use as favicon, avatar and social profile image. -->
+<!-- Small icon, 64×64. Use as favicon, avatar and social profile image. -->
 <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Code Craft">
-  <rect width="64" height="64" rx="14" fill="#0B1220"/>
-  <path d="M40 22a14 14 0 1 0 0 20" fill="none" stroke="#F5F7FA" stroke-width="6" stroke-linecap="round"/>
-  <circle cx="46" cy="32" r="4" fill="#FF9F1C"/>
+  <rect width="64" height="64" rx="10" fill="#2B45FF"/>
+  <path d="M24 22 14 32l10 10M40 22l10 10-10 10M35 20 29 44" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
 ```
 
 | Rule | Spec |
 | --- | --- |
-| Clear space | At least the height of the dot on all sides |
-| Minimum size | 24 px monogram, 96 px wordmark |
-| On light backgrounds | Swap `#F5F7FA` for `#0B1220` and the tile for transparent |
-| Don't | Stretch, recolor the dot, add shadows or effects |
+| Clear space | Height of the period on all sides |
+| Minimum size | 24 px icon, 96 px wordmark |
+| Don't | Stretch, recolor the period, add shadows or effects |
 
 ### Color
 
-A deep ink-navy ground (calm, trustworthy, technical) with a cool blue for structure and one warm amber reserved for calls to action. Amber sits opposite blue on the color wheel, which is what makes buttons stand out.
+A cool white ground with a single cobalt accent reserved for interactive elements and the wordmark period.
 
 | Token | Value | Use |
 | --- | --- | --- |
-| `--background` | `#0B1220` | page ground |
-| `--surface` | `#121B2E` | cards, panels |
-| `--border` | `#22304A` | structural rules only |
-| `--foreground` | `#F5F7FA` | body and headlines |
-| `--muted` | `#9AA7BD` | captions, secondary text |
-| `--primary` | `#4F8CFF` | links, active nav, icons, focus rings |
-| `--cta` | `#FF9F1C` | primary buttons only |
-| `--cta-foreground` | `#0B1220` | text on amber buttons |
-| `--paper` | `#F7F5F0` | optional light sections (testimonials, pricing) |
+| `--background` | `#EEF0F4` | page ground |
+| `--surface` | `#FFFFFF` | cards, panels, inputs |
+| `--border` | `#D5D9E0` | decorative 1px rules |
+| `--border-strong` | `#78828F` | inputs, checkboxes, control outlines |
+| `--foreground` | `#0F1720` | text |
+| `--muted` | `#55606F` | captions, secondary text |
+| `--primary` | `#2B45FF` | links, active nav, buttons, focus rings |
+| `--primary-tint` | `#E3E7FF` | selected backgrounds, active admin nav |
 
 **Rules**
 
-- Amber is used for the call to action and nothing else. If everything is amber, nothing is.
-- Never place `--muted` text on `--paper`; use `#4A5568` there instead.
-- Approximate contrast on `--background`: foreground ≈ 17:1, amber ≈ 9:1, muted ≈ 7:1, primary ≈ 5.5:1. All pass WCAG AA; verify with a contrast checker after any change.
+- Cobalt is used for links, buttons, active states, and focus rings. Never use cobalt as a fill behind body text.
+- The hairline `--border` is decorative only; any control that must be perceivable (inputs, checkboxes) uses `--border-strong`.
+- All text/background pairs pass WCAG AA (4.5:1 for body text, 3:1 for UI boundaries).
 
 Tokens live in `:root` in `src/app/globals.css`; `tailwind.config.ts` maps them via `rgb(var(--token) / <alpha-value>)`.
-
-```css
-:root {
-  --background: 11 18 32;
-  --surface: 18 27 46;
-  --border: 34 48 74;
-  --foreground: 245 247 250;
-  --muted: 154 167 189;
-  --primary: 79 140 255;
-  --cta: 255 159 28;
-  --cta-foreground: 11 18 32;
-  --paper: 247 245 240;
-}
-```
 
 ### Typography
 
 | Role | Font | Notes |
 | --- | --- | --- |
-| Display / headlines | Space Grotesk (600–700) | distinctive but readable, techy without being cold |
-| Body | Inter (400–500) | maximum legibility |
-| Labels / code | JetBrains Mono | small caps labels, tags, tech stack |
+| Everything | Archivo (400, 500, 800) | loaded via next/font, display: swap |
+| Labels / code | System `ui-monospace` | small caps labels, tags, tech stack |
 
-Loaded via `next/font` with `display: swap`. Body text is 16 px minimum, line height 1.6, line length 60–75 characters. Use one `<h1>` per page, then `h2`/`h3` in order.
+Body text is 16 px minimum, line height 1.6, line length 60–75 characters. Use one `<h1>` per page.
 
 ### Components
 
-- **Primary button:** amber fill, ink text, 12 px radius, 48 px tall, 16 px semibold. One per section.
-- **Secondary button:** transparent, 1 px `--border`, foreground text; hover switches the border to `--primary`.
-- **Cards:** `--surface`, 1 px `--border`, 16 px radius. No heavy shadows.
-- **Links:** `--primary`, underlined on hover; visible focus ring (2 px `--primary`, 2 px offset).
-- **Section rhythm:** 96 px vertical padding on desktop, 64 px on mobile; alternate `--background` and `--surface`, with at most one `--paper` section per page.
-
-### Imagery
-
-- Real project screenshots and team photos only. No stock photography and no homepage sliders; visitors want to see real work.
-- Show each project as a browser-framed screenshot plus one line of result ("Booking flow rebuilt, checkout time down 40%"). Only publish numbers you can back up.
-- Keep every image WebP, sized with `sizes`, with descriptive alt text.
+- **Primary button:** cobalt fill, white text, 4px radius, 48px tall, 15-16px weight 500. Hover `#1E34E0`, active `#182BC0`.
+- **Secondary button:** transparent, 1px `--border-strong`, foreground text; hover border `--primary`.
+- **Inputs:** `--surface` fill, 1px `--border-strong`, 4px radius, focus border `--primary` + 2px ring.
+- **Cards:** `--surface`, 1px `--border`, 4px radius. No shadows.
+- **Section rhythm:** 96px vertical padding on desktop, 64px on mobile; 1px `--border` rules between sections.
 
 ### Motion
 
-CSS transitions of 300 ms or less, native scroll-snap, and `prefers-reduced-motion` respected. No public page imports Framer Motion.
-
-### Social and metadata
-
-- **Avatar:** the monogram tile. **Cover/banner:** ink background, wordmark and one-line promise.
-- `/opengraph-image`: ink background, wordmark, headline, amber "Free consultation" chip.
-- **Favicon:** monogram SVG plus a 180 px PNG for Apple touch icon.
-
-### Rollout checklist
-
-- [ ] Replace tokens in `globals.css` and `tailwind.config.ts`
-- [ ] Swap fonts in `layout.tsx` (Space Grotesk, Inter, JetBrains Mono)
-- [ ] Update logo, favicon and `/opengraph-image`
-- [ ] Restyle the primary button (amber) and audit every page for a single main CTA
-- [ ] Replace any stock imagery with real screenshots
-- [ ] Re-run PageSpeed Insights and update the Lighthouse table
-- [ ] Update site-settings defaults and `seed.ts` demo content
+CSS transitions of 300ms or less, native scroll-snap, and `prefers-reduced-motion` respected. No public page imports Framer Motion.
 
 ---
 
@@ -294,34 +254,28 @@ CSS transitions of 300 ms or less, native scroll-snap, and `prefers-reduced-moti
 Applied from the WomensNet *Jumpstarting Your Marketing* guide. Items are goals, not claims about what is already live.
 
 ### 1. Site fundamentals (free, high impact)
-
-- One target phrase per page, placed in the title tag, URL and H1 (for example, "web application development Dallas").
-- A unique meta description (about 150 characters) and descriptive image alt text on every page.
+- One target phrase per page, placed in the title tag, URL and H1.
+- A unique meta description and descriptive image alt text on every page.
 - Set up Google Search Console and Analytics, then submit `/sitemap.xml`.
-- Move to a custom domain close to the business name; `.vercel.app` looks less credible to clients.
+- Move to a custom domain close to the business name.
 
 ### 2. Convert the traffic you have
-
 - One primary CTA on every page: **Book a free consultation**.
-- Keep forms short: name, email, one question. Explain why any extra field is needed.
+- Keep forms short: name, email, one question.
 - Earn trust: case studies for each shipped project and one short client testimonial.
-- Make contact details and location easy to find on the homepage.
 - Test one change at a time (headline, CTA wording, CTA color), then keep what wins.
 
 ### 3. Offer a freebie
-
 A one-page website launch checklist for small businesses, exchanged for an email address.
 
 ### 4. Local presence and networking
-
-- Google Business Profile (Google will verify the address).
-- Local Chamber of Commerce, SCORE mentoring and Dallas–Fort Worth tech meetups.
+- Google Business Profile.
+- Local Chamber of Commerce and Dallas–Fort Worth tech meetups.
 - Referral partnerships with designers, photographers and printers.
 - One social platform done well, linking back to the site.
 
 ### 5. Later
-
-- **Publicity:** a launch press release to local business outlets; answer journalist requests (HARO-style services).
+- **Publicity:** a launch press release to local business outlets.
 - **Advertising:** hold until revenue is steady; it is the most expensive channel.
 
 ---
