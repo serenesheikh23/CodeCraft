@@ -18,7 +18,7 @@ export default function EditDemo({ initialHeadline }: { initialHeadline: string 
   return (
     <div className="bg-surface border border-border p-6 rounded-lg shadow-sm">
       <label className="block text-xs font-medium text-muted mb-2 uppercase tracking-wider" htmlFor="headline-input">
-        Homepage headline
+        EDIT IT YOURSELF. TRY IT.
       </label>
       <input
         id="headline-input"
@@ -29,7 +29,7 @@ export default function EditDemo({ initialHeadline }: { initialHeadline: string 
         className="w-full bg-background border border-border-strong rounded px-3 py-2 text-text mb-2 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
       />
       <div className="flex justify-between items-center mt-4">
-        <span className="text-xs text-muted">Demo only. Nothing is saved.</span>
+        <span className="text-xs text-muted">Type here and the headline on the left changes. That's what the admin panel feels like.</span>
         <button onClick={handleReset} className="text-xs text-primary hover:underline font-medium">
           Reset
         </button>
